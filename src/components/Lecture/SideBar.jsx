@@ -4,7 +4,7 @@ import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStar, IoStarO
 
 export default function LectureSideBar(){
     return(
-        <aside className="w-[15%] flex flex-col gap-3 bg-white h-[100vh]">
+        <aside className=" fixed w-[15%] flex flex-col gap-3 bg-white h-[100vh]">
             <div className="my-5 text-center">
                 <span className="font-bold text-xl">EduConnect</span>
             </div>
