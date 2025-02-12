@@ -1,5 +1,5 @@
-import ConstructionImage from "../assets/Hand coding-rafiki.svg"
-import LectureSideBar from "./Lecture/SideBar"
+import ConstructionImage from "../../assets/Hand coding-rafiki.svg"
+import LectureSideBar from "./SideBar"
 
 export default function Construction(){
     return(
