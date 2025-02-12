@@ -1,7 +1,7 @@
 import LectureSideBar from "../components/Lecture/SideBar";
 import LectureClasses from "../components/Lecture/classroom/classes";
 
-export default function LectureDashboard(){
+export default function LectureClassrooms(){
     return(
         <div className="flex flex-row gap-5">
             <LectureSideBar/>
