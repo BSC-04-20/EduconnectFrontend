@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LectureDashboard from "../screens/LectureDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
+import Events from "../screens/Events";
 
 const routes = createBrowserRouter([
     {
@@ -10,7 +11,7 @@ const routes = createBrowserRouter([
     },
     {
         path:"/events",
-        element:<Construction/>
+        element:<Events/>
     },
     {
         path:"/mentorship",
