@@ -3,12 +3,14 @@ import LectureDashboard from "../screens/LectureDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
 import LectureClassrooms from "../components/Lecture/classroom/classes";
+import StudentDashboard from "../screens/StudentDashboard";
+import StudentLearningMaterials from "../screens/StudentLearningMaterials";
 
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<LectureDashboard/>
+        element:<StudentDashboard/>
     },
     {
         path:"/events",
@@ -44,7 +46,7 @@ const routes = createBrowserRouter([
         { path: "events", element: <StudentConstruction /> },
         { path: "timetable", element: <StudentConstruction /> },
         { path: "discussions", element: <StudentConstruction /> },
-        { path: "resources", element: <StudentConstruction /> },
+        { path: "resources", element: <StudentLearningMaterials /> },
         { path: "ratings", element: <StudentConstruction /> },
         { path: "classroom", element: <StudentConstruction/> },
     ]},
