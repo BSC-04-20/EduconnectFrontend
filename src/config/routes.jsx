@@ -4,6 +4,7 @@ import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
 import LectureClassrooms from "../components/Lecture/classroom/classes";
 
+
 const routes = createBrowserRouter([
     {
         path:"/",
@@ -45,7 +46,7 @@ const routes = createBrowserRouter([
         { path: "discussions", element: <StudentConstruction /> },
         { path: "resources", element: <StudentConstruction /> },
         { path: "ratings", element: <StudentConstruction /> },
-        { path: "classroom", element: <LectureClassrooms/> },
+        { path: "classroom", element: <StudentConstruction/> },
     ]},
 ])
 
