@@ -1,12 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import LectureDashboard from "../screens/LectureDashboard";
+// import StudentDashboard from "../screens/StudentDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
+import StudentDiscussions from "../screens/StudentDiscussions";
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<LectureDashboard/>
+        element: <LectureDashboard/>
     },
     {
         path:"/events",
@@ -41,7 +43,7 @@ const routes = createBrowserRouter([
         { path: "mentorship", element: <StudentConstruction /> },
         { path: "events", element: <StudentConstruction /> },
         { path: "timetable", element: <StudentConstruction /> },
-        { path: "discussions", element: <StudentConstruction /> },
+        { path: "discussions", element: <StudentDiscussions /> },
         { path: "resources", element: <StudentConstruction /> },
         { path: "ratings", element: <StudentConstruction /> },
         { path: "classroom", element: <StudentConstruction /> },
