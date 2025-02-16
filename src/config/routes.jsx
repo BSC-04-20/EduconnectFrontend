@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import LectureDashboard from "../screens/LectureDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
+import StudentRating from "../screens/StudentRating";
 
 const routes = createBrowserRouter([
     {
@@ -43,7 +44,7 @@ const routes = createBrowserRouter([
         { path: "timetable", element: <StudentConstruction /> },
         { path: "discussions", element: <StudentConstruction /> },
         { path: "resources", element: <StudentConstruction /> },
-        { path: "ratings", element: <StudentConstruction /> },
+        { path: "ratings", element: <StudentRating /> },
         { path: "classroom", element: <StudentConstruction /> },
     ]},
 ])
