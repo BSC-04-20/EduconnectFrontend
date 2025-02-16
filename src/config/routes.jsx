@@ -11,7 +11,7 @@ import StudentSideBar from "../components/Student/SideBar";
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<LectureDashboard/>
+        element:<StudentDashboard/>
     },
     {
         path:"/events",

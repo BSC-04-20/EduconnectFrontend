@@ -15,15 +15,38 @@ export default function LearningMaterials(){
               <div className="bg-white place-content-start  h-[60vh] w-[80%] rounded-lg ">
               <div className="flex flex-col px-5">
 
-                
-                    <h1 className="font-semibold text-sky-900"> Courses
-                     <BiBookOpen className="text-sky-900 size-[1.5rem]"  />
-                     </h1>
-                    <span className=" ">Mathematics</span>
-                    <span className=" ">Physics</span>
-                    <span className=" ">Chemistry</span>
-                    <span className=" ">Biology</span>
-                    <span className=" ">Computer Science</span>
+                <div className="flex py-1">
+                <BiBookOpen className="text-sky-900 size-[1.5rem]"  />
+                <h1 className="font-semibold text-sky-900 px-2"> Courses</h1>
+                </div>
+
+                <div className="flex py-1">
+                <p className=" px-2">Mathematics</p>
+                <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                </div>
+
+
+                <div className="flex py-1">
+                <p className=" px-2">Physics</p>
+                <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                </div>
+
+                <div className="flex py-1">
+                <p className=" px-2">Chemistry</p>
+                <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                </div>
+
+                <div className="flex py-1">
+                <p className=" px-2">Biology</p>
+                <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                </div>
+
+
+                <div className="flex py-1">
+                <p className=" px-2">Computer science</p>
+                <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                </div>
+
                 
                 </div>
 
@@ -31,12 +54,33 @@ export default function LearningMaterials(){
 
               <div className="bg-white place-content-start  h-[35vh] w-[80%] rounded-lg  ">
               <div className="flex flex-col px-5">
-                    <h1 className="font-semibold text-sky-900"> Material Type
-                    <IoFunnelOutline className="text-sky-900 size-[1.5rem]"  /> 
-                     </h1>
-                    <span className=" ">Slides</span>
-                    <span className=" ">Books</span>
-                    <span className=" ">Videos</span>
+                 
+                 <div className="flex py-2">
+                    <IoFunnelOutline className="text-sky-900 size-[1.5rem]"  />
+                     <h1 className="font-semibold text-sky-900 px-2 "> Material Type </h1>
+                 </div>
+                    
+                    
+                 <div className="flex py-1">
+                    <BiChalkboard className="text-slate-900 size-[1.5rem]"/>
+                    <p className="px-2">Slides</p>
+                    <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                </div>
+            
+                
+                        <div className="flex py-1">
+                           <BiDockBottom className="text-slate-900 size-[1.5rem]"/>
+                           <p className="px-2"> Books</p>
+                           <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                        </div>
+                    
+                    <div className="flex py-1">
+                        <BiVideo className="text-slate-900 size-[1.5rem]"/>
+                        <p className="px-2"> videos</p>
+                        <Bs2Circle className="text-[#6B7280] mx-10 size-[1.5rem]"  />
+                       
+                    </div>
+                    
                 </div> 
 
               </div>
