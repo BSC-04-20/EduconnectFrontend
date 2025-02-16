@@ -3,6 +3,7 @@ import LectureDashboard from "../screens/LectureDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
 import Events from "../screens/Events";
+import Resources from "../screens/Resources";
 
 const routes = createBrowserRouter([
     {
@@ -24,7 +25,7 @@ const routes = createBrowserRouter([
     
     {
         path:"/resources",
-        element:<Construction/>
+        element:<Resources/>
     },
     
     {
