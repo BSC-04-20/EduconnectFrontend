@@ -1,6 +1,7 @@
 import { useState } from "react";
 import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
+import StudentSideBar2 from "../components/Student/SideBar2";
 
 
 export default function StudentRating() {
@@ -16,7 +17,7 @@ export default function StudentRating() {
 
     return (
         <>
-        <StudentsSideBar/>
+        <StudentSideBar2/>
         <section className="ml-[17%] w-[80%] pt-6">
             <div className="bg-white rounded-md shadow-md w-[100%] h-[95%] mb-20">
         <div className="p-6">
