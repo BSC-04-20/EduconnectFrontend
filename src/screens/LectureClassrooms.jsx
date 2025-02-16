@@ -1,5 +1,6 @@
 import LectureSideBar from "../components/Lecture/SideBar";
-import LectureClasses from "../components/Lecture/classroom/classes";
+import LectureClasses from "../components/Lecture/classrooms/LectureClasses";
+import StudentSideBar from "../components/Student/SideBar";
 
 export default function LectureClassrooms(){
     return(
@@ -12,3 +13,5 @@ export default function LectureClassrooms(){
         </div>
     )
 }
+ 
+

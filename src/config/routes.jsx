@@ -2,15 +2,16 @@ import { createBrowserRouter } from "react-router-dom";
 import LectureDashboard from "../screens/LectureDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
-import LectureClassrooms from "../components/Lecture/classroom/classes";
+import LectureClassrooms from "../components/Lecture/classrooms/LectureClasses";
 import StudentDashboard from "../screens/StudentDashboard";
 import StudentLearningMaterials from "../screens/StudentLearningMaterials";
+import StudentSideBar from "../components/Student/SideBar";
 
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<StudentDashboard/>
+        element:<LectureDashboard/>
     },
     {
         path:"/events",
