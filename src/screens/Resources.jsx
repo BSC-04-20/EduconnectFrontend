@@ -1,6 +1,6 @@
 import LectureSideBar from "../components/Lecture/SideBar";
 import ResourcesHeader from "../components/Lecture/Resources/ResourcesHeader";
-import SearchBar from "../components/Lecture/Resources/SearchBar";
+import ResourcesList from "../components/Lecture/Resources/ResourcesList";
 
 export default function Resources(){
     return(
@@ -8,7 +8,7 @@ export default function Resources(){
             <LectureSideBar/>
             <section className="ml-[17%] w-[100%]">
                 <ResourcesHeader/>
-                <SearchBar/>
+                <ResourcesList/>
             </section>
         </div>
     )
