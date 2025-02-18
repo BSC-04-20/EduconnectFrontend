@@ -1,67 +1,34 @@
-import { AiOutlineSearch } from "react-icons/ai";
-import { GoDownload} from "react-icons/go";
-import { FaRegFileAlt } from "react-icons/fa";
+import { FaDownload } from "react-icons/fa";
+import { MdOutlineDescription } from "react-icons/md";
 
-export default function ResourcesList(){
-    return(
-        <div className="bg-white mr-10">
-           <div className="mb-10">
-           <form className="w-[350px] relateve">
-                <div className="relative">
-                    <input type="search" placeholder="Search resources..." className="text-center w-full p-4 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg bg-white"/>
-                    <button className="absolute left-1 top-1/2 -translate-y-1/2 p-4 bg-white rounded-full">
-                        <AiOutlineSearch className="bg-transparent text-xl text-gray-500"/>
-                    </button>
-                </div>
-            </form>
-           </div>
+export default function LecturePostedResources() {
+    // List of posted resources
+    const resources = [
+        { name: "Data Structures & Algorithms", size: "PDF 3.2mb", uploaded: "3 days ago" },
+        { name: "Operating Systems Notes", size: "PDF 4.1mb", uploaded: "1 week ago" },
+        { name: "Computer Networks Guide", size: "PDF 2.8mb", uploaded: "5 days ago" },
+        { name: "Artificial Intelligence Overview", size: "PDF 5.0mb", uploaded: "2 weeks ago" },
+        { name: "Database Management Systems", size: "PDF 3.5mb", uploaded: "4 days ago" },
+    ];
 
-            <div>
-                <div className="mb-5 flex flex-rows">
-                    <FaRegFileAlt className="text-5xl text-blue-900"/>
-                    <div className="ml-5">
-                        <div><span className="text-sm text-black">Calculus Study Guide</span></div>
-                        <span className="text-xs font-light text-gray-500">PDF • 2.4 MB • Uploaded 2 days ago</span>
+    return (
+        <div className="flex flex-col gap-3 bg-white rounded-lg w-[95%] py-10 px-5">
+            {resources.map(({ name, size, uploaded }, index) => (
+                <div key={index} className="flex flex-row gap-3 items-center w-[65%]">
+                    <div className="bg-sky-200 p-1 rounded-lg">
+                        <MdOutlineDescription className="size-[2rem] text-sky-900"/>
                     </div>
-                    <GoDownload className="text-3xl text-gray-500 ml-10"/>
-                </div>
 
-                <div className="mb-5 flex flex-rows">
-                    <FaRegFileAlt className="text-5xl text-blue-900"/>
-                    <div className="ml-5">
-                        <div><span className="text-sm text-black">Calculus Study Guide</span></div>
-                        <span className="text-xs font-light text-gray-500">PDF • 2.4 MB • Uploaded 2 days ago</span>
+                    <div className="flex flex-col">
+                        <span className="font-semibold text-lg">{name}</span>
+                        <span className="text-gray-400 text-base">{size} uploaded {uploaded}</span>
                     </div>
-                    <GoDownload className="text-3xl text-gray-500 ml-10"/>
-                </div>
 
-                <div className="mb-5 flex flex-rows">
-                    <FaRegFileAlt className="text-5xl text-blue-900"/>
-                    <div className="ml-5">
-                        <div><span className="text-sm text-black">Calculus Study Guide</span></div>
-                        <span className="text-xs font-light text-gray-500">PDF • 2.4 MB • Uploaded 2 days ago</span>
+                    <div className="ml-auto">
+                        <FaDownload className="text-gray-600"/>
                     </div>
-                    <GoDownload className="text-3xl text-gray-500 ml-10"/>
                 </div>
-
-                <div className="mb-5 flex flex-rows">
-                    <FaRegFileAlt className="text-5xl text-blue-900"/>
-                    <div className="ml-5">
-                        <div><span className="text-sm text-black">Calculus Study Guide</span></div>
-                        <span className="text-xs font-light text-gray-500">PDF • 2.4 MB • Uploaded 2 days ago</span>
-                    </div>
-                    <GoDownload className="text-3xl text-gray-500 ml-10"/>
-                </div>
-
-                <div className="mb-5 flex flex-rows">
-                    <FaRegFileAlt className="text-5xl text-blue-900"/>
-                    <div className="ml-5">
-                        <div><span className="text-sm text-black">Calculus Study Guide</span></div>
-                        <span className="text-xs font-light text-gray-500">PDF • 2.4 MB • Uploaded 2 days ago</span>
-                    </div>
-                    <GoDownload className="text-3xl text-gray-500 ml-10"/>
-                </div>
-            </div>
+            ))}
         </div>
-    )
+    );
 }
