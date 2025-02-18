@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import LectureDashboard from "../screens/LectureDashboard";
+// import StudentDashboard from "../screens/StudentDashboard";
 import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
 import Events from "../screens/Events";
@@ -9,11 +10,13 @@ import StudentDashboard from "../screens/StudentDashboard";
 import StudentLearningMaterials from "../screens/StudentLearningMaterials";
 import StudentSideBar from "../components/Student/SideBar";
 
+import StudentRating from "../screens/StudentRating";
+import StudentDiscussions from "../screens/StudentDiscussions";
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<StudentDashboard/>
+        element: <LectureDashboard/>
     },
     {
         path:"/events",
@@ -50,8 +53,8 @@ const routes = createBrowserRouter([
         { path: "timetable", element: <StudentConstruction /> },
         { path: "discussions", element: <StudentConstruction /> },
         { path: "resources", element: <StudentLearningMaterials /> },
-        { path: "ratings", element: <StudentConstruction /> },
         { path: "classroom", element: <StudentConstruction/> },
+        { path: "ratings", element: <StudentRating /> },
     ]},
 ])
 
