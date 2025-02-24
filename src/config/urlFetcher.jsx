@@ -44,3 +44,30 @@ const token = localStorage.getItem("token")
       return Promise.reject(error)
    }
  )
+
+ export const StudentAuthenticatedUserUrl = axios.create({
+   baseURL:baseUrl,
+   headers: {
+     'Accept': 'application/json',
+     'X-Requested-with':'XMLHttpRequest'
+  },
+   withCredentials:true,
+   withXSRFToken:true
+});
+
+//This is to add a new and valid student token that is stored in our redux
+StudentAuthenticatedUserUrl.interceptors.request.use(
+  (config) => {
+     const state = store.getState();
+     const token = state.studentAuthorizer.value.studToken;
+
+     if(token){
+        config.headers.Authorization = `Bearer ${token}`;
+     }
+
+     return config;
+  },
+  (error) => {
+     return Promise.reject(error)
+  }
+)

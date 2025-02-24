@@ -5,7 +5,7 @@ import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { useDispatch} from "react-redux";
-import {setAuth, setToken } from "../../redux/slice";
+import { setAuth, setToken } from "../../redux/studentSlice";
 
 const StudentLoginForm = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const StudentLoginForm = () => {
 
       // Send login request
       const response = await UrlFetcher.post("/student/login", formData);
-      const token = response.data.token
+      const token = response.data.studToken
 
       dispatch(setAuth(token))
       dispatch(setToken())

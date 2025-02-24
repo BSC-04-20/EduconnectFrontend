@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { CgLogOut } from "react-icons/cg";
 import { CiBellOn, CiCalendar, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
-import { AuthenticatedUserUrl } from "../../config/urlFetcher";
+import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
 import { useDispatch } from "react-redux";
 import { removeToken, unAuthorize } from "../../redux/slice";
 import CircularProgress from "@mui/material/CircularProgress"; 
-import Button from "@mui/material/Button";
+import Button from "@mui/material/Button"; 
 
 const StudentTopBar = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const StudentTopBar = () => {
 
   const getUsername = async () => {
     try {
-      const response = await AuthenticatedUserUrl.get("/user");
+      const response = await StudentAuthenticatedUserUrl.get("/user");
       setUsername(response.data.fullname);
     } catch (error) {
       alert("Failed to get username");
@@ -27,7 +27,7 @@ const StudentTopBar = () => {
   const handleLogout = async () => {
     setLoading(true); // Start loading
     try {
-      const response = await AuthenticatedUserUrl.post("/student/logout");
+      const response = await StudentAuthenticatedUserUrl.post("/student/logout");
 
       if (response.status === 200) {
         dispatch(removeToken());

@@ -7,16 +7,17 @@ import LectureResources from "../screens/LectureResources";
 import LectureClassroomScreen from "../screens/LectureClassrooms";
 import StudentDashboard from "../screens/StudentDashboard";
 import StudentDiscussionsScreen from "../screens/StudentDiscussions";
-import StudentRatingsScreen from "../screens/StudentRating";
+import StudentRatingsScreen from "../screens/StudentRatings";
 import LecturerSignup from "../components/Lecture/signup";
 import LecturerLoginForm from "../components/Lecture/login";
+import AddClassForm from "../components/Lecture/classroom/addClassroom";
 import EventForm from "../components/Lecture/events/addEvents";
 import StudentClassroomsScreen from "../screens/StudentClassrooms";
 import LoginSelector from "../components/LoginSelector";
-import RouterAuthGuard from "../security/routerAuthGuard"; // Import RouterAuthGuard
+import RouterAuthGuard from "../security/lectureRouterAuthGuard"; // Import RouterAuthGuard
 import StudentLoginForm from "../components/Student/login";
 import StudentSignup from "../components/Student/signup";
-import AddClassForm from "../components/Lecture/classrooms/addClassroom";
+import StudentRouterAuthGuard from "../security/studentRouterAuthGuard";
 
 const routes = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const routes = createBrowserRouter([
       { path: "signup", element: <LecturerSignup /> },
       { path: "login", element: <LecturerLoginForm /> },
       { path: "dashboard", element: <RouterAuthGuard> <LectureDashboard /> </RouterAuthGuard>},
-      { path: "events", element: <RouterAuthGuard> < LectureEvents/> </RouterAuthGuard> },
+      { path: "events", element: <RouterAuthGuard> <LectureEvents /> </RouterAuthGuard> },
       { path: "mentorship", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard> },
       { path: "timetable", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard>},
       { path: "resources", element: <RouterAuthGuard> <LectureResources /> </RouterAuthGuard> },
@@ -44,14 +45,14 @@ const routes = createBrowserRouter([
     children: [
       {path:"login", element:<StudentLoginForm/>},
       {path:"signup", element:<StudentSignup/>},
-      { path: "dashboard", element: <StudentDashboard /> },
-      { path: "mentorship", element: <StudentConstruction /> },
-      { path: "events", element: <StudentConstruction /> },
-      { path: "timetable", element: <StudentConstruction /> },
-      { path: "discussions", element: <StudentDiscussionsScreen /> },
-      { path: "resources", element: <StudentConstruction /> },
-      { path: "ratings", element: <StudentRatingsScreen /> },
-      { path: "classroom", element: <StudentClassroomsScreen /> },
+      { path: "dashboard", element:<StudentRouterAuthGuard>  <StudentDashboard />  </StudentRouterAuthGuard>},
+      { path: "mentorship", element:<StudentRouterAuthGuard>  <StudentConstruction />  </StudentRouterAuthGuard>},
+      { path: "events", element:<StudentRouterAuthGuard>  <StudentConstruction />  </StudentRouterAuthGuard>},
+      { path: "timetable", element:<StudentRouterAuthGuard>  <StudentConstruction />  </StudentRouterAuthGuard>},
+      { path: "discussions", element:<StudentRouterAuthGuard>  <StudentDiscussionsScreen />  </StudentRouterAuthGuard>},
+      { path: "resources", element:<StudentRouterAuthGuard>  <StudentConstruction />  </StudentRouterAuthGuard>},
+      { path: "ratings", element:<StudentRouterAuthGuard>  <StudentRatingsScreen />  </StudentRouterAuthGuard>},
+      { path: "classroom", element:<StudentRouterAuthGuard>  <StudentClassroomsScreen />  </StudentRouterAuthGuard>},
     ],
   },
 ]);
