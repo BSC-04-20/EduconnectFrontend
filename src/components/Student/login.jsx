@@ -5,7 +5,7 @@ import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { useDispatch} from "react-redux";
-import {setAuth, setToken } from "../../app/slice";
+import {setAuth, setToken } from "../../redux/slice";
 
 const StudentLoginForm = () => {
   const navigate = useNavigate();

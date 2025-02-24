@@ -6,8 +6,9 @@ import { AuthenticatedUserUrl } from "../../config/urlFetcher";
 import { useDispatch } from "react-redux";
 import { removeToken, unAuthorize } from "../../redux/slice";
 import CircularProgress from "@mui/material/CircularProgress"; 
-import Button from "@mui/material/Button"; 
-const TopBar = () => {
+import Button from "@mui/material/Button";
+
+const StudentTopBar = () => {
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false); // Track logout loading state
@@ -26,12 +27,12 @@ const TopBar = () => {
   const handleLogout = async () => {
     setLoading(true); // Start loading
     try {
-      const response = await AuthenticatedUserUrl.post("/lecture/logout");
+      const response = await AuthenticatedUserUrl.post("/student/logout");
 
       if (response.status === 200) {
         dispatch(removeToken());
         dispatch(unAuthorize());
-        navigate("/lecture/login");
+        navigate("/student/login");
       } else {
         alert("Failed to logout");
       }
@@ -107,4 +108,4 @@ const TopBar = () => {
   );
 };
 
-export default TopBar;
+export default StudentTopBar;

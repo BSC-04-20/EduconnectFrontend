@@ -2,7 +2,7 @@ import LectureSideBar from "../components/Lecture/SideBar";
 import EventsHeader from "../components/Lecture/Events/EventsHeader";
 import EventsOverview from "../components/Lecture/Events/EventsOverview";
 
-export default function Events(){
+export default function LectureEvents(){
     return(
         <div className="flex flex-row gap-5">
             <LectureSideBar/>
