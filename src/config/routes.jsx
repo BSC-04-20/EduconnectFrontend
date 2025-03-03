@@ -6,12 +6,13 @@ import LectureClassrooms from "../components/Lecture/classrooms/LectureClasses";
 import StudentDashboard from "../screens/StudentDashboard";
 import StudentLearningMaterials from "../screens/StudentLearningMaterials";
 import StudentSideBar from "../components/Student/SideBar";
+import HomeNavBar from "../components/HomeNavBar";
 
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<StudentDashboard/>
+        element:<HomeNavBar/>
     },
     {
         path:"/events",
