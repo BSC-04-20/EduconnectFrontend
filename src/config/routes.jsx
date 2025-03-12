@@ -12,10 +12,15 @@ import StudentSideBar from "../components/Student/SideBar";
 
 import StudentRating from "../screens/StudentRating";
 import StudentDiscussions from "../screens/StudentDiscussions";
+import HomeScreen from "../screens/Home";
 
 const routes = createBrowserRouter([
     {
         path:"/",
+        element: <HomeScreen/>
+    },
+    {
+        path:"/dashboard",
         element: <LectureDashboard/>
     },
     {

@@ -4,7 +4,7 @@ import { MdGroup, MdOutlineSpaceDashboard, MdMenu, MdClose } from "react-icons/m
 import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStarOutline, IoTimeOutline } from "react-icons/io5";
 
 const navLinks = [
-    { to: "/", label: "Dashboard", icon: <MdOutlineSpaceDashboard className="size-[1.5rem]" /> },
+    { to: "/dashboard", label: "Dashboard", icon: <MdOutlineSpaceDashboard className="size-[1.5rem]" /> },
     { to: "/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
     { to: "/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
     { to: "/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
