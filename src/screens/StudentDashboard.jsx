@@ -10,13 +10,8 @@ export default function StudentDashboard(){
     return(
         <div className="flex flex-row gap-5">
             <StudentSideBar/>
-            <section className="ml-[17%] w-[100%]">
+            <section className="mt-[5vh] md:mt-0 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
                 <StudentTopBar/>
-                {/* <Board 
-                    title="Welcome Back Weston" 
-                    secondaryTxt="Here's what's happening in your learning journey"
-                    url={CollegeStudents}
-                /> */}
                 <RecentAnnouncements/>
                 <StudentsAssignments/>
             </section>

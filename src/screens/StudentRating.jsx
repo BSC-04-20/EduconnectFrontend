@@ -16,9 +16,9 @@ export default function StudentRating() {
     const [showAll, setShowAll] = useState(false);
 
     return (
-        <>
-        <StudentSideBar2/>
-        <section className="ml-[17%] w-[80%] pt-6">
+        <div className="flex flex-row gap-5">
+        <StudentsSideBar/>
+        <section className="mt-[5vh] md:mt-10 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
             <div className="bg-white rounded-md shadow-md w-[100%] h-[95%] mb-20">
         <div className="p-6">
             <h1 className="text-xl font-semibold text-blue-700">Your Teachers</h1>
@@ -64,7 +64,7 @@ export default function StudentRating() {
         </div>
         </div>
         </section>
-        </>
+        </div>
     
     );
 }
