@@ -25,7 +25,7 @@ export default function LectureSideBar() {
                     className={({ isActive }) =>
                         isActive
                             ? "text-slate-200 flex bg-sky-900 flex-row items-center gap-3 py-2 pl-4"
-                            : "text-black flex flex-row items-center gap-3 py-2 pl-4"
+                            : "text-black flex flex-row items-center gap-3 py-2 pl-4 hover:bg-sky-100"
                     }
                 >
                     {icon}

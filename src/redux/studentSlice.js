@@ -9,23 +9,23 @@ export const studentAuthorizationSlice = createSlice({
         }
     },
     reducers: {
-        setAuth: (state, actions) => {
+        setStudentAuth: (state, actions) => {
             localStorage.setItem("studToken", actions.payload)
             state.value.authorized = true
         },
         unAuthorize: (state) => {
             state.value.authorized = false
         },
-        setToken: (state) => {
+        setStudentToken: (state) => {
             state.value.studToken = localStorage.getItem("studToken")
         },
-        removeToken: (state) => {
+        removeStudentToken: (state) => {
             localStorage.removeItem("studToken")
             state.value.studToken = "0"
         }
     }  
 })
 
-export const {setAuth, unAuthorize, setToken, removeToken} = studentAuthorizationSlice.actions;
+export const {setStudentAuth, unAuthorize, setStudentToken, removeStudentToken} = studentAuthorizationSlice.actions;
 
 export default studentAuthorizationSlice.reducer;

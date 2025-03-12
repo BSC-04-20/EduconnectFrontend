@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GrGroup } from "react-icons/gr";
 
 export default function StudentClasses() {
@@ -8,7 +8,7 @@ export default function StudentClasses() {
 
     useEffect(() => {
         // Fetch classes from API
-        AuthenticatedUserUrl.get("/classes/get/student")
+        StudentAuthenticatedUserUrl.get("/classes/get/student")
             .then(response => {
                 setClasses(response.data.data);
                 setLoading(false);
