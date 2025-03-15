@@ -7,6 +7,6 @@ import AboutUs from './screens/AboutUs.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* <App /> */}
-    <AboutUs />
+    <AboutUs/>
   </StrictMode>,
 )

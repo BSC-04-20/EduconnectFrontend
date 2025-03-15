@@ -18,10 +18,10 @@ export default function JoinUs(){
                     MADISS is here for you.
                 </span>
                 <div className="grid grid-cols-2 gap-8 pr-[10%]">
-                    <button className="text-white py-3 bg-sky-500 text-xl font-bold">
+                    <button className="text-white py-3 bg-sky-500 text-xl font-bold hover:bg-sky-600">
                         Lecturer
                     </button>
-                    <button className="text-white py-3 bg-sky-500 text-xl font-bold">
+                    <button className="text-white py-3 bg-sky-500 text-xl font-bold hover:bg-sky-600">
                         Student
                     </button>
                 </div>
