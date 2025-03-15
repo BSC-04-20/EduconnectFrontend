@@ -19,7 +19,7 @@ export default function Navbar() {
     return (
         <>
             {/* Desktop Navbar */}
-            <nav className="hidden lg:flex justify-between items-center bg-gray-100 px-8 py-4 shadow-md">
+            <nav className="hidden lg:flex justify-between items-center bg-gray-100 px-8 h-[8vh] shadow-md">
                 <NavLink to="/" className="text-2xl font-bold text-sky-800">
                     EduConnect
                 </NavLink>
@@ -28,7 +28,7 @@ export default function Navbar() {
                         <NavLink 
                             key={to} 
                             to={to} 
-                            className={({ isActive }) => isActive ? "text-sky-600 font-semibold" : "hover:text-sky-600"}
+                            className={({ isActive }) => isActive ? "bg-sky-600 h-[8vh] flex items-center text-white px-3 border-solid border-b-[5px] border-b-sky-800" : "hover:text-sky-600 flex items-center"}
                         >
                             {label}
                         </NavLink>
@@ -37,7 +37,7 @@ export default function Navbar() {
                         <NavLink 
                             key={to} 
                             to={to} 
-                            className={({ isActive }) => isActive ? "text-sky-600 font-semibold" : "hover:text-sky-600"}
+                            className={({ isActive }) => isActive ? "bg-sky-800 h-[8vh] flex items-center font-semibold" : "hover:text-sky-600 flex items-center"}
                         >
                             {label}
                         </NavLink>

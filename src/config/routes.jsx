@@ -20,6 +20,10 @@ const routes = createBrowserRouter([
         element: <HomeScreen/>
     },
     {
+        path:"/about",
+        element:<Construction/>
+    },
+    {
         path:"/dashboard",
         element: <LectureDashboard/>
     },
