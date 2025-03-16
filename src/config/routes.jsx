@@ -18,11 +18,21 @@ import StudentLoginForm from "../components/Student/login";
 import StudentSignup from "../components/Student/signup";
 import AddClassForm from "../components/Lecture/classrooms/addClassroom";
 import StudentRouterAuthGuard from "../security/studentRouterAuthGuard";
+import HomeScreen from "../screens/Home";
+import SignupSelector from "../components/SignupSelector";
 
 const routes = createBrowserRouter([
   {
     path: "/",
-    element: <LoginSelector />,
+    element: <HomeScreen />,
+  },
+  {
+    path:"/login/select",
+    element:<LoginSelector/>
+  },
+  {
+    path:"/signup/select",
+    element:<SignupSelector/>
   },
   {
     path: "/lecture",

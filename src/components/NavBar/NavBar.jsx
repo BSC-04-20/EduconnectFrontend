@@ -4,13 +4,13 @@ import { MdMenu, MdClose } from "react-icons/md";
 
 const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/about", label: "About Us" },
+    { to: "/about", label: "About" },
     { to: "/events", label: "Events" },
 ];
 
 const authLinks = [
-    { to: "/login", label: "Log In" },
-    { to: "/signup", label: "Sign Up" },
+    { to: "/login/select", label: "Login" },
+    { to: "/signup/select", label: "Signup" },
 ];
 
 export default function Navbar() {
