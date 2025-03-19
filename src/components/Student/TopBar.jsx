@@ -32,7 +32,7 @@ const StudentTopBar = () => {
       if (response.status === 200) {
         dispatch(removeToken());
         dispatch(unAuthorize());
-        navigate("/student/login");
+        navigate("/");
       } else {
         alert("Failed to logout");
       }

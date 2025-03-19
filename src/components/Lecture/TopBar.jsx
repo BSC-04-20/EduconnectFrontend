@@ -31,7 +31,7 @@ const TopBar = () => {
       if (response.status === 200) {
         dispatch(removeToken());
         dispatch(unAuthorize());
-        navigate("/lecture/login");
+        navigate("/");
       } else {
         alert("Failed to logout");
       }

@@ -21,7 +21,7 @@ export const studentAuthorizationSlice = createSlice({
         },
         removeStudentToken: (state) => {
             localStorage.removeItem("studToken")
-            state.value.studToken = "0"
+            state.value.token = null;
         }
     }  
 })
