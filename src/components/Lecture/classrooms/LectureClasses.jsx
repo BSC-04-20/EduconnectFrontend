@@ -33,15 +33,15 @@ export default function LectureClasses() {
 
       <div className="grid grid-cols-3 gap-4 bg-white w-[95%] rounded-lg p-5 mt-5 flex-wrap">
         {classes.map((classItem) => (
-          <div key={classItem.id} className="mt-2 bg-white drop-shadow-md h-[40vh] w-[80%] rounded-lg flex flex-col">
-          <div key={classItem.id} className= "grid grid-row px-5 bg-sky-900 w-[100%] h-[20%] text-white rounded-lg items-center pl-2"> 
+          <Link to={`/lecture/classroom/${classItem.id}`} key={classItem.id} className="mt-2 bg-white drop-shadow-md h-[40vh] w-[80%] rounded-lg flex flex-col">
+            <div key={classItem.id} className= "grid grid-row px-5 bg-sky-900 w-[100%] h-[20%] text-white rounded-lg items-center pl-2"> 
               <h1 className="font-bold">{classItem.name}</h1>
-          </div>
-          <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA] ml-auto mr-2 mt-auto mb-2">
+            </div>
+            <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA] ml-auto mr-2 mt-auto mb-2">
               <GoPeople className="text-slate-900  size-[1.5rem]"/>
-          </div>
+            </div>
           
-      </div>
+          </Link>
         ))}
       </div>
 
