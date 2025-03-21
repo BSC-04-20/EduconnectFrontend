@@ -1,145 +1,34 @@
-import {GoCalendar, GoLocation, GoPeople} from "react-icons/go";
+import { GoCalendar, GoLocation, GoPeople } from "react-icons/go";
 
+export default function EventsOverview() {
+    const events = Array(8).fill({
+        title: "Advanced Mathematics",
+        date: "June 15, 2024 • 2:00 pm",
+        location: "Virtual Event",
+        attendees: "24 Attendees",
+    });
 
-export default function EventsOverview(){
-    return(
-        <div className="bg-white mr-8">
-           
-            <div className="W-[95%] grid grid-cols-4 gap-1 mt-5 ml-5 mr-5 mb-5">
-                <div className="shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
+    return (
+        <div className="bg-white mx-4">
+            <div className="w-[95%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
+                {events.map((event, index) => (
+                    <div key={index} className="shadow-lg rounded-lg p-4 hover:scale-105 transition-transform duration-300">
+                        <span className="font-semibold text-sm">{event.title}</span>
+                        <div className="flex flex-row gap-3 mt-3 mb-2 items-center">
+                            <GoCalendar className="text-gray-500" />
+                            <span className="text-xs text-gray-500">{event.date}</span>
+                        </div>
+                        <div className="flex flex-row gap-3 mb-2 items-center">
+                            <GoLocation className="text-gray-500" />
+                            <span className="text-xs text-gray-500">{event.location}</span>
+                        </div>
+                        <div className="flex flex-row gap-3 mb-2 items-center">
+                            <GoPeople className="text-gray-500" />
+                            <span className="text-xs text-gray-500">{event.attendees}</span>
+                        </div>
                     </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-                
-                <div className="shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-
-                <div className="shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-
-                <div className="shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-
+                ))}
             </div>
-
-            <div className="W-[95%] grid grid-cols-4 gap-1 ml-5 mr-5 mb-5">
-            <div className="mb-10 shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-                
-                <div className="mb-10 shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-
-                <div className="mb-10 shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-
-                <div className="mb-10 shadow-lg mr-10 rounded-tl-lg rounded-tr-lg rounded-br-lg rounded-bl-lg mt-4">
-                    <span className="ml-5 font-semibold text-sm">Advanced Mathematics</span>
-                    <div className="ml-5 flex flex-row gap-5 mb-2 mt-2">
-                        <GoCalendar className=""/>
-                        <span className="text-xs text-gray-500">June 15, 2024 • 2:00 pm </span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoLocation className=""/>
-                        <span className="text-xs text-gray-500">Virtual Event</span>
-                    </div>
-                    <div className="ml-5 flex flex-row gap-5 mb-2">
-                        <GoPeople className=""/>
-                        <span className="text-xs text-gray-500">24 Attendees</span>
-                    </div>
-                </div>
-
-            </div>
-
-
         </div>
-    )
+    );
 }
