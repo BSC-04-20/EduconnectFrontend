@@ -1,10 +1,11 @@
 import { FaBullhorn } from 'react-icons/fa6';
+import Empty from "../../../../assets/Empty-pana.svg"
 
 export default function ClassroomFeed({ announcements }) {
   return (
     <div className="mt-5">
       {/* Content */}
-      <div>
+      {(announcements.length > 0) && <div>
         <ul>
           {announcements.map((announcement) => (
 
@@ -17,7 +18,14 @@ export default function ClassroomFeed({ announcements }) {
             </li>
           ))}
         </ul>
-      </div>
+      </div>}
+
+      {(announcements.length === 0) && <div className='flex flex-col items-center justify-center'>
+            <div className='w-[30%]'>
+                <img src={Empty} />
+            </div>
+            <span className='text-sm text-gray-700 w-[40%] text-center'>No any announcement, assignment or resource</span>
+        </div>}
     </div>
   );
 }
