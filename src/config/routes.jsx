@@ -13,6 +13,7 @@ import StudentSideBar from "../components/Student/SideBar";
 import StudentRating from "../screens/StudentRating";
 import StudentDiscussions from "../screens/StudentDiscussions";
 import HomeScreen from "../screens/Home";
+import AboutUs from "../screens/AboutUs";
 
 const routes = createBrowserRouter([
     {
@@ -21,7 +22,7 @@ const routes = createBrowserRouter([
     },
     {
         path:"/about",
-        element:<Construction/>
+        element:<AboutUs/>
     },
     {
         path:"/dashboard",
