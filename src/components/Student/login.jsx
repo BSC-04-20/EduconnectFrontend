@@ -110,7 +110,7 @@ const StudentLoginForm = () => {
           <h2 className="text-2xl font-bold mb-4">Welcome Back</h2>
           <p className="text-sm mb-6">Log In & Pick Up Where You Left Off!</p>
           <button
-            onClick={() => navigate("/lecture/signup")}
+            onClick={() => navigate("/student/signup")}
             className="border border-white py-2 px-4 rounded hover:bg-white hover:text-sky-900 transition"
           >
             Sign Up

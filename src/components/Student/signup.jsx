@@ -70,7 +70,7 @@ export default function StudentSignup() {
             Educate, Guide & Lead - Sign Up Today!
           </p>
           <button
-            onClick={() => navigate("/lecture/login")}
+            onClick={() => navigate("/student/login")}
             className="border border-white py-1 px-24 mt-3 rounded hover:bg-white hover:text-sky-900 transition"
           >
             Sign In

@@ -22,6 +22,8 @@ import HomeScreen from "../screens/Home";
 import SignupSelector from "../components/SignupSelector";
 import LectureClassScreen from "../screens/LectureClassScreen";
 import ClassStudentsScreen from "../screens/ClassStudentsScreen";
+import AnnouncementForm from "../components/Lecture/classrooms/announcementform";
+import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 
 const routes = createBrowserRouter([
   {
@@ -51,6 +53,8 @@ const routes = createBrowserRouter([
       { path: "classroom/add", element: <RouterAuthGuard> <AddClassForm /> </RouterAuthGuard>},
       {path: "classroom/:id", element:<RouterAuthGuard><LectureClassScreen/></RouterAuthGuard>},
       {path: "classroom/:id/students", element:<RouterAuthGuard><ClassStudentsScreen/></RouterAuthGuard>},
+      {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
+      {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>}
     ],
   },
