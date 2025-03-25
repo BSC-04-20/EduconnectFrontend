@@ -30,7 +30,6 @@ const routes = createBrowserRouter([
         path:"/resources",
         element:<Resources/>
     },
-    
     {
         path:"/ratings",
         element:<Construction/>
