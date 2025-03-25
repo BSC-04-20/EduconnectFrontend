@@ -5,6 +5,7 @@ import StudentConstruction from "../components/Student/construction";
 import Events from "../screens/Events";
 import Resources from "../screens/Resources";
 import EduEvents from "../screens/EduEvents";
+import SkeletonLoader from "../screens/SkeletonLoader";
 const routes = createBrowserRouter([
     {
         path:"/",
@@ -34,7 +35,10 @@ const routes = createBrowserRouter([
         path:"/ratings",
         element:<Construction/>
     },
-    
+    {
+        path:"/main/skeletonloader",
+        element:<SkeletonLoader/>
+    },
     {
         path:"/classroom",
         element:<Construction/>
