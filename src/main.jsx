@@ -6,8 +6,6 @@ import AboutUs from './screens/AboutUs.jsx'
 import EduEvents from './screens/EduEvents.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <App /> */}
-    {/* <AboutUs/> */}
-    <EduEvents/>
+    <App />
   </StrictMode>,
 )

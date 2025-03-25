@@ -23,7 +23,7 @@ export default function ResourcesList() {
                 {[...Array(5)].map((_, index) => (
                     <div
                         key={index}
-                        className="flex flex-col md:flex-row md:items-center bg-gray-50 p-4 rounded-lg hover:shadow hover:scale-105"
+                        className="flex flex-col md:flex-row md:items-center bg-gray-50 p-4 rounded-lg hover:shadow hover:scale-[102%]"
                     >
                         <FaRegFileAlt className="text-5xl text-blue-900 mb-3 md:mb-0" />
                         <div className="md:ml-5 flex-1">

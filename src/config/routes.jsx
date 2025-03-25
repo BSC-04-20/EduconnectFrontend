@@ -4,7 +4,7 @@ import Construction from "../components/Lecture/construction";
 import StudentConstruction from "../components/Student/construction";
 import Events from "../screens/Events";
 import Resources from "../screens/Resources";
-
+import EduEvents from "../screens/EduEvents";
 const routes = createBrowserRouter([
     {
         path:"/",
@@ -22,7 +22,10 @@ const routes = createBrowserRouter([
         path:"/timetable",
         element:<Construction/>
     },
-    
+    {
+        path:"/main/events",
+        element:<EduEvents/>
+    },
     {
         path:"/resources",
         element:<Resources/>

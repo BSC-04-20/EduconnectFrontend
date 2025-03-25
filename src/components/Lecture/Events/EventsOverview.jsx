@@ -9,8 +9,8 @@ export default function EventsOverview() {
     });
 
     return (
-        <div className="bg-white mx-4">
-            <div className="w-[95%] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
+        <div className="bg-white mx-4 ml-0.5 w-[95%]">
+            <div className="w-[95%] grid grid-cols-1 sm:grid-cols-2 ml-6 md:grid-cols-3 lg:grid-cols-4 gap-6 p-5">
                 {events.map((event, index) => (
                     <div key={index} className="shadow-lg rounded-lg p-4 hover:scale-105 transition-transform duration-300">
                         <span className="font-semibold text-sm">{event.title}</span>
