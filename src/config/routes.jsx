@@ -6,12 +6,8 @@ import StudentConstruction from "../components/Student/construction";
 import Events from "../screens/Events";
 import Resources from "../screens/Resources";
 import LectureClassrooms from "../components/Lecture/classrooms/LectureClasses";
-import StudentDashboard from "../screens/StudentDashboard";
 import StudentLearningMaterials from "../screens/StudentLearningMaterials";
-import StudentSideBar from "../components/Student/SideBar";
-
 import StudentRating from "../screens/StudentRating";
-import StudentDiscussions from "../screens/StudentDiscussions";
 import HomeScreen from "../screens/Home";
 
 const routes = createBrowserRouter([
