@@ -7,12 +7,13 @@ import StudentDashboard from "../screens/StudentDashboard";
 import StudentLearningMaterials from "../screens/StudentLearningMaterials";
 import StudentSideBar from "../components/Student/SideBar";
 import HomeNavBar from "../components/HomeNavBar";
+import FileUpload from "../FileUpload";
 
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<HomeNavBar/>
+        element:<FileUpload/>
     },
     {
         path:"/events",
