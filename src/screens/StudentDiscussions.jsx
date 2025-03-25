@@ -1,5 +1,4 @@
 import { useState } from "react";
-import StudentSideBar2 from "../components/Student/SideBar2";
 import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 
 

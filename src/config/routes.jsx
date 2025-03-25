@@ -39,7 +39,6 @@ const routes = createBrowserRouter([
         path:"/timetable",
         element:<Construction/>
     },
-    
     {
         path:"/resources",
         element:<Resources/>
