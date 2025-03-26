@@ -8,7 +8,7 @@ export default function StudentClasses() {
 
     useEffect(() => {
         // Fetch classes from API
-        StudentAuthenticatedUserUrl.get("/classes/get/student")
+        StudentAuthenticatedUserUrl.get("/classes/student-classes")
             .then(response => {
                 setClasses(response.data.data);
                 setLoading(false);
