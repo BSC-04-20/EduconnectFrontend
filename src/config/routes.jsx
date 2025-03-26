@@ -9,13 +9,14 @@ import StudentSideBar from "../components/Student/SideBar";
 import HomeNavBar from "../components/HomeNavBar";
 import FileUpload from "../FileUpload";
 import CourseMaterialType from "../components/Student/resources/CoursesMaterialType"
+import ErrorPage from "../components/ErrorPage";
 
 
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<StudentLearningMaterials/>
+        element:<ErrorPage/>
     },
     {
         path:"/events",
