@@ -8,12 +8,14 @@ import StudentLearningMaterials from "../screens/StudentLearningMaterials";
 import StudentSideBar from "../components/Student/SideBar";
 import HomeNavBar from "../components/HomeNavBar";
 import FileUpload from "../FileUpload";
+import CourseMaterialType from "../components/Student/resources/CoursesMaterialType"
+
 
 
 const routes = createBrowserRouter([
     {
         path:"/",
-        element:<FileUpload/>
+        element:<StudentLearningMaterials/>
     },
     {
         path:"/events",

@@ -14,14 +14,16 @@ function createUppy() {
 export default function AssignmentUploader() {
     const [uppy] = useState(createUppy);
     return (
-        <div className="flex flex-col items-center justify-center bg-white shadow-md rounded-2xl p-6 w-[100%]">
-            <h2 className="text-lg font-semibold mb-2">UPLOAD ASSIGNMENT</h2>
+        <div className="flex flex-col items-center justify-center bg-white shadow-md min-h-screen rounded-2xl p-6 w-full">
+            <h2 className="text-lg font-semibold text-sky-950 mb-2">UPLOAD ASSIGNMENT</h2>
 
-            
-            <div className="border-2 border-dashed border-gray-400 p-6 rounded-lg text-center">
+            <div className="border-2 border-dashed border-gray-400 p-6 rounded-3xl w-full sm:w-[80%] md:w-[60%] lg:w-[50%] text-center">
                 <img src="/src/assets/upload.png" alt="Upload Icon" className="size-16 mx-auto mb-2" />
-                <p className="text-gray-600">Click or drag and drop to upload</p>
-                <Dashboard uppy={uppy}/>
+                
+                <div className="flex justify-center">
+                    <Dashboard uppy={uppy} width={300} height={180} />
+                </div>
+
                 <p className="text-xs text-gray-400 mt-1">Maximum size: 25MB</p>
             </div>
 
@@ -30,17 +32,12 @@ export default function AssignmentUploader() {
             <input
                 type="text"
                 placeholder="Paste link here"
-                className="border border-gray-300 rounded-md p-2 w-full mt-2"
+                className="border border-gray-300 rounded-md p-2 w-full sm:w-[80%] md:w-[60%] lg:w-[50%] mt-2"
             />
-            <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+            
+            <button className="mt-4 w-[50%] sm:w-[40%] md:w-[30%] lg:w-[20%] bg-sky-900 text-white py-2 rounded-md hover:bg-sky-500 transition">
                 SUBMIT
             </button>
         </div>
     );
 }
-
-
-        
-    
-
-    
