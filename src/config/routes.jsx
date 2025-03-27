@@ -13,7 +13,7 @@ import LecturerLoginForm from "../components/Lecture/login";
 import EventForm from "../components/Lecture/events/addEvents";
 import StudentClassroomsScreen from "../screens/StudentClassrooms";
 import LoginSelector from "../components/LoginSelector";
-import RouterAuthGuard from "../security/lecturerRouterAuthGuard"; // Import RouterAuthGuard
+import RouterAuthGuard from "../security/lecturerRouterAuthGuard";
 import StudentLoginForm from "../components/Student/login";
 import StudentSignup from "../components/Student/signup";
 import AddClassForm from "../components/Lecture/classrooms/addClassroom";
