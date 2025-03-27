@@ -1,6 +1,6 @@
 import Background from "../../assets/woman-free-photo.jpg";
 
-export default function HerosSectionEve() {
+export default function HerosSectionEvents() {
   return (
     <div
       className="relative h-[40vh] md:h-[50vh] lg:h-[40vh] bg-cover bg-center"
