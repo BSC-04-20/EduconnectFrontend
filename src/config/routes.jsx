@@ -14,11 +14,16 @@ import StudentRating from "../screens/StudentRating";
 import StudentDiscussions from "../screens/StudentDiscussions";
 import HomeScreen from "../screens/Home";
 import AboutUs from "../screens/AboutUs";
+import ErrorPage from "../components/ErrorPage";
 
 const routes = createBrowserRouter([
     {
         path:"/",
         element: <HomeScreen/>
+    },
+    {
+        path:"*",
+        element:<ErrorPage/>
     },
     {
         path:"/about",
