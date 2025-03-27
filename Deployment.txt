@@ -1,0 +1,94 @@
+#1: Updated my server
+apt update && apt upgrade -y
+
+#2:Installing Linux, Nginx, MySQL, PHP
+apt install nginx php-fpm php-cli php-mbstring php-xml php-bcmath php-curl php-zip unzip php-mysql mysql-server -y
+
+#3 Started mysql
+mysql -u root -p
+
+#4 Open mysql config file
+nano /etc/mysql/mysql.conf.d/mysqld.cnf
+
+#5 Find bind-address = 127.0.0.1 and change it to:
+bind-address = 0.0.0.0
+
+#6 Restart mysql
+systemctl restart mysql
+
+#7 upload your laravel project
+cd /var/www
+git clone https://github.com/yourrepo.git laravel-api
+cd laravel-api
+composer install
+
+#8 setup laravel 
+cp .env.example .env
+nano .env  # Update DB details
+php artisan key:generate
+php artisan migrate --seed  # Run migrations
+php artisan storage:link
+
+#09 Set permissions
+chown -R www-data:www-data /var/www/laravel-api
+chmod -R 775 /var/www/laravel-api/storage /var/www/laravel-api/bootstrap/cache
+
+#setup the nginx
+
+#10 setup ngix config file
+nano /etc/nginx/sites-available/laravel-api
+
+#then put the following
+#use your api where there is yoursite.com
+server {
+    listen 80;
+    server_name yourdomain.com;
+    root /var/www/laravel-api/public;
+
+    index index.php index.html;
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+
+#11 enable the site
+ln -s /etc/nginx/sites-available/laravel-api /etc/nginx/sites-enabled/
+systemctl restart nginx
+
+# Deploy React App
+#12 Upload React app 
+cd /var/www
+git clone https://github.com/yourrepo.git react-app
+cd react-app
+npm install
+npm run build
+
+#13 configure ngix for react
+nano /etc/nginx/sites-available/react-app
+
+#14 enter the following
+server {
+    listen 80;
+    server_name 123.45.67.89;
+
+    root /var/www/react-app/build;
+    index index.html;
+
+    location / {
+        try_files $uri /index.html;
+    }
+}
+
+#14 Restart ngix for react app
+ln -s /etc/nginx/sites-available/react-app /etc/nginx/sites-enabled/
+systemctl restart nginx
+
+
+

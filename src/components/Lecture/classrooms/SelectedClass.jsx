@@ -5,8 +5,6 @@ import ClassCode from './selected/classCode';
 import RegisteredStudents from './selected/StudentsNumber';
 import PostedResources from './selected/classResourcesNumber';
 import ClassroomFeed from './selected/announcements';
-import { GrAnnounce } from 'react-icons/gr';
-import { CiBullhorn } from 'react-icons/ci';
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 
@@ -15,6 +13,7 @@ export default function SelectedClassroom() {
     const [classData, setClassData] = useState(null);
     const [enrolled, setEnrolled] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
+    
     useEffect(() => {
         const fetchClassData = async () => {
             try {

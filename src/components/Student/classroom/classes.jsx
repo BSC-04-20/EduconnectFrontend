@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GrGroup } from "react-icons/gr";
+import { Link } from "react-router-dom";
 
 export default function StudentClasses() {
     const [classes, setClasses] = useState([]);
@@ -26,7 +27,7 @@ export default function StudentClasses() {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 z-0">
                     {classes.map((cls, index) => (
-                        <div key={index} className="bg-white shadow-md rounded-lg overflow-hidden border cursor-pointer transition-transform transform hover:scale-105">
+                        <Link to={`/student/classroom/${cls.class_id}`} key={index} className="bg-white shadow-md rounded-lg overflow-hidden border cursor-pointer transition-transform transform hover:scale-105">
                             {/* Header */}
                             <div className="bg-sky-800 h-16 flex flex-col items-start px-4 text-white">
                                 <span className="font-semibold text-lg">{cls.class_name}</span>
@@ -42,7 +43,7 @@ export default function StudentClasses() {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             )}

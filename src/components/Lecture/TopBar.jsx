@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { removeToken, unAuthorize } from "../../redux/slice";
 import CircularProgress from "@mui/material/CircularProgress"; 
 import Button from "@mui/material/Button"; 
+
 const TopBar = () => {
   const navigate = useNavigate();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -15,6 +16,7 @@ const TopBar = () => {
   const [username, setUsername] = useState();
 
   const getUsername = async () => {
+    
     try {
       const response = await AuthenticatedUserUrl.get("/user");
       setUsername(response.data.fullname);
@@ -49,9 +51,10 @@ const TopBar = () => {
     return today.toLocaleDateString(undefined, options);
   };
 
-  useEffect(()=>{
-    getUsername()
-  }, [])
+  useEffect(() => {
+    getUsername();
+  }, []);
+
   return (
     <>
       <div className="w-max ml-auto text-white p-4 mr-[5%] flex flex-row gap-4 items-center z-50">
