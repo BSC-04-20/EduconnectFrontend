@@ -25,6 +25,8 @@ import ClassStudentsScreen from "../screens/ClassStudentsScreen";
 import AnnouncementForm from "../components/Lecture/classrooms/announcementform";
 import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 import StudentClassScreen from "../screens/StudentSelectedClass";
+import ErrorPage from "../components/ErrorPage";
+import AboutUs from "../screens/AboutUs";
 
 const routes = createBrowserRouter([
   {
@@ -38,6 +40,14 @@ const routes = createBrowserRouter([
   {
     path:"/signup/select",
     element:<SignupSelector/>
+  },
+  {
+    path:"*",
+    element:<ErrorPage/>
+  },
+  {
+    path:"about",
+    element:<AboutUs/>
   },
   {
     path: "/lecture",
