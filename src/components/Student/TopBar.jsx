@@ -4,7 +4,7 @@ import { CiBellOn, CiCalendar, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
 import { useDispatch } from "react-redux";
-import { removeToken, unAuthorize } from "../../redux/slice";
+import { removeStudentToken, unAuthorize } from "../../redux/studentSlice";
 import CircularProgress from "@mui/material/CircularProgress"; 
 import Button from "@mui/material/Button"; 
 
@@ -25,14 +25,14 @@ const StudentTopBar = () => {
   }
 
   const handleLogout = async () => {
-    setLoading(true); // Start loading
+    setLoading(true); 
     try {
       const response = await StudentAuthenticatedUserUrl.post("/student/logout");
 
       if (response.status === 200) {
-        dispatch(removeToken());
+        dispatch(removeStudentToken());
         dispatch(unAuthorize());
-        navigate("/");
+        navigate("/student/login");
       } else {
         alert("Failed to logout");
       }
@@ -40,7 +40,7 @@ const StudentTopBar = () => {
       alert("Unauthorized");
       console.log(error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 

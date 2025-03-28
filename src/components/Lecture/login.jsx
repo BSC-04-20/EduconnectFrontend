@@ -39,7 +39,7 @@ const LecturerLoginForm = () => {
 
     try {
       // CSRF Protection
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie");
+      await axios.get("http://74.207.225.230/sanctum/csrf-cookie");
 
       // Send login request
       const response = await UrlFetcher.post("/lecture/login", formData);
