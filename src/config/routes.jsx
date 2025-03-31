@@ -13,6 +13,8 @@ import StudentSideBar from "../components/Student/SideBar";
 import StudentRating from "../screens/StudentRating";
 import StudentDiscussions from "../screens/StudentDiscussions";
 import HomeScreen from "../screens/Home";
+import AboutUs from "../screens/AboutUs";
+import ErrorPage from "../components/ErrorPage";
 
 const routes = createBrowserRouter([
     {
@@ -20,8 +22,12 @@ const routes = createBrowserRouter([
         element: <HomeScreen/>
     },
     {
+        path:"*",
+        element:<ErrorPage/>
+    },
+    {
         path:"/about",
-        element:<Construction/>
+        element:<AboutUs/>
     },
     {
         path:"/dashboard",
