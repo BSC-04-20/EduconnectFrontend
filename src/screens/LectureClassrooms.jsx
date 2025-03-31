@@ -1,16 +1,15 @@
-import LectureSideBar from "../components/Lecture/SideBar";
 import LectureClasses from "../components/Lecture/classrooms/LectureClasses";
-import StudentSideBar from "../components/Student/SideBar";
+import LectureSideBar from "../components/Lecture/SideBar";
+import TopBar from "../components/Lecture/TopBar";
 
-export default function LectureClassrooms(){
+export default function LectureClassroomScreen(){
     return(
         <div className="flex flex-row gap-5">
             <LectureSideBar/>
             <section className="mt-[5vh] md:mt-0 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
-                <LectureClasses/>     
+                <TopBar/>
+                <LectureClasses/>
             </section>
         </div>
     )
 }
- 
-

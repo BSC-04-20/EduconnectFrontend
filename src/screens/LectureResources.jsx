@@ -2,7 +2,7 @@ import LectureSideBar from "../components/Lecture/SideBar";
 import ResourcesHeader from "../components/Lecture/Resources/ResourcesHeader";
 import ResourcesList from "../components/Lecture/Resources/ResourcesList";
 
-export default function Resources(){
+export default function LectureResources(){
     return(
         <div className="flex flex-row gap-5">
             <LectureSideBar/>

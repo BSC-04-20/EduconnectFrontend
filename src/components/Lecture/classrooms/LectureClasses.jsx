@@ -1,138 +1,53 @@
+import { useEffect, useState } from "react";
+import { BsPeople } from "react-icons/bs";
+import { FaPlus } from "react-icons/fa6";
+import { Link } from "react-router-dom"; // Ensure Axios instance is imported
+import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GoPeople } from "react-icons/go";
 
-export default function LectureClasses(){
-    return( 
+export default function LectureClasses() {
+  const [classes, setClasses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-        
-        <div className="h-[90vh] grid grid-cols-3 py-5 bg-white grid grid-rows-2 gap-5 w-[80%] pe-8 px-5 ">
-        <div className="bg-[#FFFFFF] drop-shadow-md place-content-start  h-[35vh] w-[50%] rounded-lg ">
-            <div className=" text-white  bg-sky-900 gap-2 px-5 py-2 h-[30%] w-[100%] rounded-lg  ">
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await AuthenticatedUserUrl.get("/classes/get"); // Make API call
+        setClasses(response.data.data);
+        console.log(response.data.data)
+      } catch (err) {
+        setError("Failed to fetch classes. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-            <h1 className=" font-bold">COM411</h1>
-            <p className="text-sm">Angellah khumula</p> 
+    fetchClasses();
+  }, []);
 
+  return (
+    <div>
+      {loading && <p className="text-center text-gray-600">Loading classes...</p>}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
+      <div className="grid grid-cols-3 gap-4 bg-white w-[95%] rounded-lg p-5 mt-5 flex-wrap">
+        {classes.map((classItem) => (
+          <Link to={`/lecture/classroom/${classItem.id}`} key={classItem.id} className="mt-2 bg-white drop-shadow-md h-[40vh] w-[80%] rounded-lg flex flex-col">
+            <div key={classItem.id} className= "grid grid-row px-5 bg-sky-900 w-[100%] h-[20%] text-white rounded-lg items-center pl-2"> 
+              <h1 className="font-bold">{classItem.name}</h1>
             </div>
-            <div className=" px-21 mx-20 my-5 py-20">
-                 <div className="flex items-center ga justify-center place-content-end rounded-full w-10 h-10 bg-[#C7D6DA]">
-                  <GoPeople className="text-slate-900  size-[1.5rem]"/>
-                 </div>
-
+            <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA] ml-auto mr-2 mt-auto mb-2">
+              <GoPeople className="text-slate-900  size-[1.5rem]"/>
             </div>
-           
+          
+          </Link>
+        ))}
+      </div>
 
-        </div>
-
-        <div className="bg-[#FFFFFF] drop-shadow-md mx-0 place-content-start items-right h-[35vh] w-[50%] rounded-lg ">
-            <div className=" text-white  bg-sky-900 gap-2 px-5 py-2 h-[30%] w-[100%] rounded-lg ">
-
-            <h1 className=" font-bold">COM411</h1>
-            <p className="text-sm">Angellah khumula</p> 
-                
-
-            </div>
-            <div className=" px-21 mx-20 my-5 py-20">
-
-             <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA]">
-             <GoPeople className="text-slate-900 size-[1.5rem]"/>
-
-            </div>
-
-            </div>
-            
-
-        </div>
-
-        <div className="bg-[#FFFFFF] drop-shadow-md place-content-start items-right  h-[35vh] w-[50%] rounded-lg">
-            <div className=" text-white  bg-sky-900 py-2 gap-2 px-5 h-[30%] w-[100%] rounded-lg  ">
-
-            <h1 className=" font-bold">COM411</h1>
-            <p className="text-sm">Angellah khumula</p> 
-                
-
-        </div>
-
-            <div className=" px-21 mx-20 my-5 py-20"> 
-
-            <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA]">
-            <GoPeople className="text-slate-900 size-[1.5rem]"/>
-            </div>
-
-            </div>
-
-        </div>
-
-        <div className="bg-[#FFFFFF] drop-shadow-md place-content-start place-items-left  h-[35vh] w-[50%] rounded-lg  ">
-            <div className=" text-white  bg-sky-900 py-2 gap-2 px-5 h-[30%] w-[100%] rounded-lg  ">
-
-            <h1 className=" font-bold">COM411</h1>
-            <p className="text-sm">Angellah khumula</p> 
-                
-
-            </div>
-
-            <div className=" px-21 mx-20 my-5 py-20">
-
-               <div className="flex items-center justify-center rounded-full place-items-end w-10 h-10 bg-[#C7D6DA]">
-               <GoPeople className="text-slate-900 size-[1.5rem]"/>
-            </div>
-
-            </div>
-            
-
-        </div>
-
-        <div className=" bg-[#FFFFFF] drop-shadow-md place-content-start items-right  h-[35vh] w-[50%] rounded-lg ">
-            <div className=" text-white  bg-sky-900 py-2 gap-2 px-5 h-[30%] w-[100%] rounded-lg  ">
-
-            <h1 className=" font-bold">COM411</h1>
-            <p className="text-sm">Angellah khumula</p> 
-                
-
-            </div>
-            <div className=" px-21 mx-20 my-5 py-20"> 
-
-            <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA]">
-            <GoPeople className="text-slate-900 size-[1.5rem]"/>
-            </div>
-
-            </div>
-            
-
-        </div>
-
-        <div className="bg-[#FFFFFF] drop-shadow-md place-content-start items-right h-[35vh] w-[50%] rounded-lg ">
-            <div className=" text-white  bg-sky-900 py-2 gap-2 px-5 h-[30%] w-[100%] rounded-lg  ">
-
-                 <div className="flex flex-col">
-
-                  <h1 className=" font-bold">COM411</h1>
-                  <p className="text-sm">Angellah khumula</p> 
-                    
-                    
-                 </div>
-
-            </div>
-
-            <div className=" px-21 mx-20 my-5 py-20"> 
-              <div className="flex items-center justify-center rounded-full w-10 h-10 bg-[#C7D6DA]">
-              <GoPeople className="text-slate-900 size-[1.5rem]"/>
-              </div>
-
-            </div>
-            
-
-        </div>
-
-        
-
+      <Link to="/lecture/classroom/add" className="fixed bottom-16 right-24 bg-sky-200 rounded-full p-5 text-sky-900 shadow-md hover:bg-sky-500">
+        <FaPlus className="size-[2rem]" />
+      </Link>
     </div>
-
-
-
-
-
-
-    )
-
-
-}    
+  );
+}

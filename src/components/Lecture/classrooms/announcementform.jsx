@@ -1,18 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios"; // Import Axios
+import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function AnnouncementForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [files, setFiles] = useState([]);
+  const navigator = useNavigate();
+  const id = useParams();
 
   const handleFileChange = (event) => {
     setFiles([...event.target.files]);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log({ title, description, files });
-    alert("Announcement submitted!");
+
+    // Create a FormData object to send form data including files
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("class_id", id.id)
+
+    // Append each file to FormData
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    try {
+      const response = await AuthenticatedUserUrl.post("/announcement/create", formData);
+
+      if (response.status === 201) {
+        alert("Announcement submitted successfully!");
+        setTitle("");
+        setDescription("");
+        setFiles([]);
+        navigator(`/lecture/classroom/${id.id}`)
+      } else {
+        alert("Error submitting the announcement.");
+      }
+    } catch (error) {
+      console.error("Error submitting announcement:", error);
+      alert("Error submitting the announcement.");
+    }
   };
 
   return (
@@ -30,7 +61,7 @@ export default function AnnouncementForm() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700">Description(optional)</label>
+          <label className="block text-sm font-medium text-gray-700">Description (optional)</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}

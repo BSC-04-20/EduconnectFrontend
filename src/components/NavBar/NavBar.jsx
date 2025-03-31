@@ -1,20 +1,32 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { MdMenu, MdClose } from "react-icons/md";
+import { useSelector } from "react-redux";
 
 const navLinks = [
     { to: "/", label: "Home" },
-    { to: "/about", label: "About Us" },
+    { to: "/about", label: "About" },
     { to: "/events", label: "Events" },
 ];
 
 const authLinks = [
-    { to: "/login", label: "Log In" },
-    { to: "/signup", label: "Sign Up" },
+    { to: "/login/select", label: "Login" },
+    { to: "/signup/select", label: "Signup" },
 ];
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
+
+    // Get authentication tokens from Redux
+    const token = useSelector((state) => state.authorizer.value.token);
+    const studentToken = useSelector((state) => state.studentAuthorizer.value.studToken);
+
+    // Check if user is authenticated
+    const isAuthenticated = !!(token || studentToken);
+
+    useEffect(()=>{
+        console.log(isAuthenticated)
+    },[])
 
     return (
         <>
@@ -33,7 +45,19 @@ export default function Navbar() {
                             {label}
                         </NavLink>
                     ))}
-                    {authLinks.map(({ to, label }) => (
+
+                    {/* Show Dashboard if authenticated */}
+                    {isAuthenticated && (
+                        <NavLink 
+                            to={token ? "/lecture/dashboard" : "/student/dashboard"} 
+                            className="hover:text-sky-600 flex items-center"
+                        >
+                            Dashboard
+                        </NavLink>
+                    )}
+
+                    {/* Show login/signup links if NOT authenticated */}
+                    {!isAuthenticated && authLinks.map(({ to, label }) => (
                         <NavLink 
                             key={to} 
                             to={to} 
@@ -72,7 +96,19 @@ export default function Navbar() {
                         {label}
                     </NavLink>
                 ))}
-                {authLinks.map(({ to, label }) => (
+
+                {/* Show Dashboard if authenticated */}
+                {isAuthenticated && (
+                    <NavLink 
+                        to={token ? "/lecture/dashboard" : "/student/dashboard"} 
+                        className="hover:text-sky-600 flex items-center"
+                    >
+                        Dashboard
+                    </NavLink>
+                )}
+                
+                {/* Show login/signup links if NOT authenticated */}
+                {!isAuthenticated && authLinks.map(({ to, label }) => (
                     <NavLink 
                         key={to} 
                         to={to} 

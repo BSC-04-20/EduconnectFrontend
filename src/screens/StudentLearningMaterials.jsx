@@ -11,10 +11,7 @@ export default function StudentLearningMaterials(){
                 <CoursesMaterialType/>
 
                         
-        </section>
-            
-            
-             </div>
-
+            </section>    
+        </div>
     )
 }   

@@ -4,13 +4,13 @@ import { MdGroup, MdOutlineSpaceDashboard, MdMenu, MdClose } from "react-icons/m
 import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStarOutline, IoTimeOutline } from "react-icons/io5";
 
 const navLinks = [
-    { to: "/dashboard", label: "Dashboard", icon: <MdOutlineSpaceDashboard className="size-[1.5rem]" /> },
-    { to: "/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
-    { to: "/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
-    { to: "/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
-    { to: "/resources", label: "Resources", icon: <IoBookOutline className="size-[1.5rem]" /> },
-    { to: "/ratings", label: "Ratings", icon: <IoStarOutline className="size-[1.5rem]" /> },
-    { to: "/classroom", label: "Classroom", icon: <MdGroup className="size-[1.5rem]" /> },
+    { to: "/lecture/dashboard", label: "Dashboard", icon: <MdOutlineSpaceDashboard className="size-[1.5rem]" /> },
+    { to: "/lecture/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
+    { to: "/lecture/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
+    { to: "/lecture/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
+    { to: "/lecture/resources", label: "Resources", icon: <IoBookOutline className="size-[1.5rem]" /> },
+    { to: "/lecture/ratings", label: "Ratings", icon: <IoStarOutline className="size-[1.5rem]" /> },
+    { to: "/lecture/classroom", label: "Classroom", icon: <MdGroup className="size-[1.5rem]" /> },
 ];
 
 export default function LectureSideBar() {
@@ -60,7 +60,7 @@ export default function LectureSideBar() {
                             className={({ isActive }) =>
                                 isActive
                                     ? "text-slate-200 flex bg-sky-900 flex-row items-center gap-3 py-2 pl-4"
-                                    : "text-black flex flex-row items-center gap-3 py-2 pl-4"
+                                    : "text-black hover:bg-sky-200 hover:text-sky-900 flex flex-row items-center gap-3 py-2 pl-4"
                             }
                         >
                             {icon}
