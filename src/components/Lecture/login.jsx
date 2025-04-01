@@ -60,10 +60,10 @@ const LecturerLoginForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4"> {/* Added padding for responsiveness */}
+      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl flex-col sm:flex-row"> {/* Adjusted layout for small screens */}
         {/* Left Section */}
-        <div className="w-1/2 p-8">
+        <div className="w-full sm:w-1/2 p-8"> {/* Made full width on small screens */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Lecturer Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4 relative">
@@ -103,11 +103,21 @@ const LecturerLoginForm = () => {
             </button>
 
             <p className="text-sm text-gray-600 mt-3 text-center">Forgot your password?</p>
+            
+            {/* Sign Up button for small screens */}
+            <div className="sm:hidden mt-3 flex justify-center">
+              <button
+                onClick={() => navigate("/lecture/signup")}
+                className="border border-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition"
+              >
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
 
-        {/* Right Section */}
-        <div className="w-1/2 bg-sky-900 text-white p-8 flex flex-col justify-center">
+        {/* Right Section - Hidden on small screens */}
+        <div className="hidden sm:flex w-1/2 bg-sky-900 text-white p-8 flex-col justify-center">
           <h2 className="text-2xl font-bold mb-4">Welcome Back</h2>
           <p className="text-sm mb-6">Log In & Pick Up Where You Left Off!</p>
           <button
