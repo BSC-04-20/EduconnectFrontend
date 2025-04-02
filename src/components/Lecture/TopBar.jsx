@@ -16,7 +16,6 @@ const TopBar = () => {
   const [username, setUsername] = useState();
 
   const getUsername = async () => {
-    
     try {
       const response = await AuthenticatedUserUrl.get("/user");
       setUsername(response.data.fullname);
@@ -57,7 +56,7 @@ const TopBar = () => {
 
   return (
     <>
-      <div className="w-max ml-auto text-white p-4 mr-[5%] flex flex-row gap-4 items-center z-50">
+      <div className="w-full sm:w-max ml-auto text-white p-4 mr-[5%] flex flex-wrap gap-4 items-center z-50 justify-center sm:justify-end">
         <span className="flex flex-row shadow-md px-4 py-2 rounded-lg items-center gap-2 text-slate-950">
           <CiUser className="size-[1.5rem]" />
           {username}
