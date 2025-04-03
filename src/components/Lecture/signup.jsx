@@ -53,7 +53,7 @@ export default function LecturerSignup() {
       alert("Signup successful!");
       navigate("/lecture/login"); // Redirect to login page
     } catch (err) {
-      alert(err.response.data.errors)
+      alert(err.response.data.errors);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -62,13 +62,11 @@ export default function LecturerSignup() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
-        {/* Left Section */}
-        <div className="w-1/3 bg-sky-900 text-white flex flex-col items-center justify-center p-6">
+      <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row overflow-hidden w-3/4 max-w-4xl">
+        {/* Left Section (Hidden on small screens) */}
+        <div className="hidden md:flex w-1/3 bg-sky-900 text-white flex-col items-center justify-center p-6">
           <h2 className="text-2xl font-bold">Hello Friend!</h2>
-          <p className="text-sm text-gray-300 mt-2">
-            Educate, Guide & Lead - Sign Up Today!
-          </p>
+          <p className="text-sm text-gray-300 mt-2">Educate, Guide & Lead - Sign Up Today!</p>
           <button
             onClick={() => navigate("/lecture/login")}
             className="border border-white py-1 px-24 mt-3 rounded hover:bg-white hover:text-sky-900 transition"
@@ -78,10 +76,8 @@ export default function LecturerSignup() {
         </div>
 
         {/* Right Section - Form */}
-        <div className="w-2/3 p-8">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            Lecturer Signup Form
-          </h2>
+        <div className="w-full md:w-2/3 p-8">
+          <h2 className="text-xl font-semibold text-gray-700 mb-4">Lecturer Signup Form</h2>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="flex items-center border rounded px-3">
               <MdPerson className="text-gray-400 mr-2" />
@@ -149,6 +145,16 @@ export default function LecturerSignup() {
             >
               Signup
             </button>
+
+            {/* Sign In button (Visible only on small screens) */}
+            <div className="mt-4 block md:hidden text-center">
+              <button
+                onClick={() => navigate("/lecture/login")}
+                className="border border-gray-400 py-2 px-6 rounded hover:bg-gray-200 transition"
+              >
+                Sign In
+              </button>
+            </div>
           </form>
         </div>
       </div>
