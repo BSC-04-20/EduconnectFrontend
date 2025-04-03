@@ -38,7 +38,7 @@ export default function LecturePostedResources() {
     return (
         <div className="flex flex-col gap-3 bg-white rounded-lg w-[95%] py-10 px-5 overflow-x-auto md:overflow-hidden">
             {resources.map(({ name, size, uploaded }, index) => (
-                <div key={index} className="flex flex-col md:flex-row gap-3 items-center w-full md:w-[65%]">
+                <div key={index} className="flex flex-row md:flex-row gap-3 items-center w-full md:w-[65%]">
                     <div className="bg-sky-200 p-1 rounded-lg">
                         <MdOutlineDescription className="size-[2rem] text-sky-900"/>
                     </div>
@@ -48,7 +48,7 @@ export default function LecturePostedResources() {
                         <span className="text-gray-400 text-base">{size} uploaded {uploaded}</span>
                     </div>
 
-                    <div className="mt-2 md:mt-0 ml-auto flex gap-2 justify-center md:justify-end">
+                    <div className="mt-2 md:mt-0 ml-auto flex gap-5 justify-center md:justify-end">
                         <button onClick={() => handleDownload(name)} className="text-gray-600 hover:text-blue-600">
                             <FaDownload />
                         </button>
