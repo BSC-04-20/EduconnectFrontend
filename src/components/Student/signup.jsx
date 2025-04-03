@@ -1,4 +1,4 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
@@ -51,7 +51,7 @@ export default function StudentSignup() {
 
       console.log("Success:", response.data);
       alert("Signup successful!");
-      navigate("/Student/login"); // Redirect to login page
+      navigate("/student/login"); // Redirect to login page
     } catch (err) {
       alert(err.response.data.errors)
       setError(err.response?.data?.message || "An error occurred");
@@ -62,9 +62,9 @@ export default function StudentSignup() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
-        {/* Left Section */}
-        <div className="w-1/3 bg-sky-900 text-white flex flex-col items-center justify-center p-6">
+      <div className="bg-white shadow-lg rounded-lg flex flex-col lg:flex-row overflow-hidden w-3/4 max-w-4xl">
+        {/* Left Section - Hidden on small screens */}
+        <div className="hidden lg:flex w-1/3 bg-sky-900 text-white flex-col items-center justify-center p-6">
           <h2 className="text-2xl font-bold">Hello Friend!</h2>
           <p className="text-sm text-gray-300 mt-2">
             Educate, Guide & Lead - Sign Up Today!
@@ -78,7 +78,7 @@ export default function StudentSignup() {
         </div>
 
         {/* Right Section - Form */}
-        <div className="w-2/3 p-8">
+        <div className="w-full lg:w-2/3 p-8">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Student Signup Form
           </h2>
@@ -150,6 +150,14 @@ export default function StudentSignup() {
               Signup
             </button>
           </form>
+
+          {/* Sign In Button - Only on small screens */}
+          <button
+            onClick={() => navigate("/student/login")}
+            className="block lg:hidden w-full border border-sky-900 text-sky-900 py-2 mt-4 rounded hover:bg-sky-900 hover:text-white transition"
+          >
+            Sign In
+          </button>
         </div>
       </div>
 
