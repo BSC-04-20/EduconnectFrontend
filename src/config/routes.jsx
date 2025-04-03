@@ -83,6 +83,7 @@ const routes = createBrowserRouter([
       { path: "ratings", element:<StudentRouterAuthGuard>  <StudentRatingsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom", element:<StudentRouterAuthGuard>  <StudentClassroomsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>}
+      // { path: "classroom/:id/students", element:<StudentRouterAuthGuard>  <ClassStudentsScreen />  </StudentRouterAuthGuard>}
     ],
   },
 ]);

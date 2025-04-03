@@ -1,16 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import StudentSideBar2 from "../components/Student/SideBar2";
+import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
 
 
 export default function StudentRating() {
+    const [lecturers, setLecturers] = useState([]);
+    const [rating, setRating] = useState(4);
+    const [rates, setRates] = useState({});
+
+    useEffect(() => {
+        const fetchRating = async () => {
+            try {
+                const response = await StudentAuthenticatedUserUrl.get(`/ratings/get`);
+                // const data = await response.json();
+                setRating(response.data.average_rating);
+            } catch (error) {
+                alert('Error fetching rating:', error);
+            }
+        }
+    },[])
+    const handleRateClick = (index) => {
+        setRates((prevRates) => ({
+            ...prevRates,
+            [index]: prevRates[index] === "Rate Now" ? "Rate" : "Rate Now"
+        }));
+    };
+    
     const teachers = [
-        { name: "Dr Mwakabira", rating: 5, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 3, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." }
+        { name: "A", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "B", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "C", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "D", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "E", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." }
     ];
 
     const [showAll, setShowAll] = useState(false);
@@ -31,7 +54,7 @@ export default function StudentRating() {
                         <div className="flex flex-col ml-10-lg">
                         <div className="flex flex-row-lg flex-col-sm">
                             <h2 className="font-bold">{teacher.name}</h2>
-                            <div className="flex gap-1 ml-auto pt-2-sm pb-1-sm mr-5-sm ">
+                            <div className="flex gap-1 ml-auto pt-2-sm pb-1-sm pr-5 mr-5-sm mb-2 items-center">
                                     {[...Array(5)].map((_, i) => (
                                     i < teacher.rating ? (
                                         <AiFillStar key={i} className="text-yellow-500 text-xl-lg"/>
@@ -40,8 +63,26 @@ export default function StudentRating() {
                                     )
                                     ))}
                                 </div>
+                                <button 
+                                    onClick={() => {
+                                        handleRateClick(index)
+                                        if(rates[index] === "Rate Now"){
+                                            alert("Rate Now")
+                                        }
+                                        else{
+                                            //Alternative action
+                                            alert("Rate")
+                                        }
+                                    }} 
+                                    className={`h-[1px] w-[10vw] h-[4.5vh] rounded-2xl border-2 
+                                        ${rates[index] === "Rate" ? "text-sky-900 bg-white hover:bg-sky-900 hover:text-white  border-sky-900" 
+                                        : "bg-sky-900 text-white hover:bg-white hover:text-sky-900 text-sky-900 hover:border-sky-900"}`}
+                                >
+                                    <p className="flex items-center justify-center">{rates[index] || "Rate Now"}</p>
+                                </button>
+
                         </div>
-                        <div>
+                        <div> 
                             <p className="text-gray-500 text-sm w-[45vw]-lg">
                                 {teacher.datails}
                             </p>
