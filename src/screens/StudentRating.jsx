@@ -6,8 +6,12 @@ import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
 
 
 export default function StudentRating() {
+
+    
+
+
     const [lecturers, setLecturers] = useState([]);
-    const [rating, setRating] = useState(4);
+    const [ratings, setRatings] = useState({0:0,1:0,2:0,3:0,4:0,5:0});
     const [rates, setRates] = useState({});
 
     useEffect(() => {
@@ -15,25 +19,34 @@ export default function StudentRating() {
             try {
                 const response = await StudentAuthenticatedUserUrl.get(`/ratings/get`);
                 // const data = await response.json();
-                setRating(response.data.average_rating);
+                setRatings(response.data.average_rating);
             } catch (error) {
                 alert('Error fetching rating:', error);
             }
         }
     },[])
+    
     const handleRateClick = (index) => {
         setRates((prevRates) => ({
             ...prevRates,
-            [index]: prevRates[index] === "Rate Now" ? "Rate" : "Rate Now"
+            [index]: prevRates[index] === "Rate" ? "Give Rating" : "Rate"
         }));
+    };
+    const handleStarClick = (index, starValue) => {
+        if (rates[index] === "Rate") { // Allow rating only when it's "Rate"
+            setRatings((prevRatings) => ({
+                ...prevRatings,
+                [index]: starValue
+            }));
+        }
     };
     
     const teachers = [
-        { name: "A", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "B", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "C", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "D", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "E", rating: {rating}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." }
+        { name: "A", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:1 },
+        { name: "B", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:2 },
+        { name: "C", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:3 },
+        { name: "D", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:4 },
+        { name: "E", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:5 }
     ];
 
     const [showAll, setShowAll] = useState(false);
@@ -55,30 +68,35 @@ export default function StudentRating() {
                         <div className="flex flex-row-lg flex-col-sm">
                             <h2 className="font-bold">{teacher.name}</h2>
                             <div className="flex gap-1 ml-auto pt-2-sm pb-1-sm pr-5 mr-5-sm mb-2 items-center">
-                                    {[...Array(5)].map((_, i) => (
-                                    i < teacher.rating ? (
-                                        <AiFillStar key={i} className="text-yellow-500 text-xl-lg"/>
-                                    ) : (
-                                        <AiOutlineStar key={i} className="text-gray-400 text-xl-lg"/>
-                                    )
-                                    ))}
+                            {[...Array(5)].map((_, i) => (
+                                <span 
+                                    key={i} 
+                                    className={`cursor-pointer text-xl ${i < (ratings[index] || 0) ? "text-yellow-500" : "text-gray-400"} 
+                                        ${rates[index] === "Rate" ? "hover:text-yellow-600" : "cursor-not-allowed"}`}
+                                    onClick={() => handleStarClick(index, i + 1)}
+                                >
+                                    {i < (ratings[index] || 0) ? <AiFillStar /> : <AiOutlineStar />}
+                                </span>
+                            ))}
                                 </div>
                                 <button 
                                     onClick={() => {
                                         handleRateClick(index)
-                                        if(rates[index] === "Rate Now"){
-                                            alert("Rate Now")
+                                        if(rates[index] === "Give Rating"){
+                                            // alert("Rate Now")
                                         }
                                         else{
                                             //Alternative action
-                                            alert("Rate")
+                                            // alert("Rate")
                                         }
                                     }} 
+                                    disabled={ratings[index] === 0 && rates[index] === "Rate" === "Rate" ? true : false}
                                     className={`h-[1px] w-[10vw] h-[4.5vh] rounded-2xl border-2 
                                         ${rates[index] === "Rate" ? "text-sky-900 bg-white hover:bg-sky-900 hover:text-white  border-sky-900" 
-                                        : "bg-sky-900 text-white hover:bg-white hover:text-sky-900 text-sky-900 hover:border-sky-900"}`}
+                                        : "bg-sky-900 text-white hover:bg-white hover:text-sky-900 text-sky-900 hover:border-sky-900"}
+                                        ${ratings[index] === 0 && rates[index] === "Rate" ? "opacity-50 hover:bg-stone-500 cursor-not-allowed" : ""}`}
                                 >
-                                    <p className="flex items-center justify-center">{rates[index] || "Rate Now"}</p>
+                                    <p className="flex items-center justify-center">{rates[index] || "Give Rating"}</p>
                                 </button>
 
                         </div>
