@@ -27,6 +27,7 @@ import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
+import StudentAnnouncementScreen from "../screens/StudentAnnouncementPage";
 
 const routes = createBrowserRouter([
   {
@@ -82,7 +83,8 @@ const routes = createBrowserRouter([
       { path: "resources", element:<StudentRouterAuthGuard>  <StudentConstruction />  </StudentRouterAuthGuard>},
       { path: "ratings", element:<StudentRouterAuthGuard>  <StudentRatingsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom", element:<StudentRouterAuthGuard>  <StudentClassroomsScreen />  </StudentRouterAuthGuard>},
-      { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>}
+      { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>},
+      { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>}
     ],
   },
 ]);
