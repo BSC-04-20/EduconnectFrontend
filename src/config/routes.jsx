@@ -71,7 +71,8 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/students", element:<RouterAuthGuard><ClassStudentsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
-      { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>}
+      { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
+      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
     ],
   },
   {

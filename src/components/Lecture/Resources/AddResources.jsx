@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { useParams } from "react-router-dom";
 
 export default function AddResources() {
   const [fileQueue, setFileQueue] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const {id} = useParams()
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
@@ -26,20 +30,54 @@ export default function AddResources() {
     setSelectedFile(updatedQueue[updatedQueue.length - 1] || null);
   };
 
-  const handleUpload = (e) => {
+  const handleUpload = async (e) => {
     e.preventDefault();
-    if (fileQueue.length === 0) {
-      alert("Please select a file first.");
+
+    if (!title.trim()) {
+      alert("Please provide a title.");
       return;
     }
+
+    if (fileQueue.length === 0) {
+      alert("Please select at least one file.");
+      return;
+    }
+
+    // Check if file is selected in the file input
+    if (!selectedFile) {
+      alert("Please choose a file to upload.");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description || "");
+    formData.append("class_id", id)
+
     fileQueue.forEach((file) => {
-      console.log("Uploading:", file.name);
-      // logic 
+      formData.append("files[]", file); // Multiple files with the same key
     });
+
+    try {
+      const response = await AuthenticatedUserUrl.post("/resources/create", formData);
+      if (response.status !== 200) {
+        throw new Error("Upload failed.");
+      }
+      alert("Upload successful!");
+
+      // Clear form
+      setFileQueue([]);
+      setSelectedFile(null);
+      setTitle("");
+      setDescription("");
+
+    } catch (error) {
+      console.error("Error uploading:", error);
+      alert("Error uploading file.");
+    }
   };
 
   return (
-    <div className="pt-24 sm:pt-32 md:pt-40 px-4">
+    <div className="pt-20 sm:pt-20 md:pt-20 px-4">
       <form
         onSubmit={handleUpload}
         className="w-full max-w-md mx-auto p-4 sm:p-6 bg-white shadow-md rounded-xl flex flex-col gap-4"
@@ -48,7 +86,26 @@ export default function AddResources() {
           Upload Resources
         </h2>
 
-        {/* Custom file input display */}
+        {/* Title Input */}
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+          required
+          className="border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+        />
+
+        {/* Description Input */}
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Description"
+          className="border border-gray-300 rounded-md px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-500"
+          rows={3}
+        />
+
+        {/* File Input */}
         <div className="relative w-full mb-2">
           <input
             type="file"
@@ -62,7 +119,7 @@ export default function AddResources() {
           </div>
         </div>
 
-        {/* List of all files in the queue */}
+        {/* File Queue List */}
         {fileQueue.length > 0 && (
           <div className="text-sm text-gray-600 space-y-1">
             {fileQueue.map((file, index) => (
@@ -85,6 +142,7 @@ export default function AddResources() {
           </div>
         )}
 
+        {/* Upload Button */}
         <button
           type="submit"
           className="bg-sky-900 text-white px-4 py-2 rounded-lg hover:bg-sky-700 transition"
