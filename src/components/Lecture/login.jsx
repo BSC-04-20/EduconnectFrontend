@@ -107,8 +107,9 @@ const LecturerLoginForm = () => {
             {/* Sign Up button for small screens */}
             <div className="sm:hidden mt-3 flex justify-center">
               <button
+                type="button"
                 onClick={() => navigate("/lecture/signup")}
-                className="border border-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition"
+                className="border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
               >
                 Sign Up
               </button>
