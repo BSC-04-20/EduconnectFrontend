@@ -27,11 +27,15 @@ import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
+import ClassMeeting from "../screens/ClassMeeting";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <HomeScreen />,
+  },
+  {
+     path: "/jitsi", element: <ClassMeeting/>,
   },
   {
     path:"/login/select",
@@ -82,8 +86,8 @@ const routes = createBrowserRouter([
       { path: "resources", element:<StudentRouterAuthGuard>  <StudentConstruction />  </StudentRouterAuthGuard>},
       { path: "ratings", element:<StudentRouterAuthGuard>  <StudentRatingsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom", element:<StudentRouterAuthGuard>  <StudentClassroomsScreen />  </StudentRouterAuthGuard>},
-      { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>}
-      // { path: "classroom/:id/students", element:<StudentRouterAuthGuard>  <ClassStudentsScreen />  </StudentRouterAuthGuard>}
+      { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>},
+      
     ],
   },
 ]);
