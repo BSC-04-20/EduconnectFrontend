@@ -27,12 +27,16 @@ import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
+import ClassMeeting from "../screens/ClassMeeting";
 import { Rating } from "@mui/material";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <HomeScreen />,
+  },
+  {
+     path: "/jitsi", element: <ClassMeeting/>,
   },
   {
     path:"/login/select",
