@@ -73,8 +73,8 @@ export default function AssignmentUpload() {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
-        <h3 className="text-2xl font-semibold text-blue-700 mb-6">UPLOAD ASSIGNMENT</h3>
+      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-lg sm:max-w-md">
+        <h3 className="text-2xl font-semibold text-sky-700 mb-6">UPLOAD ASSIGNMENT</h3>
 
         <div className="border-2 border-dashed border-gray-400 p-6 rounded-xl mb-6">
           <input
@@ -103,7 +103,7 @@ export default function AssignmentUpload() {
 
         <button
           onClick={handleSubmit}
-          className={`w-full py-2 rounded-md text-white bg-blue-700 ${isSubmitting ? 'opacity-70' : ''}`}
+          className={`w-full py-2 rounded-md text-white bg-sky-700 ${isSubmitting ? 'opacity-70' : ''}`}
           disabled={isSubmitting}
         >
           {isSubmitting ? 'SUBMITTING...' : 'SUBMIT'}
