@@ -28,7 +28,7 @@ import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
 import ClassMeeting from "../screens/ClassMeeting";
-import { Rating } from "@mui/material";
+// import { Rating } from "@mui/material";
 
 const routes = createBrowserRouter([
   {
