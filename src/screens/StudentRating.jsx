@@ -3,6 +3,7 @@ import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import StudentSideBar2 from "../components/Student/SideBar2";
 import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
+import { useParams } from "react-router-dom";
 
 
 export default function StudentRating() {
@@ -13,6 +14,8 @@ export default function StudentRating() {
     const [lecturers, setLecturers] = useState([]);
     const [ratings, setRatings] = useState({0:0,1:0,2:0,3:0,4:0,5:0});
     const [rates, setRates] = useState({});
+
+    const id = useParams();
 
     useEffect(() => {
         const fetchRating = async () => {
@@ -40,14 +43,43 @@ export default function StudentRating() {
             }));
         }
     };
+    useEffect(() => {
+        const fetchLecturers = async () => {
+            try {
+                const response = await StudentAuthenticatedUserUrl.get(`/student/lecturers`);
+                const lecturersData = response.data.lecturers;
     
-    const teachers = [
-        { name: "A", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:1 },
-        { name: "B", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:2 },
-        { name: "C", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:3 },
-        { name: "D", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:4 },
-        { name: "E", rating: {ratings}, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students.",id:5 }
-    ];
+                // Transform the object into an array of lecturer objects
+                const formattedLecturers = Object.entries(lecturersData).map(([name, id]) => ({
+                    fullname: name,
+                    id: id
+                }));
+    
+                setLecturers(formattedLecturers);
+            } catch (error) {
+                alert('Error fetching lecturers: ' + error);
+            }
+        };
+    
+        fetchLecturers();
+    }, []);
+
+    const postRating = async (lecturerId, ratingValue) => {
+        try {
+          const response = await StudentAuthenticatedUserUrl.post(`/ratings/rate/${lecturerId}`, {
+            rating: ratingValue,
+          });
+      
+          if (response.status === 200) {
+            alert("Rating submitted successfully!");
+          } else {
+            alert("Something went wrong. Try again.");
+          }
+        } catch (error) {
+          alert("Error submitting rating: " + error.message);
+        }
+      };
+      
 
     const [showAll, setShowAll] = useState(false);
 
@@ -61,13 +93,13 @@ export default function StudentRating() {
             <p className="text-gray-600 mb-4">Tap on a teacher you want to rate</p>
             
             <div className="space-y-4">
-                {(showAll ? teachers : teachers.slice(0, 3)).map((teacher, index) => (
+                {(showAll ? lecturers : lecturers.slice(0, 3)).map((lecturer, index) => (
                     <div key={index} className="flex items-center p-4 bg-white border rounded-lg shadow-sm w-[80%]-lg">
-                        <img src={teacher.image} alt={teacher.name} className="w-12 h-12 rounded-full mr-4 object-cover scale-[1.35]-lg" />
+                        <img src={`..\\assets\\profile.png`} alt={lecturer.fullname} className="w-12 h-12 rounded-full mr-4 object-cover scale-[1.35]-lg" />
                         <div className="flex flex-col ml-10-lg">
                         <div className="flex flex-row-lg flex-col-sm">
-                            <h2 className="font-bold">{teacher.name}</h2>
-                            <div className="flex gap-1 ml-auto pt-2-sm pb-1-sm pr-5 mr-5-sm mb-2 items-center">
+                            <h2 className="font-bold pr-auto">{lecturer.fullname}</h2>
+                            <div className="flex ml-auto pt-2-sm pb-1-sm pr-5 mr-5-sm mb-2 items-center">
                             {[...Array(5)].map((_, i) => (
                                 <span 
                                     key={i} 
@@ -83,11 +115,14 @@ export default function StudentRating() {
                                     onClick={() => {
                                         handleRateClick(index)
                                         if(rates[index] === "Give Rating"){
-                                            // alert("Rate Now")
+                                            console.log()
+                                        }
+                                        else if(rates[index] === "Rate" && ratings[index] != 0 ){
+                                            postRating(lecturer.id, ratings[index]);
                                         }
                                         else{
                                             //Alternative action
-                                            // alert("Rate")
+                                            alert(ratings[index]+ "2");
                                         }
                                     }} 
                                     disabled={ratings[index] === 0 && rates[index] === "Rate" === "Rate" ? true : false}
@@ -102,7 +137,8 @@ export default function StudentRating() {
                         </div>
                         <div> 
                             <p className="text-gray-500 text-sm w-[45vw]-lg">
-                                {teacher.datails}
+                                {/* {lecturer.id} */}
+                                {/* Lecturer */}
                             </p>
                         </div>
                         </div>
@@ -110,7 +146,7 @@ export default function StudentRating() {
                 ))}
             </div>
 
-            {teachers.length > 3 && (
+            {lecturers.length > 3 && (
                 <div className="text-right mt-4">
                     <button 
                         onClick={() => setShowAll(!showAll)} 
