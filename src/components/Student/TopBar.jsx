@@ -55,9 +55,9 @@ const StudentTopBar = () => {
   }, [])
   return (
     <>
-      <div className="w-max ml-auto text-white p-4 mr-[5%] flex flex-row gap-4 items-center z-50">
+      <div className="w-full sm:w-max ml-auto text-white p-4 mr-[5%] flex flex-wrap gap-4 items-center z-50 justify-center sm:justify-end">
         <span className="flex flex-row shadow-md px-4 py-2 rounded-lg items-center gap-2 text-slate-950">
-          <CiUser className="size-[1.5rem]" />
+      <CiUser className="size-[1.5rem]" />
           {username}
         </span>
         <span className="flex flex-row gap-2 px-4 py-2 shadow-md rounded-lg text-slate-950">
@@ -76,7 +76,7 @@ const StudentTopBar = () => {
         </button>
       </div>
 
-      {/* Logout Confirmation Dialog */}
+     {/* Logout Confirmation Dialog */}
       {isDialogOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">

@@ -28,6 +28,7 @@ import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
 import AssignmentUploader from "../components/AssignmentUploader";
+import AddResources from "../components/Lecture/Resources/AddResources";
 
 const routes = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const routes = createBrowserRouter([
   {
     path:"/signup/select",
     element:<SignupSelector/>
+  },
+  {
+    path:"/addresources",
+    element:<AddResources/>
   },
   {
     path:"*",
@@ -67,7 +72,8 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/students", element:<RouterAuthGuard><ClassStudentsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
-      { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>}
+      { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
+      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
     ],
   },
   {

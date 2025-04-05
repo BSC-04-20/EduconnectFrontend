@@ -1,8 +1,6 @@
 import { useState } from "react";
 import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import StudentSideBar2 from "../components/Student/SideBar2";
-
 
 export default function StudentRating() {
     const teachers = [
