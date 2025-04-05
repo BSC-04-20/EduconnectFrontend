@@ -42,10 +42,10 @@ const routes = createBrowserRouter([
     path:"/signup/select",
     element:<SignupSelector/>
   },
-  {
-    path:"/addresources",
-    element:<AddResources/>
-  },
+  // {
+  //   path:"/addresources",
+  //   element:<AddResources/>
+  // },
   {
     path:"*",
     element:<ErrorPage/>
