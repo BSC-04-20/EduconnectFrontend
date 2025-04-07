@@ -122,7 +122,7 @@ export default function StudentRating() {
                                         }
                                         else{
                                             //Alternative action
-                                            alert(ratings[index]+ "2");
+                                            // alert(ratings[index]+ "2");
                                         }
                                     }} 
                                     disabled={ratings[index] === 0 && rates[index] === "Rate" === "Rate" ? true : false}
