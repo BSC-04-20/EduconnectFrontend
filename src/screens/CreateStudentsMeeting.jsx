@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 
-const CreateStudentsMeeting = () => {
+const JitsiMeet = () => {
   const jitsiContainerRef = useRef(null);
 
   useEffect(() => {
-    const domain = 'meet.jit.si'; // Change if using another server
+    const domain = 'localhost:8080'; // Change if using another server
     const options = {
       roomName: 'Rom',
       width: '100%',
@@ -15,7 +15,7 @@ const CreateStudentsMeeting = () => {
 
     const api = new window.JitsiMeetExternalAPI(domain, options);
 
-    // Allowed Participants List
+    // // Allowed Participants List
     // const allowedUsers = ["Atikonda Katundu","Katundu"]; // Add names of allowed participants
 
     // // Function to check and remove unauthorized participants
@@ -31,14 +31,14 @@ const CreateStudentsMeeting = () => {
     //   });
     // };
 
-    // Listen for when a participant joins
+    // // Listen for when a participant joins
     // api.on('participantJoined', checkParticipants);
 
     // // Also check every few seconds (in case display names take time to load)
     // const interval = setInterval(checkParticipants, 5000);
 
     return () => {
-    //   clearInterval(interval); // Clean up interval
+      // clearInterval(interval); // Clean up interval
       api.dispose();
     };
   }, []);
@@ -46,4 +46,4 @@ const CreateStudentsMeeting = () => {
   return <div ref={jitsiContainerRef} style={{ height: '585px' }}></div>;
 };
 
-export default CreateStudentsMeeting;
+export default JitsiMeet;

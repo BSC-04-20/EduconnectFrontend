@@ -3,14 +3,15 @@ import { JitsiMeeting } from "@jitsi/react-sdk";
 
 export default function JoinStudentMeeting() {
   const roomName = "Rom";
-  const domain = "meet.jit.si";
+  const domain = "localhost:8080";
+  const displayName = "Atikonda Katundu";
 
   return(
     <div >
       <JitsiMeeting
     domain = {domain}
     roomName = {roomName}
-    displayName = "Display name"
+    // displayName = "Display name"
     configOverwrite = {{
       disableProfile: true,
       enableWelcomePage: false,
@@ -37,7 +38,7 @@ export default function JoinStudentMeeting() {
       LANG_DETECTION: true,
     }}
     getIFrameRef = { (iframeRef) => { iframeRef.style.height = '585px'; } }
-    userInfo={{ displayName: "Tiko", email: "Email" }}
+    userInfo={{ displayName: {displayName}, email: "Email" }}
     
 />
     </div>
