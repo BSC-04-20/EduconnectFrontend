@@ -29,6 +29,7 @@ import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
 import AssignmentUploader from "../components/AssignmentUploader";
 import AddResources from "../components/Lecture/Resources/AddResources";
+import JitsiComponent from "../Jitsi/JitsiComponent";
 
 const routes = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ const routes = createBrowserRouter([
   {
     path:"about",
     element:<AboutUs/>
+  },
+  {
+    path:"jitsi",
+    element:<JitsiComponent/>
   },
   {
     path: "/lecture",
