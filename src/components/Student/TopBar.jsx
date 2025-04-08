@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CgLogOut } from "react-icons/cg";
 import { CiBellOn, CiCalendar, CiUser } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
-import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
+import { StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
 import { useDispatch } from "react-redux";
 import { removeStudentToken, unAuthorize } from "../../redux/studentSlice";
 import CircularProgress from "@mui/material/CircularProgress"; 

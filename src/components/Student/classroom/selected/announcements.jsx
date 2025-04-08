@@ -1,17 +1,17 @@
 import { FaBullhorn } from 'react-icons/fa6';
 import Empty from "../../../../assets/Empty-pana.svg"
 import { MdLibraryBooks } from 'react-icons/md';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
 
-export default function StudentClassroomFeed({ announcements }) {
-
-  useEffect(()=>{},[
-    console.log(announcements)
-  ])
+export default function StudentClassroomFeed({ announcements}) {
+  
+  useEffect(()=>{
+    
+  },[])
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 mr-[5%] sm:mr-[5%] md:mr-0">
       {/* Content */}
       {(announcements.length > 0) && <div>
         <ul>
