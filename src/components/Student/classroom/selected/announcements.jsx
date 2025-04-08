@@ -11,7 +11,7 @@ export default function StudentClassroomFeed({ announcements}) {
   },[])
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 mr-[5%] sm:mr-[5%] md:mr-0">
       {/* Content */}
       {(announcements.length > 0) && <div>
         <ul>
