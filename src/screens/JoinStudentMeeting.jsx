@@ -2,7 +2,7 @@ import { JitsiMeeting } from "@jitsi/react-sdk";
 
 
 export default function JoinStudentMeeting() {
-  const roomName = "Room name2";
+  const roomName = "Rom";
   const domain = "meet.jit.si";
 
   return(
