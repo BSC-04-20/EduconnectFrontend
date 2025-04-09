@@ -93,7 +93,7 @@ const StudentLoginForm = () => {
             <div className="mt-4 block lg:hidden text-center">
               <button
                 onClick={() => navigate("/student/signup")}
-                className="border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
+                className="sm:hidden border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
               >
                 Sign Up
               </button>
@@ -102,7 +102,7 @@ const StudentLoginForm = () => {
         </div>
 
         {/* Right Section - Hidden on small screens */}
-        <div className="hidden lg:flex w-1/2 bg-sky-900 text-white p-8 flex-col justify-center">
+        <div className="hidden sm:flex w-1/2 bg-sky-900 text-white p-8 flex-col justify-center">
           <h2 className="text-2xl font-bold mb-4">Welcome Back</h2>
           <p className="text-sm mb-6">Log In & Pick Up Where You Left Off!</p>
           <button
