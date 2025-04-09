@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa"; // Added back icon
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { setStudentAuth, setStudentToken } from "../../redux/studentSlice";
 
 const StudentLoginForm = () => {
@@ -20,8 +20,8 @@ const StudentLoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //Redux functions
-  const dispatch = useDispatch()
+  // Redux functions
+  const dispatch = useDispatch();
 
   // Handle form input change
   const handleChange = (e) => {
@@ -38,18 +38,15 @@ const StudentLoginForm = () => {
     setError(null); // Reset previous errors
 
     try {
-      // CSRF Protection
-      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL
+      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL;
       await axios.get(sanctumUrl);
 
-      // Send login request
       const response = await UrlFetcher.post("/student/login", formData);
-      const token = response.data.studToken
+      const token = response.data.studToken;
 
-      dispatch(setStudentAuth(token))
-      dispatch(setStudentToken())
+      dispatch(setStudentAuth(token));
+      dispatch(setStudentToken());
 
-      // Redirect on success
       navigate("/student/dashboard");
     } catch (err) {
       console.error("Login error:", err.response?.data || err.message);
@@ -61,7 +58,18 @@ const StudentLoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
+      <div>
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        >
+          <FaArrowLeft />
+          <span>Back</span>
+        </button>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl relative">
+
         {/* Left Section */}
         <div className="w-1/2 p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Student Login</h2>
@@ -91,7 +99,6 @@ const StudentLoginForm = () => {
               />
             </div>
 
-            {/* Show error message */}
             {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
             <button

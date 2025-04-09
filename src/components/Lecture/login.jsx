@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { useDispatch} from "react-redux";
-import {setAuth, setToken } from "../../redux/slice";
+import { useDispatch } from "react-redux";
+import { setAuth, setToken } from "../../redux/slice";
 
 const LecturerLoginForm = () => {
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ const LecturerLoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //Redux functions
-  const dispatch = useDispatch()
+  // Redux functions
+  const dispatch = useDispatch();
 
   // Handle form input change
   const handleChange = (e) => {
@@ -39,15 +39,15 @@ const LecturerLoginForm = () => {
 
     try {
       // CSRF Protection
-      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL
+      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL;
       await axios.get(sanctumUrl);
 
       // Send login request
       const response = await UrlFetcher.post("/lecture/login", formData);
-      const token = response.data.token
+      const token = response.data.token;
 
-      dispatch(setAuth(token))
-      dispatch(setToken())
+      dispatch(setAuth(token));
+      dispatch(setToken());
 
       // Redirect on success
       navigate("/lecture/dashboard");
@@ -60,7 +60,16 @@ const LecturerLoginForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+      >
+        <FaArrowLeft />
+        <span>Back</span>
+      </button>
+
       <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
         {/* Left Section */}
         <div className="w-1/2 p-8">

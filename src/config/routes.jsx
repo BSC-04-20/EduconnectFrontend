@@ -28,7 +28,7 @@ import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
 import AddResources from "../components/Lecture/Resources/AddResources";
-
+// import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -50,6 +50,10 @@ const routes = createBrowserRouter([
     path:"*",
     element:<ErrorPage/>
   },
+  // {
+  //   path:"lecturertimetable",
+  //   element:<LecturerTimeTable/>
+  // },
   {
     path:"about",
     element:<AboutUs/>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdLock } from "react-icons/md";
+import { IoMdArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import { Dialog, CircularProgress } from "@mui/material"; // Import MUI Components
@@ -32,16 +33,14 @@ export default function StudentSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    setLoading(true); // Start loading
-    setError(null); // Reset errors
+    setLoading(true);
+    setError(null);
 
     try {
-      // Send API request
       const response = await UrlFetcher.post("/student/signup", {
         fullname: formData.fullname,
         phonenumber: formData.phonenumber,
@@ -51,9 +50,9 @@ export default function StudentSignup() {
 
       console.log("Success:", response.data);
       alert("Signup successful!");
-      navigate("/Student/login"); // Redirect to login page
+      navigate("/Student/login");
     } catch (err) {
-      alert(err.response.data.errors)
+      alert(err.response.data.errors);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -61,7 +60,16 @@ export default function StudentSignup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+      {/* Back Button */}
+      <button
+        className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-gray-900 transition"
+        onClick={() => navigate(-1)}
+      >
+        <IoMdArrowBack className="mr-1 text-xl" />
+        Back
+      </button>
+
       <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
         {/* Left Section */}
         <div className="w-1/3 bg-sky-900 text-white flex flex-col items-center justify-center p-6">
