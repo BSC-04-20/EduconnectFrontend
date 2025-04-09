@@ -1,0 +1,46 @@
+#1 Update and upgrade
+sudo apt update && sudo apt upgrade -y
+
+#2 set hostname
+sudo hostnamectl set-hostname jitsi.educonnecti.com
+
+#3 edit hostname
+sudo nano /etc/hosts
+
+#3.1 Then enter
+127.0.1.1   jitsi.educonnecti.com
+
+#4 install required dependencies
+sudo apt install curl gnupg2 wget -y
+
+#5 ownload and import the Jitsi Meet GPG key with the following command
+sudo curl https://download.jitsi.org/jitsi-key.gpg.key -o jitsi-key.gpg.key
+
+#5.1 Then create a repository
+gpg --output /usr/share/keyrings/jitsi-key.gpg --dearmor jitsi-key.gpg.key
+
+#6 create a source list file for Jitsi using the following command
+
+
+#7 Paste the following line
+deb [signed-by=/usr/share/keyrings/jitsi-key.gpg] https://download.jitsi.org stable/
+
+#8 Next, you will also need to import the Prosody GPG key. You can download and import it with the following command.
+curl https://prosody.im/files/prosody-debian-packages.key -o prosody-debian-packages.key
+gpg --output /usr/share/keyrings/prosody-keyring.gpg --dearmor prosody-debian-packages.key
+
+#9 Then, create a sources list file for Prosody with the following command.
+nano /etc/apt/sources.list.d/prosody.list
+
+#10 paste the following line
+deb [signed-by=/usr/share/keyrings/prosody-keyring.gpg] http://packages.prosody.im/debian jammy main
+
+#11 update the apt
+sudo apt update
+
+        ********* Installing Jitsi Meet **********
+        ********* This is the actual jitsi *******
+
+#1 Now, you install the Jitsi Meet package by running the following command.
+apt install jitsi-meet -y
+

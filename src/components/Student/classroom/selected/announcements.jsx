@@ -17,7 +17,7 @@ export default function StudentClassroomFeed({ announcements}) {
         <ul>
           {announcements.map((announcement, index) => (
 
-            <Link to={announcement.type = "assignment" ? `/student/assignmentupload/${announcement.id}` : `/student/classroom/${announcement.id/announcement}`} key={announcement.id} className="p-4 bg-white shadow-sm rounded-md mb-2 flex items-center gap-3">
+            <Link to={announcement.type = "assignment" ? `/student/assignmentupload/${announcement.id}` : `/student/classroom/${announcement.id/announcement}`} key={announcement.id} className="p-4 bg-white shadow-sm rounded-md mb-2 flex items-center gap-3 hover:bg-sky-50">
               {announcements[index].type === "announcement" ? <FaBullhorn className='text-sky-600'/> : <MdLibraryBooks className='text-sky-600'/>}
               <div>
                 <h3 className="font-semibold">{announcement.title}</h3>

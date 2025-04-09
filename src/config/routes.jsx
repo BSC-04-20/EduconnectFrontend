@@ -16,7 +16,6 @@ import LoginSelector from "../components/LoginSelector";
 import RouterAuthGuard from "../security/lecturerRouterAuthGuard";
 import StudentLoginForm from "../components/Student/login";
 import StudentSignup from "../components/Student/signup";
-import AddClassForm from "../components/Lecture/classrooms/addClassroom";
 import StudentRouterAuthGuard from "../security/studentRouterAuthGuard";
 import HomeScreen from "../screens/Home";
 import SignupSelector from "../components/SignupSelector";
@@ -69,7 +68,6 @@ const routes = createBrowserRouter([
       { path: "resources", element: <RouterAuthGuard> <LectureResources /> </RouterAuthGuard> },
       { path: "ratings", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard>},
       { path: "classroom", element: <RouterAuthGuard> <LectureClassroomScreen /> </RouterAuthGuard>},
-      { path: "classroom/add", element: <RouterAuthGuard> <AddClassForm /> </RouterAuthGuard>},
       {path: "classroom/:id", element:<RouterAuthGuard><LectureClassScreen/></RouterAuthGuard>},
       {path: "classroom/:id/students", element:<RouterAuthGuard><ClassStudentsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
@@ -92,7 +90,7 @@ const routes = createBrowserRouter([
       { path: "ratings", element:<StudentRouterAuthGuard>  <StudentRatingsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom", element:<StudentRouterAuthGuard>  <StudentClassroomsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>},
-       {path: "assignmentupload/:id", element:<StudentRouterAuthGuard> <AssignmentUploader/> </StudentRouterAuthGuard>}
+      {path: "assignmentupload/:id", element:<StudentRouterAuthGuard> <AssignmentUploader/> </StudentRouterAuthGuard>},
       { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>},
       {path: "classroom/:id/students", element:<StudentRouterAuthGuard><ClassmatesScreen/></StudentRouterAuthGuard>},
     ],
