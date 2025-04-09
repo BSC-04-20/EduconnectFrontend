@@ -1,5 +1,5 @@
 import StudentClasses from "../components/Student/classroom/classes";
-import NoClass from "../components/Student/classroom/no_class";
+// import NoClass from "../components/Student/classroom/no_class";
 import StudentSideBar from "../components/Student/SideBar";
 import StudentTopBar from "../components/Student/TopBar";
 

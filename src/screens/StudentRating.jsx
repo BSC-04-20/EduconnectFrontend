@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-import StudentSideBar2 from "../components/Student/SideBar2";
+// import StudentSideBar2 from "../components/Student/SideBar2";
 import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
 import { useParams } from "react-router-dom";
 
@@ -11,7 +11,7 @@ export default function StudentRating() {
     
 
 
-    const [lecturers, setLecturers] = useState([]);
+    // const [lecturers, setLecturers] = useState([]);
     const [ratings, setRatings] = useState({0:0,1:0,2:0,3:0,4:0,5:0});
     const [rates, setRates] = useState({});
 
@@ -27,6 +27,7 @@ export default function StudentRating() {
                 alert('Error fetching rating:', error);
             }
         }
+        fetchRating();
     },[])
     
     const handleRateClick = (index) => {
