@@ -60,10 +60,6 @@ const LecturerLoginForm = () => {
   };
 
   return (
-<<<<<<< HEAD
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4"> {/* Added padding for responsiveness */}
-      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl flex-col sm:flex-row"> {/* Adjusted layout for small screens */}
-=======
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
       {/* Back Button */}
       <button
@@ -75,7 +71,6 @@ const LecturerLoginForm = () => {
       </button>
 
       <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
->>>>>>> 69af3d1c500869030192f549f7c0606ee812ce51
         {/* Left Section */}
         <div className="w-full sm:w-1/2 p-8"> {/* Made full width on small screens */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Lecturer Login</h2>
