@@ -104,7 +104,7 @@ const StudentLoginForm = () => {
               <button
                 type="button"
                 onClick={() => navigate("/student/signup")}
-                className="border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
+                className="sm:hidden border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
               >
                 Sign Up
               </button>
