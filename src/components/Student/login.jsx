@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa"; // Added back icon
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -14,6 +14,10 @@ const StudentLoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+<<<<<<< HEAD
+=======
+  // Redux functions
+>>>>>>> 69af3d1c500869030192f549f7c0606ee812ce51
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
@@ -28,7 +32,11 @@ const StudentLoginForm = () => {
     try {
       const sanctumUrl = import.meta.env.VITE_SANCTUM_URL;
       await axios.get(sanctumUrl);
+<<<<<<< HEAD
       
+=======
+
+>>>>>>> 69af3d1c500869030192f549f7c0606ee812ce51
       const response = await UrlFetcher.post("/student/login", formData);
       const token = response.data.studToken;
 
@@ -45,9 +53,25 @@ const StudentLoginForm = () => {
   };
 
   return (
+<<<<<<< HEAD
     <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
       <div className="bg-white shadow-lg rounded-lg flex flex-col md:flex-row w-full max-w-3xl">
         
+=======
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div>
+        {/* Back Button */}
+        <button
+          onClick={() => navigate(-1)}
+          className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        >
+          <FaArrowLeft />
+          <span>Back</span>
+        </button>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl relative">
+
+>>>>>>> 69af3d1c500869030192f549f7c0606ee812ce51
         {/* Left Section */}
         <div className="w-full lg:w-1/2 p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Student Login</h2>

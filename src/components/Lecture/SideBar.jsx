@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { MdGroup, MdOutlineSpaceDashboard, MdMenu, MdClose } from "react-icons/md";
 import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStarOutline, IoTimeOutline } from "react-icons/io5";
 
@@ -15,12 +15,21 @@ const navLinks = [
 
 export default function LectureSideBar() {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate(); // Add navigate hook
 
     return (
         <>
             {/* Burger Menu Button for Small Screens */}
             <button className="lg:hidden fixed top-4 left-4 z-50 text-2xl" onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <MdClose /> : <MdMenu />}
+            </button>
+
+            {/* Back Button */}
+            <button
+                className="fixed top-4 left-[15%] z-50 bg-sky-800 text-white px-4 py-2 rounded shadow-md hover:bg-sky-700"
+                onClick={() => navigate(-1)}
+            >
+                Back
             </button>
 
             {/* Sidebar for Small to Medium Screens */}
