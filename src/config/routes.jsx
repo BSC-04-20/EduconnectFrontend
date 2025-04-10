@@ -31,6 +31,7 @@ import AddResources from "../components/Lecture/Resources/AddResources";
 import StudentAnnouncementScreen from "../screens/StudentAnnouncementPage";
 import ClassmatesScreen from "../screens/ClassmatesScreen";
 
+// import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -44,14 +45,18 @@ const routes = createBrowserRouter([
     path:"/signup/select",
     element:<SignupSelector/>
   },
-  {
-    path:"/addresources",
-    element:<AddResources/>
-  },
+  // {
+  //   path:"/addresources",
+  //   element:<AddResources/>
+  // },
   {
     path:"*",
     element:<ErrorPage/>
   },
+  // {
+  //   path:"lecturertimetable",
+  //   element:<LecturerTimeTable/>
+  // },
   {
     path:"about",
     element:<AboutUs/>

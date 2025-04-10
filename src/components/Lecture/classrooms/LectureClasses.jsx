@@ -12,6 +12,8 @@ export default function LectureClasses() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const navigator = useNavigate();
+
   const handleAddClick = () => {
     setIsDialogOpen(true);
   };
