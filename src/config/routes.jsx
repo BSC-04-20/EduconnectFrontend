@@ -30,6 +30,7 @@ import AssignmentUploader from "../components/AssignmentUploader";
 import AddResources from "../components/Lecture/Resources/AddResources";
 import StudentAnnouncementScreen from "../screens/StudentAnnouncementPage";
 import ClassmatesScreen from "../screens/ClassmatesScreen";
+import JitsiComponent from "../Jitsi/JitsiComponent";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -60,6 +61,10 @@ const routes = createBrowserRouter([
   {
     path:"about",
     element:<AboutUs/>
+  },
+  {
+    path:"jitsi",
+    element:<JitsiComponent/>
   },
   {
     path: "/lecture",
