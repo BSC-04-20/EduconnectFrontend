@@ -83,15 +83,15 @@ export default function LectureClasses() {
         ))}
       </div>
 
-      <Link
+      <button
         onClick={handleAddClick}
-        className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 bg-sky-200 rounded-full p-4 sm:p-5 text-sky-900 shadow-md hover:bg-sky-500 transition-colors"
+        className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 bg-sky-600 rounded-full p-4 sm:p-5 text-sky-900 shadow-md hover:bg-sky-700 transition-colors"
       >
-        <FaPlus className="size-[1.75rem] sm:size-[2rem]" />
-      </Link>
+        <FaPlus className="w-10 h-10 text-white rounded-full flex items-center justify-center transition duration-300" />
+      </button>
 
       {isDialogOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 transition-all">
           <div className="max-w-[55%] min-w-[35%] my-auto mx-auto p-6 bg-white shadow-lg rounded-lg">
             <h2 className="text-2xl font-semibold text-center text-gray-700 mb-4">
               Create New Class
@@ -136,4 +136,3 @@ export default function LectureClasses() {
     </div>
   );
 }
-

@@ -54,13 +54,20 @@ export default function SelectedClassroom() {
         formData.append('start_time', discussionData.time);
         
         try {
-            const response = await AuthenticatedUserUrl.post(`/classes/${id}/discussion`, formData)
+            const response = await AuthenticatedUserUrl.post(`/classes/${id}/discussion`, formData);
 
-            const result = await response.json();
-            console.log('Discussion created:', result);
-            setShowAddModal(false); // Close the modal after submission
+            if (response.status === 201) {
+                // Success: Discussion created
+                alert('Discussion created successfully!');
+                setShowAddModal(false); // Close the modal
+            } else {
+                // Failure: Something went wrong
+                alert('Failed to create discussion. Please try again.');
+            }
         } catch (error) {
+            // Catch any errors
             console.error('Error creating discussion:', error);
+            alert('Error creating discussion. Please try again.');
         }
     };
 
@@ -83,44 +90,70 @@ export default function SelectedClassroom() {
                         <div
                             className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                         >
-                            <Link
-                                to={`/lecture/classroom/${id}/assignment`}
-                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                            >
-                                <MdLibraryBooks className="text-sky-600" size={20} />
-                            </Link>
+                            <div className="group relative">
+                                <Link
+                                    to={`/lecture/classroom/${id}/assignment`}
+                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                >
+                                    <MdLibraryBooks className="text-sky-600" size={20} />
+                                </Link>
+                                {/* Tooltip */}
+                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    Create Assignment
+                                </span>
+                            </div>
                         </div>
+
                         <div
                             className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                         >
-                            <Link
-                                to={`/lecture/classroom/${id}/announcement`}
-                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                            >
-                                <FaBullhorn className="text-sky-600" size={20} />
-                            </Link>
+                            <div className="group relative">
+                                <Link
+                                    to={`/lecture/classroom/${id}/announcement`}
+                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                >
+                                    <FaBullhorn className="text-sky-600" size={20} />
+                                </Link>
+                                {/* Tooltip */}
+                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    Create Announcement
+                                </span>
+                            </div>
                         </div>
+
                         <div
                             className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                         >
-                            <Link
-                                to={`/lecture/classroom/${id}/addresources`}
-                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                            >
-                                <BiBookOpen className="text-sky-600" size={20} />
-                            </Link>
+                            <div className="group relative">
+                                <Link
+                                    to={`/lecture/classroom/${id}/addresources`}
+                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                >
+                                    <BiBookOpen className="text-sky-600" size={20} />
+                                </Link>
+                                {/* Tooltip */}
+                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    Upload Resources
+                                </span>
+                            </div>
                         </div>
 
                         {/* This is for adding a discussion */}
                         <div
                             className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                         >
-                            <button
-                                onClick={() => setShowAddModal(true)}
-                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                            >
-                                <BiGroup className="text-sky-600" size={20} />
-                            </button>
+                            <div className="group relative">
+                                <button
+                                    onClick={() => setShowAddModal(true)}
+                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                >
+                                    <BiGroup className="text-sky-600" size={20} />
+                                </button>
+                                {/* Tooltip */}
+                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    Add Discussion
+                                </span>
+                            </div>
                         </div>
                     </>
                 )}
@@ -129,6 +162,7 @@ export default function SelectedClassroom() {
                 <button
                     onClick={() => setOpen(!open)}
                     className="w-16 h-16 bg-sky-600 hover:bg-sky-700 text-white rounded-full shadow-lg flex items-center justify-center transition duration-300 text-3xl"
+                    title="Open/Close Actions"
                 >
                     {open ? '×' : '+'}
                 </button>

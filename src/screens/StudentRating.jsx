@@ -4,11 +4,11 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 export default function StudentRating() {
     const teachers = [
-        { name: "Dr Mwakabira", rating: 5, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 3, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
-        { name: "Dr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." }
+        { name: "Mr Mwakabira", rating: 5, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "Mr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "Mr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "Mr Mwakabira", rating: 3, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." },
+        { name: "Mr Mwakabira", rating: 4, image: "..\\src\\assets\\profile.jpg", datails:"A Computer Science lecturer teaches programming, algorithms, software development, and emerging technologies while mentoring students." }
     ];
 
     const [showAll, setShowAll] = useState(false);

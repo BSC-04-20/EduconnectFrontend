@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa"; // Added back icon
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -47,14 +47,28 @@ const StudentLoginForm = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div>
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center gap-2"
-        >
-          <FaArrowLeft />
-          <span>Back</span>
-        </button>
+        {/* Top Bar with Back, Home, and Lecture Buttons */}
+        <div className="absolute top-4 left-4 flex gap-4 z-50 text-gray-600 hover:text-gray-900">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2"
+          >
+            <FaArrowLeft />
+            <span>Back</span>
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2"
+          >
+            <span>Home</span>
+          </button>
+          <button
+            onClick={() => navigate("/lecture/login")}
+            className="flex items-center gap-2"
+          >
+            <span>Lecture</span>
+          </button>
+        </div>
       </div>
       <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl relative">
 
@@ -129,8 +143,3 @@ const StudentLoginForm = () => {
 };
 
 export default StudentLoginForm;
-
-
-
-
-

@@ -57,14 +57,26 @@ export default function LecturerSignup() {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 px-4 pt-6">
-      {/* Back Button */}
-      <div className="mb-4">
+      {/* Top Bar with Back, Home, and Lecture Buttons */}
+      <div className="mb-4 flex gap-4">
         <button
           className="flex items-center text-gray-600 hover:text-gray-900 transition"
           onClick={() => navigate(-1)}
         >
           <IoArrowBack className="mr-2 text-2xl" />
           Back
+        </button>
+        <button
+          onClick={() => navigate("/lecture/dashboard")}
+          className="text-gray-600 hover:text-gray-900 transition"
+        >
+          Home
+        </button>
+        <button
+          onClick={() => navigate("/student/signup")}
+          className="text-gray-600 hover:text-gray-900 transition"
+        >
+          Student
         </button>
       </div>
 
@@ -87,7 +99,7 @@ export default function LecturerSignup() {
           {/* Right Section - Form */}
           <div className="w-full md:w-2/3 p-8">
             <h2 className="text-xl font-semibold text-gray-700 mb-4">
-              Lecturer Signup Form
+              Lecturer Signup
             </h2>
             <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="flex items-center border rounded px-3">

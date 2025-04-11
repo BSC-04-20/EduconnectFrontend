@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { CgLogOut } from "react-icons/cg";
-import { CiBellOn, CiCalendar, CiUser } from "react-icons/ci";
+import { CiBellOn, CiCalendar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { AuthenticatedUserUrl } from "../../config/urlFetcher";
 import { useDispatch } from "react-redux";
 import { removeToken, unAuthorize } from "../../redux/slice";
-import CircularProgress from "@mui/material/CircularProgress"; 
-import Button from "@mui/material/Button"; 
+import CircularProgress from "@mui/material/CircularProgress";
+import Button from "@mui/material/Button";
 
 const TopBar = () => {
   const navigate = useNavigate();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [loading, setLoading] = useState(false); // Track logout loading state
   const dispatch = useDispatch();
-  const [username, setUsername] = useState();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const getUsername = async () => {
     try {
@@ -22,13 +24,12 @@ const TopBar = () => {
     } catch (error) {
       alert("Failed to get username");
     }
-  }
+  };
 
   const handleLogout = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const response = await AuthenticatedUserUrl.post("/lecture/logout");
-
       if (response.status === 200) {
         dispatch(removeToken());
         dispatch(unAuthorize());
@@ -40,7 +41,7 @@ const TopBar = () => {
       alert("Unauthorized");
       console.log(error);
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -51,36 +52,61 @@ const TopBar = () => {
   };
 
   useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
     getUsername();
   }, []);
 
   return (
     <>
       <div className="w-full sm:w-max ml-auto text-white p-4 mr-[5%] flex flex-wrap gap-4 items-center z-50 justify-center sm:justify-end">
-        <span className="flex flex-row shadow-md px-4 py-2 rounded-lg items-center gap-2 text-slate-950">
-          <CiUser className="size-[1.5rem]" />
-          {username}
-        </span>
         <span className="flex flex-row gap-2 px-4 py-2 shadow-md rounded-lg text-slate-950">
           <CiCalendar className="size-[1.5rem]" />
           {getCurrentDate()}
         </span>
+
         <span className="shadow-md rounded-lg px-4 py-2">
           <CiBellOn className="text-slate-950 size-[1.5rem]" />
         </span>
-        <button
-          className="flex flex-row items-center gap-2 bg-gray-700 hover:bg-sky-700 text-white py-2 px-4 rounded-lg"
-          onClick={() => setIsDialogOpen(true)} // Open the dialog
-        >
-          <CgLogOut className="size-[1.5rem]" />
-          Logout
-        </button>
+
+        {/* Profile Dropdown */}
+        <div className="relative" ref={menuRef}>
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="w-10 h-10 rounded-full bg-sky-700 text-white flex items-center justify-center font-bold uppercase hover:bg-sky-800"
+          >
+            {username?.charAt(0)}
+          </button>
+
+          {menuOpen && (
+            <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg z-50 py-2">
+              <button
+                className="flex items-center justify-start gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
+                onClick={() => {
+                  setIsDialogOpen(true);
+                  setMenuOpen(false);
+                }}
+              >
+                <CgLogOut className="size-5" />
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Logout Confirmation Dialog */}
       {isDialogOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm z-50 transition-all">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96 animate-fade-in">
             <h2 className="text-xl font-bold mb-4 text-center">Confirm Logout</h2>
             <p className="text-center mb-4">Are you sure you want to log out?</p>
             <div className="flex justify-center space-x-4">
@@ -88,7 +114,7 @@ const TopBar = () => {
                 variant="outlined"
                 color="primary"
                 onClick={() => setIsDialogOpen(false)}
-                disabled={loading} // Disable cancel button when loading
+                disabled={loading}
               >
                 Cancel
               </Button>
@@ -96,8 +122,8 @@ const TopBar = () => {
                 variant="contained"
                 color="error"
                 onClick={handleLogout}
-                disabled={loading} // Disable button while logging out
-                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null} // Show spinner
+                disabled={loading}
+                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : null}
               >
                 {loading ? "Logging Out..." : "Logout"}
               </Button>

@@ -61,14 +61,28 @@ const LecturerLoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
-      {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="absolute top-4 left-4 text-gray-600 hover:text-gray-900 flex items-center gap-2"
-      >
-        <FaArrowLeft />
-        <span>Back</span>
-      </button>
+      {/* Top Bar with Back, Home, and Lecture Buttons */}
+      <div className="absolute top-4 left-4 flex gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        >
+          <FaArrowLeft />
+          <span>Back</span>
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="text-gray-600 hover:text-gray-900"
+        >
+          Home
+        </button>
+        <button
+          onClick={() => navigate("/student/login")}
+          className="text-gray-600 hover:text-gray-900"
+        >
+          Student
+        </button>
+      </div>
 
       <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
         {/* Left Section */}

@@ -1,4 +1,4 @@
- import { useState } from "react";
+import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdLock } from "react-icons/md";
 import { IoMdArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
@@ -61,14 +61,28 @@ export default function StudentSignup() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
-      {/* Back Button */}
-      <button
-        className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-gray-900 transition"
-        onClick={() => navigate(-1)}
-      >
-        <IoMdArrowBack className="mr-1 text-xl" />
-        Back
-      </button>
+      {/* Top Bar with Back, Home, and Lecture Buttons */}
+      <div className="absolute top-6 left-6 flex gap-4 z-50 text-gray-600 hover:text-gray-900">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2"
+        >
+          <IoMdArrowBack className="mr-1 text-xl" />
+          <span>Back</span>
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2"
+        >
+          <span>Home</span>
+        </button>
+        <button
+          onClick={() => navigate("/lecture/signup")}
+          className="flex items-center gap-2"
+        >
+          <span>Lecture</span>
+        </button>
+      </div>
 
       <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
         {/* Left Section */}
