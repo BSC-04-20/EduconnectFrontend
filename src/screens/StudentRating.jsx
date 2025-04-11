@@ -109,50 +109,69 @@ export default function StudentRating() {
             <div className="space-y-4">
               {(showAll ? lecturers : lecturers.slice(0, 3)).map(
                 (lecturer, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-full">
+                  <div
+                    key={index}
+                    className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-full"
+                  >
                     {/* Profile image */}
-                    <img src={`..\\assets\\profile.png`} alt={lecturer.fullname} className="w-12 h-12 rounded-full object-cover" />
-                
+                    <img
+                      src={`..\\assets\\profile.png`}
+                      alt={lecturer.fullname}
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+
                     {/* Lecturer name (left content) */}
                     <div className="ml-4 flex-1">
-                        <h2 className="font-bold">{lecturer.fullname}</h2>
+                      <h2 className="font-bold">{lecturer.fullname}</h2>
                     </div>
-                
+
                     {/* Right section: stars and button */}
                     <div className="flex items-center space-x-4 ml-auto">
-                        {/* Stars */}
-                        <div className="flex items-center space-x-1">
-                            {[...Array(5)].map((_, i) => (
-                                <span 
-                                    key={i} 
-                                    className={`cursor-pointer text-xl ${i < (ratings[index] || 0) ? "text-yellow-500" : "text-gray-400"} 
-                                        ${rates[index] === "Rate" ? "hover:text-yellow-600" : "cursor-not-allowed"}`}
-                                    onClick={() => handleStarClick(index, i + 1)}
-                                >
-                                    {i < (ratings[index] || 0) ? <AiFillStar /> : <AiOutlineStar />}
-                                </span>
-                            ))}
-                        </div>
-                
-                        {/* Button */}
-                        <button 
-                            onClick={() => {
-                                handleRateClick(index);
-                                if (rates[index] === "Give Rating") {
-                                    console.log();
-                                } else if (rates[index] === "Rate" && ratings[index] !== 0) {
-                                    postRating(lecturer.id, ratings[index]);
-                                }
-                            }}
-                            disabled={ratings[index] === 0 && rates[index] === "Rate"}
-                            className={`px-4 py-1 rounded-2xl border-2 text-white bg-sky-900 hover:bg-white hover:text-sky-900 hover:border-sky-900
-                                ${ratings[index] === 0 && rates[index] === "Rate" ? "opacity-50 cursor-not-allowed" : ""}`}
-                        >
-                            {rates[index] || "Give"}
-                        </button>
+                      {/* Stars */}
+                      <div className="flex items-center space-x-1">
+                        {[...Array(5)].map((_, i) => (
+                          <span
+                            key={i}
+                            className={`cursor-pointer text-xl ${
+                              i < (ratings[index] || 0)
+                                ? "text-yellow-500"
+                                : "text-gray-400"
+                            } ${
+                              rates[index] === "Rate"
+                                ? "hover:text-yellow-600"
+                                : "cursor-not-allowed"
+                            }`}
+                            onClick={() => handleStarClick(index, i + 1)}
+                          >
+                            {i < (ratings[index] || 0) ? (
+                              <AiFillStar />
+                            ) : (
+                              <AiOutlineStar />
+                            )}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Button */}
+                      <button 
+  onClick={() => {
+    handleRateClick(index);
+    if (rates[index] === "Give Rating") {
+      console.log();
+    } else if (rates[index] === "Rate" && ratings[index] !== 0) {
+      postRating(lecturer.id, ratings[index]);
+    }
+  }}
+  disabled={(!ratings[index] || ratings[index] === 0) && rates[index] === "Rate"}
+  className={`px-4 py-1 rounded-2xl border-2 text-white bg-sky-900
+    hover:bg-white hover:text-sky-900 hover:border-sky-900
+    ${((!ratings[index] || ratings[index] === 0) && rates[index] === "Rate") ? "opacity-50 cursor-not-allowed" : ""}`}
+>
+  {rates[index] || "Give Rating"}
+</button>
+
                     </div>
-                </div>
-                
+                  </div>
                 )
               )}
             </div>
