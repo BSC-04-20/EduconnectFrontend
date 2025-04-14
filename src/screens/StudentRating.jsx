@@ -7,14 +7,7 @@ import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
 
 export default function StudentRating() {
   const [lecturers, setLecturers] = useState([]);
-  const [ratings, setRatings] = useState({
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-  });
+  const [ratings, setRatings] = useState({});
   const [rates, setRates] = useState({});
 
   // const id = useParams();
@@ -103,7 +96,7 @@ export default function StudentRating() {
               Your Teachers
             </h1>
             <p className="text-gray-600 mb-4">
-              Tap on a teacher you want to rate
+              Tap on Give a rating to rate a lecturer
             </p>
 
             <div className="space-y-4">
@@ -153,23 +146,26 @@ export default function StudentRating() {
                       </div>
 
                       {/* Button */}
-                      <button 
-  onClick={() => {
-    handleRateClick(index);
-    if (rates[index] === "Give Rating") {
-      console.log();
-    } else if (rates[index] === "Rate" && ratings[index] !== 0) {
-      postRating(lecturer.id, ratings[index]);
-    }
-  }}
-  disabled={(!ratings[index] || ratings[index] === 0) && rates[index] === "Rate"}
-  className={`px-4 py-1 rounded-2xl border-2 text-white bg-sky-900
-    hover:bg-white hover:text-sky-900 hover:border-sky-900
-    ${((!ratings[index] || ratings[index] === 0) && rates[index] === "Rate") ? "opacity-50 cursor-not-allowed" : ""}`}
->
-  {rates[index] || "Give Rating"}
-</button>
+                      <button
+                        onClick={() => {
+                            // alert(ratings[index]); 
+                            handleRateClick(index);
+                          if((ratings[index] || ratings[index] !== 0) && rates[index] === "Rate"){
+                          postRating(lecturer.id, ratings[index]);
+                          }
+                      }}
+                        disabled={(ratings[index] === '0'|| ratings[index] === '.' || ratings[index] === 0 || !ratings[index]) 
+                          && rates[index] === "Rate"}
+                        className={` w-[10vw] h-[4.5vh] rounded-2xl border-2 
+                            ${rates[index] === "Rate" ? "text-sky-900 bg-white hover:bg-sky-900 hover:text-white  border-sky-900" 
+                            : "bg-sky-900 text-white hover:bg-white hover:text-sky-900 hover:border-sky-900"}
+                            ${(ratings[index] === '0'|| ratings[index] === '.'  || ratings[index] === 0 || !ratings[index]) 
+                              && rates[index] === "Rate" ? "opacity-50 hover:bg-stone-500 cursor-not-allowed" : ""}`}
 
+
+                      >
+                        {rates[index] === "Rate" ? "Rate" : "Give Rating"}
+                      </button>
                     </div>
                   </div>
                 )
