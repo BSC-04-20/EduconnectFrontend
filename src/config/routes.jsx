@@ -27,8 +27,7 @@ import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
-import JoinStudentMeeting from "../screens/JoinStudentMeeting";
-import CreateStudentsMeeting from "../screens/CreateStudentsMeeting";
+import LecturerRating from "../screens/LecturerRating";
 
 const routes = createBrowserRouter([
   {
@@ -61,7 +60,7 @@ const routes = createBrowserRouter([
       { path: "mentorship", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard> },
       { path: "timetable", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard>},
       { path: "resources", element: <RouterAuthGuard> <LectureResources /> </RouterAuthGuard> },
-      { path: "ratings", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard>},
+      { path: "ratings", element: <RouterAuthGuard> <LecturerRating /> </RouterAuthGuard>},
       { path: "classroom", element: <RouterAuthGuard> <LectureClassroomScreen /> </RouterAuthGuard>},
       { path: "classroom/add", element: <RouterAuthGuard> <AddClassForm /> </RouterAuthGuard>},
       {path: "classroom/:id", element:<RouterAuthGuard><LectureClassScreen/></RouterAuthGuard>},
