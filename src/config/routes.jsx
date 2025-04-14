@@ -28,11 +28,16 @@ import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
 import LecturerRating from "../screens/LecturerRating";
+import TimeTable from "../screens/LecturerCalendar";
 
 const routes = createBrowserRouter([
   {
     path: "/",
     element: <HomeScreen />,
+  },
+  {
+    path:"/ti",
+    element: <TimeTable/>
   },
   {
     path:"/login/select",
