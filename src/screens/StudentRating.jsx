@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
-// import StudentSideBar2 from "../components/Student/SideBar2";
+import StudentTopBar from "../components/Student/TopBar";
 import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
-// import { useParams } from "react-router-dom";
+
 
 export default function StudentRating() {
   const [lecturers, setLecturers] = useState([]);
@@ -90,6 +90,7 @@ export default function StudentRating() {
     <div className="flex flex-row gap-5">
       <StudentsSideBar />
       <section className="mt-[5vh] md:mt-10 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
+      <StudentTopBar/>
         <div className="bg-white rounded-md shadow-md w-[100%] h-[95%] mb-20">
           <div className="p-6">
             <h1 className="text-xl font-semibold text-blue-700">
