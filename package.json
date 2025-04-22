@@ -16,6 +16,7 @@
     "@mui/material": "^6.4.4",
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "js-cookie": "^3.0.5",
     "lib-jitsi-meet": "^1.0.6",

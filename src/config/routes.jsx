@@ -29,6 +29,7 @@ import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
 import LecturerRating from "../screens/LecturerRating";
 import TimeTable from "../screens/LecturerCalendar";
+import LecturerCalendar from "../screens/LecturerCalendar";
 
 const routes = createBrowserRouter([
   {
@@ -61,9 +62,9 @@ const routes = createBrowserRouter([
       { path: "signup", element: <LecturerSignup /> },
       { path: "login", element: <LecturerLoginForm /> },
       { path: "dashboard", element: <RouterAuthGuard> <LectureDashboard /> </RouterAuthGuard>},
-      { path: "events", element: <RouterAuthGuard> < LectureEvents/> </RouterAuthGuard> },
+      { path: "events", element: <RouterAuthGuard> <Construction /></RouterAuthGuard> },
       { path: "mentorship", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard> },
-      { path: "timetable", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard>},
+      { path: "timetable", element: <RouterAuthGuard> <LecturerCalendar/> </RouterAuthGuard>},
       { path: "resources", element: <RouterAuthGuard> <LectureResources /> </RouterAuthGuard> },
       { path: "ratings", element: <RouterAuthGuard> <LecturerRating /> </RouterAuthGuard>},
       { path: "classroom", element: <RouterAuthGuard> <LectureClassroomScreen /> </RouterAuthGuard>},
