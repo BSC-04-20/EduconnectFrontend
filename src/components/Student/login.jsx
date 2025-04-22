@@ -1,55 +1,40 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { setStudentAuth, setStudentToken } from "../../redux/studentSlice";
 
 const StudentLoginForm = () => {
   const navigate = useNavigate();
 
-  // State for form fields
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-
-  // State for loading and error messages
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //Redux functions
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  // Handle form input change
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError(null); // Reset previous errors
+    setError(null);
 
     try {
-      // CSRF Protection
-      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL
+      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL;
       await axios.get(sanctumUrl);
-
-      // Send login request
+      
       const response = await UrlFetcher.post("/student/login", formData);
-      const token = response.data.studToken
+      const token = response.data.studToken;
 
-      dispatch(setStudentAuth(token))
-      dispatch(setStudentToken())
+      dispatch(setStudentAuth(token));
+      dispatch(setStudentToken());
 
-      // Redirect on success
       navigate("/student/dashboard");
     } catch (err) {
       console.error("Login error:", err.response?.data || err.message);
@@ -61,9 +46,34 @@ const StudentLoginForm = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
+      <div>
+        {/* Top Bar with Back, Home, and Lecture Buttons */}
+        <div className="absolute top-4 left-4 flex gap-4 z-50 text-gray-600 hover:text-gray-900">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2"
+          >
+            <FaArrowLeft />
+            <span>Back</span>
+          </button>
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2"
+          >
+            <span>Home</span>
+          </button>
+          <button
+            onClick={() => navigate("/lecture/login")}
+            className="flex items-center gap-2"
+          >
+            <span>Lecture</span>
+          </button>
+        </div>
+      </div>
+      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl relative">
+
         {/* Left Section */}
-        <div className="w-1/2 p-8">
+        <div className="w-full lg:w-1/2 p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Student Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4 relative">
@@ -91,7 +101,6 @@ const StudentLoginForm = () => {
               />
             </div>
 
-            {/* Show error message */}
             {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
             <button
@@ -103,11 +112,22 @@ const StudentLoginForm = () => {
             </button>
 
             <p className="text-sm text-gray-600 mt-3 text-center">Forgot your password?</p>
+            
+            {/* Sign Up button appears below on small screens */}
+            <div className="mt-4 block md:hidden text-center">
+              <button
+                type="button"
+                onClick={() => navigate("/student/signup")}
+                className="sm:hidden border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
+              >
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
 
-        {/* Right Section */}
-        <div className="w-1/2 bg-sky-900 text-white p-8 flex flex-col justify-center">
+        {/* Right Section - Hidden on small screens */}
+        <div className="hidden md:flex w-1/2 bg-sky-900 text-white p-8 flex-col justify-center">
           <h2 className="text-2xl font-bold mb-4">Welcome Back</h2>
           <p className="text-sm mb-6">Log In & Pick Up Where You Left Off!</p>
           <button

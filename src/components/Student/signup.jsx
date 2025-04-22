@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdLock } from "react-icons/md";
+import { IoMdArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import { Dialog, CircularProgress } from "@mui/material"; // Import MUI Components
@@ -32,16 +33,14 @@ export default function StudentSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    setLoading(true); // Start loading
-    setError(null); // Reset errors
+    setLoading(true);
+    setError(null);
 
     try {
-      // Send API request
       const response = await UrlFetcher.post("/student/signup", {
         fullname: formData.fullname,
         phonenumber: formData.phonenumber,
@@ -51,9 +50,9 @@ export default function StudentSignup() {
 
       console.log("Success:", response.data);
       alert("Signup successful!");
-      navigate("/Student/login"); // Redirect to login page
+      navigate("/student/login"); // Redirect to login page
     } catch (err) {
-      alert(err.response.data.errors)
+      alert(err.response.data.errors);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -61,7 +60,30 @@ export default function StudentSignup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+      {/* Top Bar with Back, Home, and Lecture Buttons */}
+      <div className="absolute top-6 left-6 flex gap-4 z-50 text-gray-600 hover:text-gray-900">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2"
+        >
+          <IoMdArrowBack className="mr-1 text-xl" />
+          <span>Back</span>
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="flex items-center gap-2"
+        >
+          <span>Home</span>
+        </button>
+        <button
+          onClick={() => navigate("/lecture/signup")}
+          className="flex items-center gap-2"
+        >
+          <span>Lecture</span>
+        </button>
+      </div>
+
       <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
         {/* Left Section */}
         <div className="w-1/3 bg-sky-900 text-white flex flex-col items-center justify-center p-6">
@@ -78,7 +100,7 @@ export default function StudentSignup() {
         </div>
 
         {/* Right Section - Form */}
-        <div className="w-2/3 p-8">
+        <div className="w-full lg:w-2/3 p-8">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
             Student Signup Form
           </h2>
@@ -150,6 +172,14 @@ export default function StudentSignup() {
               Signup
             </button>
           </form>
+
+          {/* Sign In Button - Only on small screens */}
+          <button
+            onClick={() => navigate("/student/login")}
+            className="block lg:hidden w-full border border-sky-900 text-sky-900 py-2 mt-4 rounded hover:bg-sky-900 hover:text-white transition"
+          >
+            Sign In
+          </button>
         </div>
       </div>
 

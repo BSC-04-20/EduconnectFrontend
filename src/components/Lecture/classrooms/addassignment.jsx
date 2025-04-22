@@ -30,7 +30,7 @@ export default function AssignmentForm() {
 
     // Append each file to FormData
     files.forEach((file) => {
-      formData.append("files", file);
+      formData.append("files[]", file);
     });
 
     try {

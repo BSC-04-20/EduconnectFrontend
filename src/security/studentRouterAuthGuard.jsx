@@ -8,7 +8,6 @@ import { Navigate } from "react-router-dom";
 export default function StudentRouterAuthGuard({ children }) {
   const token = useSelector((state) => state.studentAuthorizer.value.studToken); // Get authorization status from redux
 
-  console.log(token)
   if (!token) {
     return <Navigate to="/student/login" replace />; // Redirect to login
   }

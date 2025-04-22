@@ -25,11 +25,16 @@ export default function AnnouncementForm() {
 
     // Append each file to FormData
     files.forEach((file) => {
-      formData.append("files", file);
+      formData.append("announcement_files[]", file);
     });
 
     try {
-      const response = await AuthenticatedUserUrl.post("/announcement/create", formData);
+      const response = await AuthenticatedUserUrl.post("/announcement/create", formData,
+        {
+          headers: {
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'application/json'
+        }});
 
       if (response.status === 201) {
         alert("Announcement submitted successfully!");

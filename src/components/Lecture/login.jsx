@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
-import { useDispatch} from "react-redux";
-import {setAuth, setToken } from "../../redux/slice";
+import { useDispatch } from "react-redux";
+import { setAuth, setToken } from "../../redux/slice";
 
 const LecturerLoginForm = () => {
   const navigate = useNavigate();
@@ -20,8 +20,8 @@ const LecturerLoginForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  //Redux functions
-  const dispatch = useDispatch()
+  // Redux functions
+  const dispatch = useDispatch();
 
   // Handle form input change
   const handleChange = (e) => {
@@ -39,15 +39,15 @@ const LecturerLoginForm = () => {
 
     try {
       // CSRF Protection
-      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL
+      const sanctumUrl = import.meta.env.VITE_SANCTUM_URL;
       await axios.get(sanctumUrl);
 
       // Send login request
       const response = await UrlFetcher.post("/lecture/login", formData);
-      const token = response.data.token
+      const token = response.data.token;
 
-      dispatch(setAuth(token))
-      dispatch(setToken())
+      dispatch(setAuth(token));
+      dispatch(setToken());
 
       // Redirect on success
       navigate("/lecture/dashboard");
@@ -60,10 +60,33 @@ const LecturerLoginForm = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+      {/* Top Bar with Back, Home, and Lecture Buttons */}
+      <div className="absolute top-4 left-4 flex gap-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+        >
+          <FaArrowLeft />
+          <span>Back</span>
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="text-gray-600 hover:text-gray-900"
+        >
+          Home
+        </button>
+        <button
+          onClick={() => navigate("/student/login")}
+          className="text-gray-600 hover:text-gray-900"
+        >
+          Student
+        </button>
+      </div>
+
       <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
         {/* Left Section */}
-        <div className="w-1/2 p-8">
+        <div className="w-full sm:w-1/2 p-8"> {/* Made full width on small screens */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Lecturer Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4 relative">
@@ -103,11 +126,22 @@ const LecturerLoginForm = () => {
             </button>
 
             <p className="text-sm text-gray-600 mt-3 text-center">Forgot your password?</p>
+            
+            {/* Sign Up button for small screens */}
+            <div className="sm:hidden mt-3 flex justify-center">
+              <button
+                type="button"
+                onClick={() => navigate("/lecture/signup")}
+                className="border border-sky-900 text-sky-900 py-2 px-4 rounded hover:bg-sky-900 hover:text-white transition w-full"
+              >
+                Sign Up
+              </button>
+            </div>
           </form>
         </div>
 
-        {/* Right Section */}
-        <div className="w-1/2 bg-sky-900 text-white p-8 flex flex-col justify-center">
+        {/* Right Section - Hidden on small screens */}
+        <div className="hidden sm:flex w-1/2 bg-sky-900 text-white p-8 flex-col justify-center">
           <h2 className="text-2xl font-bold mb-4">Welcome Back</h2>
           <p className="text-sm mb-6">Log In & Pick Up Where You Left Off!</p>
           <button

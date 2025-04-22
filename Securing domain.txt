@@ -1,0 +1,12 @@
+#1 Install Certbot: For Debian/Ubuntu:
+sudo apt update
+sudo apt install certbot python3-certbot-nginx
+
+#2 Obtain and install certificate:
+sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+
+#3 Set up auto-renewal:
+sudo systemctl enable certbot.timer
+
+#4 Use Fail2Ban to prevent brute-force attacks:
+sudo apt install fail2ban
