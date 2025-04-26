@@ -6,15 +6,18 @@ import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setAuth, setToken } from "../../redux/slice";
+import { useForm } from "react-hook-form";
 
 const LecturerLoginForm = () => {
   const navigate = useNavigate();
 
   // State for form fields
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm({ mode: "onChange" });
 
   // State for loading and error messages
   const [loading, setLoading] = useState(false);
@@ -23,17 +26,17 @@ const LecturerLoginForm = () => {
   // Redux functions
   const dispatch = useDispatch();
 
-  // Handle form input change
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // // Handle form input change
+  // const handleChange = (e) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
+    // e.preventDefault();
     setLoading(true);
     setError(null); // Reset previous errors
 
@@ -43,7 +46,7 @@ const LecturerLoginForm = () => {
       await axios.get(sanctumUrl);
 
       // Send login request
-      const response = await UrlFetcher.post("/lecture/login", formData);
+      const response = await UrlFetcher.post("/lecture/login", data);
       const token = response.data.token;
 
       dispatch(setAuth(token));
@@ -88,33 +91,34 @@ const LecturerLoginForm = () => {
         {/* Left Section */}
         <div className="w-full sm:w-1/2 p-8"> {/* Made full width on small screens */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Lecturer Login</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4 relative">
+          <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="mb-4 relative">
               <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="email"
-                name="email"
                 placeholder="Email"
                 className="w-full px-10 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={formData.email}
-                onChange={handleChange}
-                required
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^\S+@\S+$/i,
+                    message: "Invalid email format"
+                  }
+                })}
               />
+              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             </div>
             <div className="mb-4 relative">
               <FaLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
                 type="password"
-                name="password"
                 placeholder="Password"
                 className="w-full px-10 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-sky-500"
-                value={formData.password}
-                onChange={handleChange}
-                required
+                {...register("password", { required: "Password is required" })}
               />
+              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
             </div>
 
-            {/* Show error message */}
             {error && <p className="text-red-500 text-sm mb-3">{error}</p>}
 
             <button
