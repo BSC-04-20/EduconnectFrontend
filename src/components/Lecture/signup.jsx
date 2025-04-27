@@ -4,32 +4,22 @@ import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import { Dialog, CircularProgress } from "@mui/material";
 import { IoArrowBack } from "react-icons/io5";
+import { useForm } from "react-hook-form";
 
 export default function LecturerSignup() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    fullname: "",
-    phonenumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({ mode: "onChange" });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
+  const onSubmit = async (data) => {
+    if (data.password !== data.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
@@ -39,10 +29,10 @@ export default function LecturerSignup() {
 
     try {
       const response = await UrlFetcher.post("/lecture/signup", {
-        fullname: formData.fullname,
-        phonenumber: formData.phonenumber,
-        email: formData.email,
-        password: formData.password,
+        fullname: data.fullname,
+        phonenumber: data.phonenumber,
+        email: data.email,
+        password: data.password,
       });
 
       alert("Signup successful!");
@@ -54,6 +44,8 @@ export default function LecturerSignup() {
       setLoading(false);
     }
   };
+
+  const password = watch("password");
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100 px-4 pt-6">
@@ -101,67 +93,96 @@ export default function LecturerSignup() {
             <h2 className="text-xl font-semibold text-gray-700 mb-4">
               Lecturer Signup
             </h2>
-            <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
               <div className="flex items-center border rounded px-3">
                 <MdPerson className="text-gray-400 mr-2" />
                 <input
                   type="text"
-                  name="fullname"
                   placeholder="Full name"
                   className="w-full py-2 outline-none"
-                  value={formData.fullname}
-                  onChange={handleChange}
-                  required
+                  {...register("fullname", { required: "Full name is required" })}
                 />
               </div>
+              {errors.fullname && (
+                <p className="text-red-500 text-sm">{errors.fullname.message}</p>
+              )}
+
               <div className="flex items-center border rounded px-3">
                 <MdPhone className="text-gray-400 mr-2" />
                 <input
                   type="text"
-                  name="phonenumber"
                   placeholder="Phone number"
                   className="w-full py-2 outline-none"
-                  value={formData.phonenumber}
-                  onChange={handleChange}
-                  required
+                  {...register("phonenumber", {
+                    required: "Phone number is required",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "Phone number must be digits only",
+                    },
+                  })}
                 />
               </div>
+              {errors.phonenumber && (
+                <p className="text-red-500 text-sm">{errors.phonenumber.message}</p>
+              )}
+
               <div className="flex items-center border rounded px-3">
                 <MdEmail className="text-gray-400 mr-2" />
                 <input
                   type="email"
-                  name="email"
                   placeholder="Email"
                   className="w-full py-2 outline-none"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                      message: "Invalid email address",
+                    },
+                  })}
                 />
               </div>
+              {errors.email && (
+                <p className="text-red-500 text-sm">{errors.email.message}</p>
+              )}
+
               <div className="flex items-center border rounded px-3">
                 <MdLock className="text-gray-400 mr-2" />
                 <input
                   type="password"
-                  name="password"
                   placeholder="Password"
                   className="w-full py-2 outline-none"
-                  value={formData.password}
-                  onChange={handleChange}
-                  required
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 8,
+                      message: "Password must be at least 8 characters",
+                    },
+                  })}
                 />
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-sm">{errors.password.message}</p>
+              )}
+
               <div className="flex items-center border rounded px-3">
                 <MdLock className="text-gray-400 mr-2" />
                 <input
                   type="password"
-                  name="confirmPassword"
                   placeholder="Confirm Password"
                   className="w-full py-2 outline-none"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  required
+                  {...register("confirmPassword", {
+                    required: "Please confirm your password",
+                    validate: (value) =>
+                      value === password || "Passwords do not match",
+                  })}
                 />
               </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-sm">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+
               <button
                 type="submit"
                 className="w-full bg-sky-900 text-white py-2 rounded hover:bg-sky-700 transition"
