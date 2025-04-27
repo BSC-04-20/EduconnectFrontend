@@ -10,10 +10,10 @@ export default function AddResources() {
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
 
-  // useNavigate for navigation
+  
   const navigate = useNavigate();
 
-  // useForm Hook for validation
+  
   const {
     register,
     handleSubmit,
@@ -66,7 +66,7 @@ export default function AddResources() {
       setFileQueue([]); setSelectedFile(null);
       setValue("title", ""); setValue("description", "");
 
-      // Navigate to the classroom page
+      
       navigate(`/lecture/classroom/${id}`);
     } catch {
       showToast("Error uploading file. File too big");

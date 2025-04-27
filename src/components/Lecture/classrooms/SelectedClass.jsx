@@ -8,6 +8,7 @@ import ClassroomFeed from './selected/announcements';
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 import { BiBookOpen, BiGroup } from 'react-icons/bi';
+import { useForm } from "react-hook-form";
 
 export default function SelectedClassroom() {
     const { id } = useParams();
@@ -21,6 +22,12 @@ export default function SelectedClassroom() {
         time: '',
     });
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        // reset,
+      } = useForm({ mode: "onChange" });
     useEffect(() => {
         const fetchClassData = async () => {
             try {
@@ -70,6 +77,7 @@ export default function SelectedClassroom() {
             alert('Error creating discussion. Please try again.');
         }
     };
+     
 
     return (
         <div className="my-5">
@@ -172,20 +180,19 @@ export default function SelectedClassroom() {
             {showAddModal && (
                 <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-96">
-                        <h2 className="text-2xl mb-4">Add a Discussion</h2>
-                        <form onSubmit={handleCreateDiscussion}>
+                        <h2 className="text-2xl mb-1">Add a Discussion</h2>
+                        <form onSubmit={handleSubmit(handleCreateDiscussion)}>
                             <div className="mb-4">
                                 <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                                     Discussion Name
                                 </label>
                                 <input
                                     type="text"
-                                    id="name"
+                                    {...register('name', {required: "The name of the discussion is required"})}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                    value={discussionData.name}
-                                    onChange={(e) => setDiscussionData({ ...discussionData, name: e.target.value })}
-                                    required
+                                    
                                 />
+                                {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                             </div>
                             <div className="mb-4">
                                 <label htmlFor="time" className="block text-sm font-medium text-gray-700">
@@ -193,11 +200,9 @@ export default function SelectedClassroom() {
                                 </label>
                                 <input
                                     type="datetime-local"
-                                    id="time"
+                                    {...register('time', {required: "The time of the discussion is required"})}
                                     className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                    value={discussionData.time}
-                                    onChange={(e) => setDiscussionData({ ...discussionData, time: e.target.value })}
-                                    required
+                                    
                                 />
                             </div>
                             <div className="flex justify-end gap-2">
