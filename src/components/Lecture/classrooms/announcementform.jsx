@@ -1,94 +1,133 @@
-import { useEffect, useState } from "react";
-import axios from "axios"; // Import Axios
-import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 
 export default function AnnouncementForm() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [files, setFiles] = useState([]);
   const navigator = useNavigate();
-  const id = useParams();
+  const { id } = useParams();
+  const [files, setFiles] = useState([]);
+  const [fileError, setFileError] = useState("");
+  const [toast, setToast] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors }
+  } = useForm({ mode: "onChange" });
 
   const handleFileChange = (event) => {
-    setFiles([...event.target.files]);
+    const selectedFiles = Array.from(event.target.files);
+
+    const allowedTypes = [
+      "application/pdf", 
+      "image/jpeg", 
+      "image/png", 
+      "application/msword", 
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+      "application/vnd.ms-excel", 
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ];
+
+    const invalidFiles = selectedFiles.filter(file => !allowedTypes.includes(file.type));
+
+    if (invalidFiles.length > 0) {
+      setFileError("Only PDF, Word, Excel, JPG, and PNG files are allowed.");
+      setFiles([]);
+    } else {
+      setFileError("");
+      setFiles(selectedFiles);
+    }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Create a FormData object to send form data including files
+  const onSubmit = async (data) => {
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description);
-    formData.append("class_id", id.id)
+    formData.append("title", data.title);
+    formData.append("description", data.description || "");
+    formData.append("class_id", id);
 
-    // Append each file to FormData
-    files.forEach((file) => {
-      formData.append("announcement_files[]", file);
-    });
+    if (files.length > 0) {
+      files.forEach((file) => {
+        formData.append("announcement_files[]", file);
+      });
+    }
 
     try {
-      const response = await AuthenticatedUserUrl.post("/announcement/create", formData,
-        {
-          headers: {
-          'Content-Type': 'multipart/form-data',
-          'Accept': 'application/json'
-        }});
+      const response = await AuthenticatedUserUrl.post("/announcement/create", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Accept": "application/json",
+        },
+      });
 
       if (response.status === 201) {
-        alert("Announcement submitted successfully!");
-        setTitle("");
-        setDescription("");
+        setToast("Announcement submitted successfully!");
+        reset();
         setFiles([]);
-        navigator(`/lecture/classroom/${id.id}`)
+        setFileError("");
+        setTimeout(() => {
+          setToast("");
+          navigator(`/lecture/classroom/${id}`);
+        }, 3000);
       } else {
-        alert("Error submitting the announcement.");
+        setToast("Error submitting the announcement.");
+        setTimeout(() => setToast(""), 3000);
       }
     } catch (error) {
       console.error("Error submitting announcement:", error);
-      alert("Error submitting the announcement.");
+      setToast("Error submitting the announcement.");
+      setTimeout(() => setToast(""), 3000);
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
-      <h2 className="text-2xl font-semibold mb-4">Make an Announcement</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            className="mt-1 p-2 w-full border rounded-lg"
-          />
+    <div className="relative">
+      {toast && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white p-4 rounded-lg shadow-lg z-50">
+          {toast}
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Description (optional)</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="mt-1 p-2 w-full border rounded-lg"
-          ></textarea>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Upload Files</label>
-          <input
-            type="file"
-            multiple
-            onChange={handleFileChange}
-            className="mt-1 w-full p-2 border rounded-lg"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-sky-900 text-white py-2 rounded-lg hover:bg-sky-700"
-        >
-          Submit Announcement
-        </button>
-      </form>
+      )}
+      <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
+        <h2 className="text-2xl font-semibold mb-4">Make an Announcement</h2>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Title</label>
+            <input
+              type="text"
+              {...register("title", { required: "Title is required" })}
+              className="mt-1 p-2 w-full border rounded-lg"
+            />
+            {errors.title && <p className="text-red-500 text-sm">{errors.title.message}</p>}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Description (optional)</label>
+            <textarea
+              {...register("description")}
+              className="mt-1 p-2 w-full border rounded-lg"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Upload Files</label>
+            <input
+              type="file"
+              multiple
+              onChange={handleFileChange}
+              className="mt-1 w-full p-2 border rounded-lg"
+            />
+            {fileError && <p className="text-red-500 text-sm">{fileError}</p>}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-sky-900 text-white py-2 rounded-lg hover:bg-sky-700"
+          >
+            Submit Announcement
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
