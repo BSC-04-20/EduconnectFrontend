@@ -17,11 +17,16 @@ export default function StudentClassroomFeed({ announcements}) {
         <ul>
           {announcements.map((announcement, index) => (
 
-            <Link to={announcement.type = "assignment" ? `/student/assignmentupload/${announcement.id}` : `/student/classroom/${announcement.id/announcement}`} key={announcement.id} className="p-4 bg-white shadow-sm rounded-md mb-2 flex items-center gap-3 hover:bg-sky-50">
-              {announcements[index].type === "announcement" ? <FaBullhorn className='text-sky-600'/> : <MdLibraryBooks className='text-sky-600'/>}
+            <Link to={announcement.type = "assignment" ? `/student/assignmentupload/${announcement.id}` 
+            : `/student/classroom/${announcement.id/announcement}`} 
+            key={announcement.id} className="p-4 bg-white shadow-sm rounded-md mb-2 flex items-center gap-3
+             hover:bg-sky-50">
+              {announcements[index].type === "announcement" ? <FaBullhorn className='text-sky-600'/> 
+              : <MdLibraryBooks className='text-sky-600'/>}
               <div>
                 <h3 className="font-semibold">{announcement.title}</h3>
-                <p className="text-gray-500 text-sm">{new Date(announcement.created_at).toLocaleDateString('en-GB', {day: '2-digit', month: 'long', year: 'numeric'})}</p>
+                <p className="text-gray-500 text-sm">{new Date(announcement.created_at)
+                .toLocaleDateString('en-GB', {day: '2-digit', month: 'long', year: 'numeric'})}</p>
               </div>
             </Link>
           ))}
@@ -32,7 +37,8 @@ export default function StudentClassroomFeed({ announcements}) {
             <div className='w-[30%]'>
                 <img src={Empty} />
             </div>
-            <span className='text-sm text-gray-700 w-[40%] text-center'>No any announcement, assignment or resource</span>
+            <span className='text-sm text-gray-700 w-[40%] text-center'>
+              No any announcement, assignment or resource</span>
         </div>}
     </div>
   );
