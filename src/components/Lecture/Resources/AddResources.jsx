@@ -1,106 +1,115 @@
 import { useState } from "react";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 export default function AddResources() {
   const [fileQueue, setFileQueue] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const {id} = useParams()
+  const [toast, setToast] = useState("");
+  const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // useNavigate for navigation
+  const navigate = useNavigate();
+
+  // useForm Hook for validation
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({mode: "onChange"});
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     if (file) {
       const exists = fileQueue.some((f) => f.name === file.name);
       if (!exists) {
         setFileQueue((prev) => [...prev, file]);
         setSelectedFile(file);
       } else {
-        alert("This file is already selected.");
+        setToast("This file is already selected.");
+        setTimeout(() => setToast(""), 3000);
       }
     }
-
-    e.target.value = ""; // Reset so same file can be reselected
+    e.target.value = "";
   };
 
   const handleRemove = (index) => {
-    const updatedQueue = fileQueue.filter((_, i) => i !== index);
-    setFileQueue(updatedQueue);
-    setSelectedFile(updatedQueue[updatedQueue.length - 1] || null);
+    const updated = fileQueue.filter((_, i) => i !== index);
+    setFileQueue(updated);
+    setSelectedFile(updated[updated.length - 1] || null);
   };
 
-  const handleUpload = async (e) => {
-    e.preventDefault();
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 3000);
+  };
 
-    if (!title.trim()) {
-      alert("Please provide a title.");
-      return;
-    }
+  const handleUpload = async (data) => {
+    if (!data.title.trim()) return showToast("Please provide a title.");
+    if (fileQueue.length === 0) return showToast("Please select at least one file.");
+    if (!selectedFile) return showToast("Please choose a file to upload.");
 
-    if (fileQueue.length === 0) {
-      alert("Please select at least one file.");
-      return;
-    }
-
-    // Check if file is selected in the file input
-    if (!selectedFile) {
-      alert("Please choose a file to upload.");
-      return;
-    }
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append("title", title);
-    formData.append("description", description || "");
-    formData.append("class_id", id)
-
-    fileQueue.forEach((file) => {
-      formData.append("files[]", file); // Multiple files with the same key
-    });
+    formData.append("title", data.title);
+    formData.append("description", data.description || "");
+    formData.append("class_id", id);
+    fileQueue.forEach((file) => formData.append("files[]", file));
 
     try {
-      const response = await AuthenticatedUserUrl.post("/resources/create", formData);
-      if (response.status !== 200) {
-        throw new Error("Upload failed.");
-      }
-      alert("Upload successful!");
+      const res = await AuthenticatedUserUrl.post("/resources/create", formData);
+      if (res.status !== 200) throw new Error();
+      showToast("Upload successful!");
+      setFileQueue([]); setSelectedFile(null);
+      setValue("title", ""); setValue("description", "");
 
-      // Clear form
-      setFileQueue([]);
-      setSelectedFile(null);
-      setTitle("");
-      setDescription("");
-
-    } catch (error) {
-      console.error("Error uploading:", error);
-      alert("Error uploading file.");
+      // Navigate to the classroom page
+      navigate(`/lecture/classroom/${id}`);
+    } catch {
+      showToast("Error uploading file. File too big");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="pt-20 sm:pt-20 md:pt-20 px-4">
+    <div className="pt-20 px-4 relative">
+      {/* Loading Overlay */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+          <div className="w-16 h-16 border-4 border-white border-dashed rounded-full animate-spin"></div>
+        </div>
+      )}
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 max-w-max">
+          {toast}
+        </div>
+      )}
+
       <form
-        onSubmit={handleUpload}
-        className="w-full max-w-md mx-auto p-4 sm:p-6 bg-white shadow-md rounded-xl flex flex-col gap-4"
+        onSubmit={handleSubmit(handleUpload)}
+        className="w-full max-w-md mx-auto bg-white shadow-md rounded-xl p-6 flex flex-col gap-4"
       >
-        <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800">
-          Upload Resources
-        </h2>
+        <h2 className="text-xl font-bold text-center text-gray-800">Upload Resources</h2>
 
         {/* Title Input */}
         <input
+          {...register("title", { required: "Title is required" })}
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
-          required
           className="border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
+        {errors.title  && <p className="text-red-500 text-xs">{errors.title.message}</p>}
 
         {/* Description Input */}
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Description"
+          {...register("description")}
+          placeholder="Description (optional)"
           className="border border-gray-300 rounded-md px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-500"
           rows={3}
         />
@@ -110,30 +119,29 @@ export default function AddResources() {
           <input
             type="file"
             onChange={handleFileChange}
-            className="block w-full text-sm text-gray-500 opacity-0 absolute inset-0 z-10 cursor-pointer"
+            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
           />
-          <div className="flex items-center justify-between text-sm bg-white border border-gray-300 rounded-md px-4 py-2 cursor-pointer">
+          <div className="flex items-center justify-between bg-white border border-gray-300 rounded-md px-4 py-2 text-sm">
             <span className="truncate text-gray-600">
               {selectedFile ? selectedFile.name : "Choose Files"}
             </span>
           </div>
         </div>
+        {/* Validation Error for File */}
+        {fileQueue.length === 0 && <p className="text-red-500 text-xs">At least one file must be selected.</p>}
 
-        {/* File Queue List */}
         {fileQueue.length > 0 && (
-          <div className="text-sm text-gray-600 space-y-1">
-            {fileQueue.map((file, index) => (
+          <div className="space-y-1 text-sm text-gray-600">
+            {fileQueue.map((file, i) => (
               <div
-                key={index}
+                key={i}
                 className="flex justify-between items-center bg-gray-100 p-2 rounded-md"
               >
-                <span className="truncate max-w-[70%] sm:max-w-[80%]">
-                  {file.name}
-                </span>
+                <span className="truncate max-w-[70%]">{file.name}</span>
                 <button
                   type="button"
-                  onClick={() => handleRemove(index)}
-                  className="ml-2 text-red-600 hover:text-red-400 text-xs"
+                  onClick={() => handleRemove(i)}
+                  className="text-red-600 hover:text-red-400 text-xs"
                 >
                   Remove
                 </button>
@@ -142,10 +150,9 @@ export default function AddResources() {
           </div>
         )}
 
-        {/* Upload Button */}
         <button
           type="submit"
-          className="bg-sky-900 text-white px-4 py-2 rounded-lg hover:bg-sky-700 transition"
+          className="bg-sky-900 text-white py-2 rounded-lg hover:bg-sky-700 transition"
         >
           Upload
         </button>
