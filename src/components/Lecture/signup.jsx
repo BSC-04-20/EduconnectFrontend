@@ -81,7 +81,7 @@ export default function LecturerSignup() {
       </div>
 
       <div className="flex flex-col items-center justify-center flex-grow">
-        <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
+        <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-full sm:w-3/4 md:w-3/4 max-w-4x mx-5 max-w-4xl">
           {/* Left Section */}
           <div className="w-1/3 bg-sky-900 text-white flex-col items-center justify-center p-6 hidden md:flex">
             <h2 className="text-2xl font-bold">Hello Friend!</h2>
@@ -90,7 +90,7 @@ export default function LecturerSignup() {
             </p>
             <button
               onClick={() => navigate("/lecture/login")}
-              className="border border-white py-1 px-8 mt-3 rounded hover:bg-white hover:text-sky-900 transition"
+              className="hidden lg:flex border border-white py-3 px-16 mt-3 rounded hover:bg-white hover:text-sky-900 transition"
             >
               Sign In
             </button>
@@ -171,10 +171,10 @@ export default function LecturerSignup() {
             </form>
 
             {/* Sign In button for small screens */}
-            <div className="mt-4 block md:hidden text-center">
+            <div className="mt-4 block lg:hidden text-center">
               <button
                 onClick={() => navigate("/lecture/login")}
-                className="border border-gray-400 py-2 px-6 rounded hover:bg-gray-200 transition"
+                className="block lg:hidden w-full border border-sky-900 text-sky-900 py-2 mt-4 rounded hover:bg-sky-900 hover:text-white transition"
               >
                 Sign In
               </button>

@@ -70,7 +70,7 @@ const StudentLoginForm = () => {
           </button>
         </div>
       </div>
-      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl relative">
+      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl relative mx-5">
 
         {/* Left Section */}
         <div className="w-full lg:w-1/2 p-8">

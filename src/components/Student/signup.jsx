@@ -60,7 +60,7 @@ export default function StudentSignup() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
+    <div className="flex items-center justify-center min-h-screen w-full bg-gray-100 relative">
       {/* Top Bar with Back, Home, and Lecture Buttons */}
       <div className="absolute top-6 left-6 flex gap-4 z-50 text-gray-600 hover:text-gray-900">
         <button
@@ -84,16 +84,16 @@ export default function StudentSignup() {
         </button>
       </div>
 
-      <div className="bg-white shadow-lg rounded-lg flex overflow-hidden w-3/4 max-w-4xl">
+      <div className="bg-white shadow-lg rounded-lg md:flex overflow-hidden w-full sm:w-3/4 md:w-3/4 max-w-4x mx-5">
         {/* Left Section */}
-        <div className="w-1/3 bg-sky-900 text-white flex flex-col items-center justify-center p-6">
+        <div className="w-1/3 bg-sky-900 text-white hidden md:flex flex-col items-center justify-center p-6">
           <h2 className="text-2xl font-bold">Hello Friend!</h2>
           <p className="text-sm text-gray-300 mt-2">
             Educate, Guide & Lead - Sign Up Today!
           </p>
           <button
             onClick={() => navigate("/student/login")}
-            className="border border-white py-1 px-24 mt-3 rounded hover:bg-white hover:text-sky-900 transition"
+            className="hidden lg:flex border border-white py-3 px-16 mt-3 rounded hover:bg-white hover:text-sky-900 transition"
           >
             Sign In
           </button>
@@ -101,7 +101,7 @@ export default function StudentSignup() {
 
         {/* Right Section - Form */}
         <div className="w-full lg:w-2/3 p-8">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">
+          <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 mb-4">
             Student Signup Form
           </h2>
           <form className="space-y-4" onSubmit={handleSubmit}>

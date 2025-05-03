@@ -3,6 +3,7 @@ import { StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GrGroup } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { PiPlus } from "react-icons/pi";
+import NoClass from "./no_class";
 
 export default function StudentClasses() {
     const [classes, setClasses] = useState([]);
@@ -75,26 +76,29 @@ export default function StudentClasses() {
             {loading ? (
                 <p className="text-gray-500">Loading...</p>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 z-0">
-                    {classes.map((cls, index) => (
-                        <Link
-                            to={`/student/classroom/${cls.class_id}`}
-                            key={index}
-                            className="bg-white shadow-md rounded-lg overflow-hidden border cursor-pointer transition-transform transform hover:scale-105"
-                        >
-                            <div className="bg-sky-800 h-16 flex flex-col justify-center px-4 text-white">
-                                <span className="font-semibold text-lg truncate">{cls.class_name}</span>
-                                <span className="font-light text-sm truncate">{cls.lecture_name}</span>
-                            </div>
-                            <div className="p-4 flex flex-col justify-end h-28">
-                                <div className="flex justify-end mt-auto">
-                                    <div className="bg-sky-100 p-2 rounded-full shadow-md">
-                                        <GrGroup size={20} className="text-sky-700" />
+                <div>
+                    {classes.length === 0 ? <NoClass/> :
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 z-0">
+                        {classes.map((cls, index) => (
+                            <Link
+                                to={`/student/classroom/${cls.class_id}`}
+                                key={index}
+                                className="bg-white shadow-md rounded-lg overflow-hidden border cursor-pointer transition-transform transform hover:scale-105"
+                            >
+                                <div className="bg-sky-800 h-16 flex flex-col justify-center px-4 text-white">
+                                    <span className="font-semibold text-lg truncate">{cls.class_name}</span>
+                                    <span className="font-light text-sm truncate">{cls.lecture_name}</span>
+                                </div>
+                                <div className="p-4 flex flex-col justify-end h-28">
+                                    <div className="flex justify-end mt-auto">
+                                        <div className="bg-sky-100 p-2 rounded-full shadow-md">
+                                            <GrGroup size={20} className="text-sky-700" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Link>
-                    ))}
+                            </Link>
+                        ))}
+                    </div>}
                 </div>
             )}
 

@@ -84,7 +84,7 @@ const LecturerLoginForm = () => {
         </button>
       </div>
 
-      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl">
+      <div className="bg-white shadow-lg rounded-lg flex w-full max-w-3xl mx-5">
         {/* Left Section */}
         <div className="w-full sm:w-1/2 p-8"> {/* Made full width on small screens */}
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Lecturer Login</h2>

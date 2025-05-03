@@ -67,13 +67,13 @@ const TopBar = () => {
 
   return (
     <>
-      <div className="w-full sm:w-max ml-auto text-white p-4 mr-[5%] flex flex-wrap gap-4 items-center z-50 justify-center sm:justify-end">
-        <span className="flex flex-row gap-2 px-4 py-2 shadow-md rounded-lg text-slate-950">
+      <div className="w-full sm:w-max ml-auto text-white p-4 sm:mr-[5%] flex flex-wrap gap-4 items-center z-50 justify-end">
+        <span className="hidden sm:flex sm:flex-row gap-2 px-4 py-2 shadow-sm rounded-lg text-slate-950">
           <CiCalendar className="size-[1.5rem]" />
           {getCurrentDate()}
         </span>
 
-        <span className="shadow-md rounded-lg px-4 py-2">
+        <span className="shadow-sm rounded-lg px-4 py-2">
           <CiBellOn className="text-slate-950 size-[1.5rem]" />
         </span>
 

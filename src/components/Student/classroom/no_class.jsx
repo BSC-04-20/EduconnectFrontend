@@ -43,14 +43,11 @@ export default function NoClass() {
 
     return (
         <div className="flex flex-col text-center text-lg items-center">
-            <div>
-                <img src={Fisherman} className="size-[30rem]" alt="No Class" />
+            <div className="mb-2">
+                <img src={Fisherman} className="w-96" alt="No Class" />
             </div>
             <div className="flex flex-col">
-                <span>You don't have any class</span>
-                <Link onClick={openModal} className="text-blue-500 cursor-pointer">
-                    Click Here to join
-                </Link>
+                <span className="text-gray-500 text-xs sm:text-base md:text-lg">You don't have any class</span>
             </div>
 
             {/* Modal */}
