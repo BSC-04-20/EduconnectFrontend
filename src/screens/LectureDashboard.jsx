@@ -15,7 +15,7 @@ export default function LectureDashboard() {
           <section className="mt-[5vh] md:mt-0 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
             <TopBar/>
             <Board
-              title="Welcome Back Professor"
+              title="Welcome Back"
               secondaryTxt="Here's what's happening in your educational network"
               url={ResearchPaoer}
             />
