@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaChalkboardTeacher } from 'react-icons/fa';
 import { PiStudentBold } from 'react-icons/pi';
 import { useNavigate } from 'react-router-dom';
+import { Toaster, toast} from "react-hot-toast";
 
 const SignupSelector = () => {// null, 'student', or 'lecturer'
   const navigator = useNavigate();  
@@ -12,7 +13,7 @@ const SignupSelector = () => {// null, 'student', or 'lecturer'
     } else if (userType === 'lecturer') {
         navigator("/lecture/signup")
     } else {
-      alert("Please select a user type.");
+      toast.error("Please select a user type.");
     }
   };
 

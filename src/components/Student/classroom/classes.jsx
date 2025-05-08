@@ -3,6 +3,7 @@ import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from "../../../conf
 import { GrGroup } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { PiPlus } from "react-icons/pi";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function StudentClasses() {
     const [classes, setClasses] = useState([]);
@@ -43,7 +44,7 @@ export default function StudentClasses() {
         try {
             const response = await StudentAuthenticatedUserUrl.post("/classes/join", { code: classCode });
             if (response.status === 201) {
-                alert("Successfully joined the class!");
+                toast.success("Successfully joined the class!");
                 closeModal();
                 setLoading(true);
                 StudentAuthenticatedUserUrl.get("/classes/student-classes").then(response => {
@@ -65,6 +66,8 @@ export default function StudentClasses() {
             <button onClick={openModal} className="fixed bottom-16 right-6 bg-white text-sky-500 p-4 rounded-full shadow-lg hover:bg-gray-50 flex items-center justify-center">
                 <PiPlus size={30} />
             </button>
+
+            <Toaster/>
 
             {loading ? (
                 <p className="text-gray-500">Loading...</p>
