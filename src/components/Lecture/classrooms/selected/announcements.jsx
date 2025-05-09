@@ -8,8 +8,14 @@ export default function ClassroomFeed({ announcements }) {
   const navigator = useNavigate();
   const { id } = useParams()
 
-  const goTo = (selectedId) => {
-    navigator(`/lecture/classroom/${id}/${selectedId}`)
+  const goTo = (selectedId, type) => {
+    navigator(`/lecture/classroom/${id}/${selectedId}`,
+      {
+        state: {
+          type: type
+        }
+      }
+    )
   }
 
   return (
@@ -21,8 +27,8 @@ export default function ClassroomFeed({ announcements }) {
             {announcements.map((announcement) => (
               <li
                 key={announcement.id}
-                onClick={()=> goTo(announcement.id)}
-                className="p-4 bg-white shadow-sm rounded-md mb-2 flex items-center justify-between"
+                onClick={()=> goTo(announcement.id, announcement.type)}
+                className="p-4 bg-white shadow-sm hover:bg-sky-50 rounded-md mb-2 flex items-center justify-between cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   {announcement.type === "announcement" ? (

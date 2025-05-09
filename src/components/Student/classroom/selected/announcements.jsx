@@ -1,14 +1,22 @@
 import { FaBullhorn } from 'react-icons/fa6';
 import Empty from "../../../../assets/Empty-pana.svg"
 import { MdLibraryBooks } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 
 export default function StudentClassroomFeed({ announcements}) {
-  
-  useEffect(()=>{
-    
-  },[])
+  const navigator = useNavigate();
+  const { id } = useParams()
+
+  const goTo = (selectedId, type) => {
+    navigator(`/student/classroom/${id}/${selectedId}`,
+      {
+        state: {
+          type: type
+        }
+      }
+    )
+  }
 
   return (
     <div className="mt-5 mr-[5%] sm:mr-[5%] md:mr-0">
@@ -17,13 +25,13 @@ export default function StudentClassroomFeed({ announcements}) {
         <ul>
           {announcements.map((announcement, index) => (
 
-            <Link to={announcement.type = "assignment" ? `/student/assignmentupload/${announcement.id}` : `/student/classroom/${announcement.id/announcement}`} key={announcement.id} className="p-4 bg-white shadow-sm rounded-md mb-2 flex items-center gap-3 hover:bg-sky-50">
+            <div onClick={()=> goTo(announcement.id, announcement.type)} key={announcement.id} className="p-4 bg-white shadow-sm rounded-md mb-2 flex cursor-pointer items-center gap-3 hover:bg-sky-50">
               {announcements[index].type === "announcement" ? <FaBullhorn className='text-sky-600'/> : <MdLibraryBooks className='text-sky-600'/>}
               <div>
                 <h3 className="font-semibold">{announcement.title}</h3>
                 <p className="text-gray-500 text-sm">{new Date(announcement.created_at).toLocaleDateString('en-GB', {day: '2-digit', month: 'long', year: 'numeric'})}</p>
               </div>
-            </Link>
+            </div>
           ))}
         </ul>
       </div>}

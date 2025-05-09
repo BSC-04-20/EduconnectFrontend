@@ -6,7 +6,7 @@ import {
   FaFileAlt
 } from 'react-icons/fa';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
-import { AuthenticatedUserUrl } from '../../../../config/urlFetcher';
+import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from '../../../../config/urlFetcher';
 
 const getFileIcon = (filename) => {
   const ext = filename.split('.').pop().toLowerCase();
@@ -47,7 +47,7 @@ export default function SelectedAnnouncement() {
           : `/assignment/get/${selectedId}`;
 
       try {
-        const res = await AuthenticatedUserUrl.get(endpoint);
+        const res = await StudentAuthenticatedUserUrl.get(endpoint);
         setData(res.data);
         if (res.data.files) {
           setResources(res.data.files);
@@ -79,7 +79,7 @@ export default function SelectedAnnouncement() {
     }
 
     try {
-      await AuthenticatedUserUrl.delete(endpoint);
+      await StudentAuthenticatedUserUrl.delete(endpoint);
       alert(`${type} deleted successfully!`);
       navigate(-1); // Go back
     } catch (error) {
@@ -92,7 +92,6 @@ export default function SelectedAnnouncement() {
 
   const handleEdit = () => {
     console.log(`Edit ${type} with ID ${selectedId}`);
-    // Implement navigation to edit page or show modal
   };
 
   if (!data) {

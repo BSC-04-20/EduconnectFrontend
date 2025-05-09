@@ -32,6 +32,8 @@ import StudentAnnouncementScreen from "../screens/StudentAnnouncementPage";
 import ClassmatesScreen from "../screens/ClassmatesScreen";
 import JitsiComponent from "../Jitsi/JitsiComponent";
 import SelectedAnnouncement from "../components/Lecture/classrooms/Announcement/SelectedAnnouncement";
+import LectureSelectedAnnouncementScreen from "../screens/LectureSelectedAnnouncementScreen";
+import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnouncementScreen";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -82,7 +84,7 @@ const routes = createBrowserRouter([
       {path: "classroom/:id", element:<RouterAuthGuard><LectureClassScreen/></RouterAuthGuard>},
       {path: "classroom/:id/students", element:<RouterAuthGuard><ClassStudentsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
-      {path: "classroom/:id/:selectedId", element:<RouterAuthGuard><SelectedAnnouncement/></RouterAuthGuard>},
+      {path: "classroom/:id/:selectedId", element:<RouterAuthGuard><LectureSelectedAnnouncementScreen/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
       { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
@@ -102,6 +104,7 @@ const routes = createBrowserRouter([
       { path: "ratings", element:<StudentRouterAuthGuard>  <StudentRatingsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom", element:<StudentRouterAuthGuard>  <StudentClassroomsScreen />  </StudentRouterAuthGuard>},
       { path: "classroom/:id", element:<StudentRouterAuthGuard>  <StudentClassScreen />  </StudentRouterAuthGuard>},
+      {path: "classroom/:id/:selectedId", element:<StudentRouterAuthGuard><StudentSelectedAnnouncementScreen/></StudentRouterAuthGuard>},
       {path: "assignmentupload/:id", element:<StudentRouterAuthGuard> <AssignmentUploader/> </StudentRouterAuthGuard>},
       { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>},
       {path: "classroom/:id/students", element:<StudentRouterAuthGuard><ClassmatesScreen/></StudentRouterAuthGuard>},
