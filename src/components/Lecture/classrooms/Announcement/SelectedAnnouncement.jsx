@@ -48,9 +48,9 @@ export default function SelectedAnnouncement() {
 
       try {
         const res = await AuthenticatedUserUrl.get(endpoint);
-        setData(res.data);
-        if (res.data.files) {
-          setResources(res.data.files);
+        setData(res.data.assignment);
+        if (res.data.assignment.files) {
+          setResources(res.data.assignment.files);
         }
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -100,7 +100,7 @@ export default function SelectedAnnouncement() {
   }
 
   return (
-    <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg max-w-4xl mx-auto relative">
+    <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg max-w-4xl mx-auto mb-10 relative">
       {/* Top-right menu */}
       <div className="absolute top-4 right-4 z-10">
         <div className="relative">
@@ -157,7 +157,7 @@ export default function SelectedAnnouncement() {
 
       {/* Content */}
       <span className="block font-light text-sm sm:text-base md:text-lg text-gray-700 mb-2">
-        {data.subject || 'Unknown Subject'}
+        {data.class.name || 'Unknown Subject'}
       </span>
       <hr className="mb-4 border-gray-300" />
       <h1 className="font-bold text-xl sm:text-2xl md:text-3xl mb-3">
@@ -212,6 +212,9 @@ export default function SelectedAnnouncement() {
           </div>
         </>
       )}
+      <div className='w-full'>
+        <button className='bg-sky-700 hover:bg-sky-500 px-5 py-1 text-white rounded mt-5 justify-end'>Submissions</button>
+      </div>
     </div>
   );
 }

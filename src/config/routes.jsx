@@ -34,6 +34,7 @@ import JitsiComponent from "../Jitsi/JitsiComponent";
 import SelectedAnnouncement from "../components/Lecture/classrooms/Announcement/SelectedAnnouncement";
 import LectureSelectedAnnouncementScreen from "../screens/LectureSelectedAnnouncementScreen";
 import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnouncementScreen";
+import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -85,6 +86,7 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/students", element:<RouterAuthGuard><ClassStudentsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
       {path: "classroom/:id/:selectedId", element:<RouterAuthGuard><LectureSelectedAnnouncementScreen/></RouterAuthGuard>},
+      {path: "classroom/:id/:selectedId/submissions", element:<RouterAuthGuard><AssignmentSubmissionsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
       { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
