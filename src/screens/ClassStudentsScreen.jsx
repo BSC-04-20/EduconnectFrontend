@@ -1,5 +1,5 @@
 import ClassStudentsTable from "../components/Lecture/classrooms/selected/studentsList";
-import SelectedClassroom from "../components/Lecture/classrooms/SelectedClass";
+// import SelectedClassroom from "../components/Lecture/classrooms/SelectedClass";
 import LectureSideBar from "../components/Lecture/SideBar";
 import TopBar from "../components/Lecture/TopBar";
 
