@@ -57,7 +57,8 @@ export default function LecturerSignup() {
       }, 1000)
       
     } catch (err) {
-      alert(err.response.data.errors);
+      const firstError = Object.values(err.response.data.errors)[0][0];
+      toast.error(firstError);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);

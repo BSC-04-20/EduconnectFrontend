@@ -56,8 +56,8 @@ export default function StudentSignup() {
         navigate("/student/login"); // Redirect to login page
       }, 1000)
     } catch (err) {
-      alert(err.response.data.errors)
-      // toast.error("Server not online")
+      const firstError = Object.values(err.response.data.errors)[0][0];
+      toast.error(firstError);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
