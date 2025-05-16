@@ -49,6 +49,7 @@ export default function NoClass() {
             </div>
             <div className="flex flex-col">
                 <span className="text-gray-500 text-xs sm:text-base md:text-lg">You don't have any class</span>
+                <p className="text-sm text-gray-500">Click the + button to join your first class.</p>
             </div>
             <Toaster/>
 

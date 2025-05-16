@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { MdGroup, MdOutlineSpaceDashboard, MdMenu, MdClose } from "react-icons/md";
 import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStarOutline, IoTimeOutline } from "react-icons/io5";
 
@@ -34,8 +34,8 @@ export default function LectureSideBar() {
 
             {/* Sidebar for Small to Medium Screens */}
             <aside className={`fixed top-0 left-0 h-full bg-white w-full md:w-full shadow-lg transform ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden transition-transform duration-300 ease-in-out`}>                
-                <div className="my-5 text-center">
-                    <span className="font-bold text-xl">EduConnect</span>
+                <div className="my-5 text-center text-sky-900">
+                    <Link to="/" className="font-bold text-xl">EduConnect</Link>
                 </div>
                 <nav className="flex flex-col gap-3">
                     {navLinks.map(({ to, label, icon }) => (
@@ -59,7 +59,7 @@ export default function LectureSideBar() {
             {/* Sidebar for Large Screens */}
             <aside className="hidden lg:flex flex-col fixed top-0 left-0 h-full bg-white w-[15%] shadow-lg">                
                 <div className="my-5 text-center">
-                    <span className="font-bold text-xl">EduConnect</span>
+                    <Link to="/" className="font-bold text-xl text-sky-900">EduConnect</Link>
                 </div>
                 <nav className="flex flex-col gap-3">
                     {navLinks.map(({ to, label, icon }) => (

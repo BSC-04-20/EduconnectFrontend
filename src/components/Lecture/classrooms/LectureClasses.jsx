@@ -3,6 +3,8 @@ import { FaPlus } from "react-icons/fa6";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GoPeople } from "react-icons/go";
+import { PiPlus } from "react-icons/pi";
+import Empty from "../../../assets/Empty-pana.svg";
 
 export default function LectureClasses() {
   const [classes, setClasses] = useState([]);
@@ -18,12 +20,10 @@ export default function LectureClasses() {
     setIsDialogOpen(true);
   };
 
-  // Define fetchClasses function outside useEffect to make it reusable
   const fetchClasses = async () => {
     try {
       const response = await AuthenticatedUserUrl.get("/classes/get");
       setClasses(response.data.data);
-      console.log(response.data.data);
     } catch (err) {
       setError("Failed to fetch classes. Please try again.");
     } finally {
@@ -42,10 +42,8 @@ export default function LectureClasses() {
 
       if (response.status === 201 || response.status === 200) {
         alert("Class added successfully!");
-        setClassName(""); // Reset form
+        setClassName("");
         setIsDialogOpen(false);
-
-        // Refetch the classes after adding a new one
         fetchClasses();
       }
     } catch (error) {
@@ -56,7 +54,7 @@ export default function LectureClasses() {
   };
 
   useEffect(() => {
-    fetchClasses(); // Call the fetchClasses function on mount
+    fetchClasses();
   }, []);
 
   return (
@@ -64,6 +62,16 @@ export default function LectureClasses() {
       {loading && <p className="text-center text-gray-600">Loading classes...</p>}
       {error && <p className="text-center text-red-500">{error}</p>}
 
+      {/* Empty state */}
+      {!loading && classes.length === 0 && (
+        <div className="flex flex-col items-center justify-center mt-12 space-y-6 text-center">
+          <img src={Empty} alt="No Classes" className="w-64 max-w-full mx-auto" />
+          <p className="text-gray-600 text-lg">No classes found.</p>
+          <p className="text-sm text-gray-500">Click the + button to create your first class.</p>
+        </div>
+      )}
+
+      {/* Classes grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {classes.map((classItem) => (
           <Link
@@ -83,16 +91,18 @@ export default function LectureClasses() {
         ))}
       </div>
 
+      {/* Add class button */}
       <button
         onClick={handleAddClick}
-        className="fixed bottom-6 right-6 sm:bottom-10 sm:right-10 bg-sky-600 rounded-full p-4 sm:p-5 text-sky-900 shadow-md hover:bg-sky-700 transition-colors"
+        className="fixed bottom-16 right-6 bg-white text-sky-500 p-4 rounded-full shadow-lg hover:bg-gray-100 z-50 transition-all"
       >
-        <FaPlus className="w-10 h-10 text-white rounded-full flex items-center justify-center transition duration-300" />
+        <PiPlus size={30} />
       </button>
 
+      {/* Add class dialog */}
       {isDialogOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 transition-all">
-          <div className="max-w-[55%] min-w-[35%] my-auto mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 transition-all px-4">
+          <div className="w-full max-w-xl bg-white p-6 shadow-lg rounded-lg">
             <h2 className="text-2xl font-semibold text-center text-gray-700 mb-4">
               Create New Class
             </h2>
@@ -113,17 +123,17 @@ export default function LectureClasses() {
                   required
                 />
               </div>
-              <div className="flex flex-row flex-wrap justify-end gap-3">
+              <div className="flex flex-wrap justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsDialogOpen(false)}
-                  className="py-3 px-3 text-red-500 hover:text-red-700 hover:bg-gray-50 font-semibold rounded-lg mt-4"
+                  className="py-3 px-4 text-red-500 hover:text-red-700 hover:bg-gray-50 font-semibold rounded-lg"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="py-3 px-3 hover:bg-sky-700 bg-sky-900 text-white font-semibold rounded-lg mt-4"
+                  className="py-3 px-4 bg-sky-900 hover:bg-sky-700 text-white font-semibold rounded-lg"
                   disabled={classAddLoading}
                 >
                   {classAddLoading ? "Adding..." : "Add Class"}
