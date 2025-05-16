@@ -26,7 +26,6 @@ import AssignmentForm from "../components/Lecture/classrooms/addassignment";
 import StudentClassScreen from "../screens/StudentSelectedClass";
 import ErrorPage from "../components/ErrorPage";
 import AboutUs from "../screens/AboutUs";
-<<<<<<< HEAD
 import AssignmentUploader from "../components/AssignmentUploader";
 import AddResources from "../components/Lecture/Resources/AddResources";
 import StudentAnnouncementScreen from "../screens/StudentAnnouncementPage";
@@ -36,9 +35,7 @@ import SelectedAnnouncement from "../components/Lecture/classrooms/Announcement/
 import LectureSelectedAnnouncementScreen from "../screens/LectureSelectedAnnouncementScreen";
 import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnouncementScreen";
 import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen";
-=======
 import LecturerRating from "../screens/LecturerRating";
->>>>>>> b43f003029efe7290687fe2957757b512d16c6b8
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
