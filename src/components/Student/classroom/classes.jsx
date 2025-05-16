@@ -4,6 +4,7 @@ import { GrGroup } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { PiPlus } from "react-icons/pi";
 import NoClass from "./no_class";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function StudentClasses() {
     const [classes, setClasses] = useState([]);
@@ -44,7 +45,7 @@ export default function StudentClasses() {
         try {
             const response = await StudentAuthenticatedUserUrl.post("/classes/join", { code: classCode });
             if (response.status === 201) {
-                alert("Successfully joined the class!");
+                toast.success("Successfully joined the class!");
                 closeModal();
                 setLoading(true);
                 StudentAuthenticatedUserUrl.get("/classes/student-classes").then(response => {
@@ -73,6 +74,8 @@ export default function StudentClasses() {
             </button>
 
             {/* Loading State */}
+            <Toaster/>
+
             {loading ? (
                 <p className="text-gray-500">Loading...</p>
             ) : (

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { MdPerson, MdPhone, MdEmail, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
-import { Dialog, CircularProgress } from "@mui/material";
 import { IoArrowBack } from "react-icons/io5";
+import { Dialog, CircularProgress } from "@mui/material"; // Import MUI Components
+import { Toaster, toast} from "react-hot-toast";
 
 export default function LecturerSignup() {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function LecturerSignup() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
 
@@ -45,10 +46,15 @@ export default function LecturerSignup() {
         password: formData.password,
       });
 
-      alert("Signup successful!");
-      navigate("/lecture/login");
+      console.log("Success:", response.data);
+      toast.success("Signup successful!");
+      setTimeout(() => {
+        navigate("/lecture/login"); // Redirect to login page
+      }, 1000)
+      
     } catch (err) {
-      alert(err.response.data.errors);
+      const firstError = Object.values(err.response.data.errors)[0][0];
+      toast.error(firstError);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);

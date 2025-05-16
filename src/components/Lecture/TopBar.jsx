@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { removeToken, unAuthorize } from "../../redux/slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
+import { Toaster, toast} from "react-hot-toast";
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const TopBar = () => {
       const response = await AuthenticatedUserUrl.get("/user");
       setUsername(response.data.fullname);
     } catch (error) {
-      alert("Failed to get username");
+      toast.error("Failed to get username");
     }
   };
 
@@ -35,10 +36,10 @@ const TopBar = () => {
         dispatch(unAuthorize());
         navigate("/");
       } else {
-        alert("Failed to logout");
+        toast.error("Failed to logout");
       }
     } catch (error) {
-      alert("Unauthorized");
+      toast.error("Unauthorized");
       console.log(error);
     } finally {
       setLoading(false);

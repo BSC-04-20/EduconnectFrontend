@@ -4,10 +4,11 @@ import { IoMdArrowBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import { Dialog, CircularProgress } from "@mui/material"; // Import MUI Components
+import { Toaster, toast} from "react-hot-toast";
 
 export default function StudentSignup() {
   const navigate = useNavigate();
-
+ 
   // State to hold form data
   const [formData, setFormData] = useState({
     fullname: "",
@@ -34,7 +35,7 @@ export default function StudentSignup() {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
     setLoading(true);
@@ -48,11 +49,14 @@ export default function StudentSignup() {
         password: formData.password,
       });
 
-      console.log("Success:", response.data);
-      alert("Signup successful!");
-      navigate("/student/login"); // Redirect to login page
+      console.log("Success:", response);
+      toast.success("Signup successful!");
+      setTimeout(() => {
+        navigate("/student/login"); // Redirect to login page
+      }, 1000)
     } catch (err) {
-      alert(err.response.data.errors);
+      const firstError = Object.values(err.response.data.errors)[0][0];
+      toast.error(firstError);
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);
@@ -98,6 +102,7 @@ export default function StudentSignup() {
             Sign In
           </button>
         </div>
+       
 
         {/* Right Section - Form */}
         <div className="w-full lg:w-2/3 p-8">
@@ -172,6 +177,8 @@ export default function StudentSignup() {
               Signup
             </button>
           </form>
+
+          <Toaster/>
 
           {/* Sign In Button - Only on small screens */}
           <button

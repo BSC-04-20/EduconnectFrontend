@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import Fisherman from "../../../assets/ice fishing-amico.svg";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+import  { Toaster, toast} from "react-hot-toast";
 
 export default function NoClass() {
     const [isOpen, setIsOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function NoClass() {
             const response = await AuthenticatedUserUrl.post("/classes/join", { code: classCode });
 
             if (response.status === 201) {
-                alert("Successfully joined the class!");
+                toast.success("Successfully joined the class!");
                 closeModal();
             } else {
                 setError("Failed to join the class. Please check the code.");
@@ -49,6 +50,7 @@ export default function NoClass() {
             <div className="flex flex-col">
                 <span className="text-gray-500 text-xs sm:text-base md:text-lg">You don't have any class</span>
             </div>
+            <Toaster/>
 
             {/* Modal */}
             {isOpen && (
