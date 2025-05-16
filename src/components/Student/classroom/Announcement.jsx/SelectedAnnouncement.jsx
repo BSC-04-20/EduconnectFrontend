@@ -266,7 +266,7 @@ export default function SelectedAnnouncement() {
       )}
 
       {/* Submission Form */}
-      {(type === 'assignment' && status === "pending" && submittedFiles.length === 0) && (
+      {(type === 'assignment' && status === "not submitted" && submittedFiles.length === 0) && (
         <>
           <hr className="my-6 border-gray-300" />
           <h2 className="text-sm sm:text-base font-semibold mb-2">Submit Assignment</h2>

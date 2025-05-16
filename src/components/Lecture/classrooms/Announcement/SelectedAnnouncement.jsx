@@ -5,7 +5,7 @@ import {
   FaFileImage,
   FaFileAlt
 } from 'react-icons/fa';
-import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { useLocation, useParams, useNavigate, Link } from 'react-router-dom';
 import { AuthenticatedUserUrl } from '../../../../config/urlFetcher';
 
 const getFileIcon = (filename) => {
@@ -27,6 +27,7 @@ const getFileIcon = (filename) => {
 
 export default function SelectedAnnouncement() {
   const { selectedId } = useParams();
+  const { id } = useParams()
   const location = useLocation();
   const navigate = useNavigate();
   const type = location.state?.type;
@@ -36,7 +37,7 @@ export default function SelectedAnnouncement() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);  // Loading state for deletion
-
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!type || !selectedId) return;
@@ -212,8 +213,8 @@ export default function SelectedAnnouncement() {
           </div>
         </>
       )}
-      <div className='w-full'>
-        <button className='bg-sky-700 hover:bg-sky-500 px-5 py-1 text-white rounded mt-5 justify-end'>Submissions</button>
+      <div className='w-full mt-5'>
+        <Link to={`/lecture/classroom/${id}/${selectedId}/submissions`} className='bg-sky-700 hover:bg-sky-500 px-5 py-1 text-white rounded mt-5 justify-end'>Submissions</Link>
       </div>
     </div>
   );

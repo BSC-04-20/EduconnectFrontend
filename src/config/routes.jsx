@@ -72,10 +72,6 @@ const routes = createBrowserRouter([
     element:<JitsiComponent/>
   },
   {
-    path:"viewer",
-    element:<AssignmentMarking/>,
-  },
-  {
     path: "/lecture",
     children: [
       { path: "signup", element: <LecturerSignup /> },
@@ -92,6 +88,7 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/announcement", element:<RouterAuthGuard><AnnouncementForm/></RouterAuthGuard>},
       {path: "classroom/:id/:selectedId", element:<RouterAuthGuard><LectureSelectedAnnouncementScreen/></RouterAuthGuard>},
       {path: "classroom/:id/:selectedId/submissions", element:<RouterAuthGuard><AssignmentSubmissionsScreen/></RouterAuthGuard>},
+      {path: "classroom/:id/:selectedId/submissions/:submissionId", element:<RouterAuthGuard><AssignmentMarking/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
       { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
