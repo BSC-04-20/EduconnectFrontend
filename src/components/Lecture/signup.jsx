@@ -3,6 +3,7 @@ import { MdPerson, MdPhone, MdEmail, MdLock } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import UrlFetcher from "../../config/urlFetcher";
 import { Dialog, CircularProgress } from "@mui/material"; // Import MUI Components
+import { Toaster, toast} from "react-hot-toast";
 
 export default function LecturerSignup() {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ export default function LecturerSignup() {
 
     // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
     setLoading(true); // Start loading
@@ -50,8 +51,11 @@ export default function LecturerSignup() {
       });
 
       console.log("Success:", response.data);
-      alert("Signup successful!");
-      navigate("/lecture/login"); // Redirect to login page
+      toast.success("Signup successful!");
+      setTimeout(() => {
+        navigate("/lecture/login"); // Redirect to login page
+      }, 1000)
+      
     } catch (err) {
       alert(err.response.data.errors);
       setError(err.response?.data?.message || "An error occurred");
@@ -74,6 +78,7 @@ export default function LecturerSignup() {
             Sign In
           </button>
         </div>
+        <Toaster/>
 
         {/* Right Section - Form */}
         <div className="w-full md:w-2/3 p-8">

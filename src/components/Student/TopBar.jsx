@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { removeStudentToken, unAuthorize } from "../../redux/studentSlice";
 import CircularProgress from "@mui/material/CircularProgress"; 
 import Button from "@mui/material/Button"; 
+import { Toaster, toast} from "react-hot-toast";
 
 const StudentTopBar = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const StudentTopBar = () => {
       const response = await StudentAuthenticatedUserUrl.get("/user");
       setUsername(response.data.fullname);
     } catch (error) {
-      alert("Failed to get username");
+      toast.error("Failed to get username");
     }
   }
 
@@ -34,10 +35,10 @@ const StudentTopBar = () => {
         dispatch(unAuthorize());
         navigate("/student/login");
       } else {
-        alert("Failed to logout");
+        toast.error("Failed to logout");
       }
     } catch (error) {
-      alert("Unauthorized");
+      toast.error("Unauthorized");
       console.log(error);
     } finally {
       setLoading(false);
@@ -75,6 +76,9 @@ const StudentTopBar = () => {
           Logout
         </button>
       </div>
+
+      <Toaster/>
+
 
       {/* Logout Confirmation Dialog */}
       {isDialogOpen && (
