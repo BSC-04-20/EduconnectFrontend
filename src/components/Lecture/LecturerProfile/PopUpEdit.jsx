@@ -1,5 +1,6 @@
 import React from "react";
 import { toast } from "react-hot-toast";
+// import { AuthenticatedUserUrl } from "../../config/urlFetcher";
 
 const PopUpEdit = ({ isOpen, onClose, formData, setFormData, setPreviewImage }) => {
   if (!isOpen) return null;
@@ -30,7 +31,9 @@ const PopUpEdit = ({ isOpen, onClose, formData, setFormData, setPreviewImage }) 
       const response = await AuthenticatedUserUrl.put("/user/update", data);
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        onClose();
+        onClose(); 
+      } else {
+        toast.error("Unexpected response");
       }
     } catch (error) {
       toast.error("Failed to update profile");
