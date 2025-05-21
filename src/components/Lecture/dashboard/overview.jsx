@@ -17,12 +17,12 @@ export default function Overview() {
                     },
                 });
                 
-                if (!response.ok) {
-                    throw new Error("Failed to fetch class count");
-                }
+                // if (!response.ok) {
+                //     throw new Error("Failed to fetch class count");
+                // }
 
-                const data = await response.json();
-                setClassCount(data.count); // Adjust if the response structure is different
+                const data = response.data;
+                setClassCount(data.total_classes); // Adjust if the response structure is different
             } catch (error) {
                 console.error("Error fetching class count:", error);
             }
