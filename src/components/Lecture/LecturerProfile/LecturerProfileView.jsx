@@ -1,5 +1,8 @@
+// LecturerProfileView.js
 import React, { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
+import { FiEdit } from "react-icons/fi";
+import PopUpEdit from "./PopUpEdit"; // import modal component
 
 const LecturerProfileView = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +12,9 @@ const LecturerProfileView = () => {
     description: "",
     profilePicture: null,
   });
-
   const [previewImage, setPreviewImage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Fetch current profile data
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -31,123 +33,46 @@ const LecturerProfileView = () => {
         toast.error("Failed to load profile");
       }
     };
-
     fetchProfile();
   }, []);
 
-  // Handle input changes
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === "profilePicture" && files[0]) {
-      setFormData(prev => ({ ...prev, profilePicture: files[0] }));
-      setPreviewImage(URL.createObjectURL(files[0]));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
-
-  // Submit updated profile
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const data = new FormData();
-    data.append("fullname", formData.fullname);
-    data.append("email", formData.email);
-    if (formData.password) data.append("password", formData.password);
-    data.append("description", formData.description);
-    if (formData.profilePicture) {
-      data.append("profilePicture", formData.profilePicture);
-    }
-
-    try {
-      const response = await AuthenticatedUserUrl.put("/user/update", data);
-      if (response.status === 200) {
-        toast.success("Profile updated successfully");
-      }
-    } catch (error) {
-      toast.error("Failed to update profile");
-    }
-  };
-
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Lecturer Profile</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Profile Picture */}
-        <div>
-          <label className="block font-semibold">Profile Picture</label>
-          <input type="file" name="profilePicture" accept="image/*" onChange={handleChange} />
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="mt-2 h-24 w-24 rounded-full object-cover border"
-            />
-          )}
-        </div>
+    <div className="min-h-screen bg-white flex flex-col items-center">
+      <div
+        className="w-full h-40 bg-cover bg-center bg-blue-800"
+        
+      ></div>
 
-        {/* Full Name */}
-        <div>
-          <label className="block font-semibold">Name</label>
-          <input
-            type="text"
-            name="fullname"
-            value={formData.fullname}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md"
-            required
-          />
-        </div>
+      <div className="relative -top-16 w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-lg">
+        {previewImage ? (
+          <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
+        ) : (
+          <div className="w-full h-full bg-gray-200"></div>
+        )}
+      </div>
 
-        {/* Email */}
-        <div>
-          <label className="block font-semibold">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md"
-            required
-          />
-        </div>
+      <div className="-mt-12 text-center px-4">
+        <h1 className="text-2xl font-bold text-gray-800">{formData.fullname || "Full Name"}</h1>
+        <p className="text-sm font-medium text-gray-500 mt-1">{formData.email || "Email"}</p>
+        <p className="text-gray-500 text-sm mt-4 max-w-md mx-auto">
+          {formData.description || "Add a short bio or description about yourself here."}
+        </p>
 
-        {/* Password */}
-        <div>
-          <label className="block font-semibold">New Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md"
-            placeholder="Leave blank to keep current password"
-          />
-        </div>
+        <button
+          className="mt-4 inline-flex items-center text-blue-600 hover:underline"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <FiEdit className="mr-2" /> Edit
+        </button>
+      </div>
 
-        {/* Description */}
-        <div>
-          <label className="block font-semibold">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md"
-            rows="4"
-            placeholder="Add a short bio or description"
-          ></textarea>
-        </div>
-
-        {/* Submit Button */}
-        <div className="pt-4">
-          <button
-            type="submit"
-            className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
-          >
-            Save Changes
-          </button>
-        </div>
-      </form>
+      <PopUpEdit
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        formData={formData}
+        setFormData={setFormData}
+        setPreviewImage={setPreviewImage}
+      />
     </div>
   );
 };
