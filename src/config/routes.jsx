@@ -36,6 +36,7 @@ import LectureSelectedAnnouncementScreen from "../screens/LectureSelectedAnnounc
 import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnouncementScreen";
 import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen";
 import LecturerRating from "../screens/LecturerRating";
+import LecturerProfile from "../screens/LecturerProfile";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -90,7 +91,8 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/:selectedId/submissions", element:<RouterAuthGuard><AssignmentSubmissionsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
-      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
+      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>},
+      {path: "lecturerprofile", element: <RouterAuthGuard> <LecturerProfile /> </RouterAuthGuard>}
     ],
   },
   {

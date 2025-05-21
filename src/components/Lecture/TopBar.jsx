@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CgLogOut } from "react-icons/cg";
+import { CgLogOut, CgProfile } from "react-icons/cg";
 import { CiBellOn, CiCalendar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { AuthenticatedUserUrl } from "../../config/urlFetcher";
@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { removeToken, unAuthorize } from "../../redux/slice";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "@mui/material/Button";
-import { Toaster, toast} from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 const TopBar = () => {
   const navigate = useNavigate();
@@ -89,6 +89,16 @@ const TopBar = () => {
 
           {menuOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg z-50 py-2">
+              <button
+                className="flex items-center justify-start gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
+                onClick={() => {
+                  navigate("/lecture/lecturerprofile");
+                  setMenuOpen(false);
+                }}
+              >
+                <CgProfile className="size-5" />
+                Profile
+              </button>
               <button
                 className="flex items-center justify-start gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
                 onClick={() => {
