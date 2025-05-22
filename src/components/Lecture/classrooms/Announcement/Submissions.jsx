@@ -90,7 +90,7 @@ export default function Submissions() {
                 );
 
                 return (
-                  <tr key={index} className="hover:bg-gray-50 text-sm sm:text-base">
+                  <tr key={index} className={`hover:bg-gray-50 ${hasSubmitted ?'hover:cursor-pointer' : ""} text-sm sm:text-base`}>
                     <td className="py-3 px-4 border-b">{student.fullname}</td>
                     <td className="py-3 px-4 border-b">{student.email}</td>
                     <td className="py-3 px-4 border-b">{student.phonenumber}</td>

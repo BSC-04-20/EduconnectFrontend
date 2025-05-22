@@ -27,6 +27,7 @@ const getFileIcon = (filename) => {
 
 export default function SelectedAnnouncement() {
   const { selectedId } = useParams();
+  const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const type = location.state?.type;
@@ -94,6 +95,10 @@ export default function SelectedAnnouncement() {
     console.log(`Edit ${type} with ID ${selectedId}`);
     // Implement navigation to edit page or show modal
   };
+
+  const goToSubmit = () => {
+    navigate(`/lecture/classroom/${id}/${selectedId}/submissions`)
+  }
 
   if (!data) {
     return <p className="text-center mt-10 text-gray-600">Loading...</p>;
@@ -213,7 +218,7 @@ export default function SelectedAnnouncement() {
         </>
       )}
       <div className='w-full'>
-        <button className='bg-sky-700 hover:bg-sky-500 px-5 py-1 text-white rounded mt-5 justify-end'>Submissions</button>
+        <button onClick={()=>goToSubmit()}  className='bg-sky-700 hover:bg-sky-500 px-5 py-1 text-white rounded mt-5 justify-end'>Submissions</button>
       </div>
     </div>
   );

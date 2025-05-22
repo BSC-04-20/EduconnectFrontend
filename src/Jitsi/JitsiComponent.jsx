@@ -10,7 +10,7 @@ export default function JitsiComponent() {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = location.state || {};
-  const domain = "meet.jit.si";
+  const domain = "srv820256.hstgr.cloud";
 
   const getUserName = async () => {
     try {
