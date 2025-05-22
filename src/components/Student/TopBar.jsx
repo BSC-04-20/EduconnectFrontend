@@ -6,8 +6,8 @@ import { StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
 import { useDispatch } from "react-redux";
 import { removeStudentToken, unAuthorize } from "../../redux/studentSlice";
 import CircularProgress from "@mui/material/CircularProgress";
-import Button from "@mui/material/Button"; 
-import { Toaster, toast} from "react-hot-toast";
+import Button from "@mui/material/Button";
+import { Toaster, toast } from "react-hot-toast";
 
 const StudentTopBar = () => {
   const navigate = useNavigate();
@@ -90,6 +90,17 @@ const StudentTopBar = () => {
           {menuOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg z-50 py-2">
               <button
+                onClick={() => {
+                  navigate("/student/studentprofile");
+                  setMenuOpen(false);
+                }}
+                className="flex items-center justify-start gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
+              >
+                <CgProfile className="size-5" />
+                Profile
+              </button>
+
+              <button
                 className="flex items-center justify-start gap-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full"
                 onClick={() => {
                   setIsDialogOpen(true);
@@ -104,8 +115,7 @@ const StudentTopBar = () => {
         </div>
       </div>
 
-      <Toaster/>
-
+      <Toaster />
 
       {/* Logout Confirmation Dialog */}
       {isDialogOpen && (

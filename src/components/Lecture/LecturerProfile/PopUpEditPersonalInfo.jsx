@@ -12,7 +12,7 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await onSave();
+      await onSave?.(); // Optional chaining in case onSave is not passed
       toast.success("Personal info updated successfully");
       onClose();
     } catch (error) {
@@ -49,6 +49,18 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave 
               type="email"
               name="email"
               value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block font-medium text-sm mb-1">Phone Number</label>
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
               required

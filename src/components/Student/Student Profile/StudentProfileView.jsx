@@ -2,17 +2,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { FiEdit } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
-import PopUpEditBio from "./PopUpEditBio";
 import PopUpChangePassword from "./PopUpChangePassword";
 // import { AuthenticatedUserUrl } from "../../config/urlFetcher";
 
-const LecturerProfileView = () => {
+const StudentProfileView = () => {
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
-    phone: "",
     password: "",
-    description: "",
     profilePicture: null,
   });
 
@@ -25,13 +22,11 @@ const LecturerProfileView = () => {
     const fetchProfile = async () => {
       try {
         const response = await AuthenticatedUserUrl.get("/user");
-        const { fullname, email, phone, description, profilePicture } = response.data;
+        const { fullname, email, profilePicture } = response.data;
         setFormData(prev => ({
           ...prev,
           fullname,
           email,
-          phone: phone || "",
-          description: description || "",
         }));
         if (profilePicture) {
           setPreviewImage(profilePicture);
@@ -72,7 +67,7 @@ const LecturerProfileView = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 max-w-3xl mx-auto">
-        <h1 className="text-xl font-bold text-gray-800 mb-6">Lecturer Profile</h1>
+        <h1 className="text-xl font-bold text-gray-800 mb-6">Student Profile</h1>
 
         {/* Profile Picture and Upload */}
         <div className="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-4 sm:space-y-0 mb-8 text-center sm:text-left">
@@ -120,23 +115,6 @@ const LecturerProfileView = () => {
           </div>
           <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
           <p><span className="font-medium">Email:</span> {formData.email}</p>
-          <p><span className="font-medium">Phone:</span> {formData.phone || "Not provided"}</p>
-        </div>
-
-        {/* Bio */}
-        <div className="bg-gray-100 rounded-md p-4">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-700">Bio</h2>
-            <button
-              onClick={() => openEdit("bio")}
-              className="text-blue-600 hover:underline text-sm flex items-center"
-            >
-              <FiEdit className="mr-1" /> Edit
-            </button>
-          </div>
-          <p className="text-gray-700">
-            {formData.description || "No bio added yet."}
-          </p>
         </div>
 
         {/* Change Password */}
@@ -163,15 +141,6 @@ const LecturerProfileView = () => {
           />
         )}
 
-        {isModalOpen && editSection === "bio" && (
-          <PopUpEditBio
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        )}
-
         {isModalOpen && editSection === "password" && (
           <PopUpChangePassword
             isOpen={isModalOpen}
@@ -183,4 +152,4 @@ const LecturerProfileView = () => {
   );
 };
 
-export default LecturerProfileView;
+export default StudentProfileView;
