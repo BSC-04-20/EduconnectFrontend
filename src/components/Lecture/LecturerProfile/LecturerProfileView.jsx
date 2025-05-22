@@ -68,12 +68,12 @@ const LecturerProfileView = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 max-w-3xl mx-auto">
         <h1 className="text-xl font-bold text-gray-800 mb-6">Lecturer Profile</h1>
 
-                {/* Profile picture and upload */}
-        <div className="flex items-center space-x-6 mb-8">
+        {/* Profile picture and upload */}
+        <div className="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-4 sm:space-y-0 mb-8 text-center sm:text-left">
           <div className="w-40 h-40 rounded-full overflow-hidden bg-gray-200">
             {previewImage ? (
               <img
@@ -104,7 +104,6 @@ const LecturerProfileView = () => {
             </p>
           </div>
         </div>
-
 
         {/* Personal Info */}
         <div className="bg-gray-100 rounded-md p-4 mb-4">
