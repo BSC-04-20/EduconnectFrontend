@@ -21,7 +21,7 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave 
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center px-4 sm:px-0 z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg relative">
         <button
           onClick={onClose}
@@ -32,25 +32,25 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave 
         <h2 className="text-xl font-semibold mb-4">Edit Personal Info</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium">Full Name</label>
+            <label className="block font-medium text-sm mb-1">Full Name</label>
             <input
               type="text"
               name="fullname"
               value={formData.fullname}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
               required
             />
           </div>
 
           <div>
-            <label className="block font-medium">Email</label>
+            <label className="block font-medium text-sm mb-1">Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
               required
             />
           </div>
@@ -58,7 +58,7 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave 
           <div className="text-right">
             <button
               type="submit"
-              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
             >
               Save Changes
             </button>
