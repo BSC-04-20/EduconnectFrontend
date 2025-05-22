@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { toast } from "react-hot-toast";
+import React, { useState, useEffect, useRef } from "react";
 import { FiEdit } from "react-icons/fi";
-import PopUpEdit from "./PopUpEdit";
-// import { AuthenticatedUserUrl } from "../../config/urlFetcher"; // Uncomment and update path as needed
+import { toast } from "react-hot-toast";
+import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
+import PopUpEditBio from "./PopUpEditBio";
+// import { AuthenticatedUserUrl } from "../../config/urlFetcher";
 
 const LecturerProfileView = () => {
   const [formData, setFormData] = useState({
@@ -12,8 +13,11 @@ const LecturerProfileView = () => {
     description: "",
     profilePicture: null,
   });
+
   const [previewImage, setPreviewImage] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editSection, setEditSection] = useState(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -36,40 +40,116 @@ const LecturerProfileView = () => {
     fetchProfile();
   }, []);
 
-  return (
-    <div className="min-h-screen bg-white flex flex-col items-center">
-      <div className="w-full h-40 bg-cover bg-center bg-gradient-to-r from-blue-700 via-sky-500 to-indigo-500"></div>
+  const openEdit = (section) => {
+    setEditSection(section);
+    setIsModalOpen(true);
+  };
 
-      <div className="relative -top-24 w-48 h-48 rounded-full overflow-hidden border-4 border-white shadow-lg">
-        {previewImage ? (
-          <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
-        ) : (
-          <div className="w-full h-full bg-gray-200"></div>
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setEditSection(null);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      setPreviewImage(imageURL);
+      setFormData(prev => ({
+        ...prev,
+        profilePicture: file,
+      }));
+    }
+  };
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
+        <h1 className="text-xl font-bold text-gray-800 mb-6">Edit Profile</h1>
+
+        <div className="flex items-center space-x-6 mb-8">
+          <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200">
+            {previewImage ? (
+              <img
+                src={previewImage}
+                alt="Profile"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200"></div>
+            )}
+          </div>
+          <div>
+            <button
+              onClick={handleUploadClick}
+              className="border px-4 py-1 rounded text-sm font-medium"
+            >
+              Upload new photo
+            </button>
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              At least 800x800 px recommended. JPG or PNG is allowed
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-gray-100 rounded-md p-4 mb-4">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="font-semibold text-gray-700">Personal Info</h2>
+            <button
+              onClick={() => openEdit("personal")}
+              className="text-blue-600 hover:underline text-sm flex items-center"
+            >
+              <FiEdit className="mr-1" /> Edit
+            </button>
+          </div>
+          <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
+          <p><span className="font-medium">Email:</span> {formData.email}</p>
+        </div>
+
+        <div className="bg-gray-100 rounded-md p-4">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="font-semibold text-gray-700">Bio</h2>
+            <button
+              onClick={() => openEdit("bio")}
+              className="text-blue-600 hover:underline text-sm flex items-center"
+            >
+              <FiEdit className="mr-1" /> Edit
+            </button>
+          </div>
+          <p className="text-gray-700">
+            {formData.description || "No bio added yet."}
+          </p>
+        </div>
+
+        {isModalOpen && editSection === "personal" && (
+          <PopUpEditPersonalInfo
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        )}
+
+        {isModalOpen && editSection === "bio" && (
+          <PopUpEditBio
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            formData={formData}
+            setFormData={setFormData}
+          />
         )}
       </div>
-
-      <div className="-mt-16 text-center px-4">
-        <h1 className="text-2xl font-bold text-gray-800">{formData.fullname || "Full Name"}</h1>
-        <p className="text-sm font-medium text-gray-500 mt-1">{formData.email || "Email"}</p>
-        <p className="text-gray-500 text-sm mt-4 max-w-md mx-auto">
-          {formData.description || "Add a short bio or description about yourself here."}
-        </p>
-
-        <button
-          className="mt-4 inline-flex items-center text-blue-600 hover:underline"
-          onClick={() => setIsModalOpen(true)}
-        >
-          <FiEdit className="mr-2" /> Edit
-        </button>
-      </div>
-
-      <PopUpEdit
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        formData={formData}
-        setFormData={setFormData}
-        setPreviewImage={setPreviewImage}
-      />
     </div>
   );
 };
