@@ -41,28 +41,28 @@ export default function Overview() {
                 icon={<GoPeople className="text-slate-900 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />}
                 iconBg="bg-slate-100"
                 bg="bg-slate-200"
-                title="Number of Classes"
+                title="Classes"
                 value={classCount}
             />
             <Card
                 icon={<GoCalendar className="text-pink-900 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />}
                 iconBg="bg-pink-100"
                 bg="bg-pink-200"
-                title="Upcoming Events"
+                title="Events"
                 value="156"
             />
             <Card
                 icon={<GoBook className="text-amber-900 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />}
                 iconBg="bg-amber-100"
                 bg="bg-amber-200"
-                title="Shared Resources"
+                title="Resources"
                 value={resourceCount}
             />
             <Card
                 icon={<FaRegComment className="text-orange-900 w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7" />}
                 iconBg="bg-orange-100"
                 bg="bg-orange-200"
-                title="Open Discussions"
+                title="Discussions"
                 value="38"
             />
         </div>
