@@ -23,7 +23,7 @@ const StudentProfileView = () => {
       try {
         const response = await AuthenticatedUserUrl.get("/user");
         const { fullname, email, profilePicture } = response.data;
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
           fullname,
           email,
@@ -53,7 +53,7 @@ const StudentProfileView = () => {
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setPreviewImage(imageURL);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         profilePicture: file,
       }));
@@ -67,11 +67,13 @@ const StudentProfileView = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-4 sm:p-6">
       <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 max-w-3xl mx-auto">
-        <h1 className="text-xl font-bold text-gray-800 mb-6">Student Profile</h1>
+        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center sm:text-left">
+          Student Profile
+        </h1>
 
         {/* Profile Picture and Upload */}
-        <div className="flex flex-col sm:flex-row items-center sm:space-x-6 space-y-4 sm:space-y-0 mb-8 text-center sm:text-left">
-          <div className="w-40 h-40 rounded-full overflow-hidden bg-gray-200">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start sm:space-x-6 space-y-4 sm:space-y-0 mb-8">
+          <div className="w-36 h-36 sm:w-40 sm:h-40 rounded-full overflow-hidden bg-gray-200 flex-shrink-0">
             {previewImage ? (
               <img
                 src={previewImage}
@@ -79,10 +81,10 @@ const StudentProfileView = () => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gray-200"></div>
+              <div className="w-full h-full bg-gray-200" />
             )}
           </div>
-          <div>
+          <div className="text-center sm:text-left">
             <button
               onClick={handleUploadClick}
               className="border px-4 py-1 rounded text-sm font-medium"
@@ -96,8 +98,8 @@ const StudentProfileView = () => {
               className="hidden"
               onChange={handleFileChange}
             />
-            <p className="text-xs text-gray-500 mt-1">
-              At least 800x800 px recommended. JPG or PNG is allowed
+            <p className="text-xs text-gray-500 mt-1 max-w-xs">
+              At least 800x800 px recommended. JPG or PNG is allowed.
             </p>
           </div>
         </div>
@@ -105,7 +107,9 @@ const StudentProfileView = () => {
         {/* Personal Info */}
         <div className="bg-gray-100 rounded-md p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-700">Personal Info</h2>
+            <h2 className="font-semibold text-gray-700 text-sm sm:text-base">
+              Personal Info
+            </h2>
             <button
               onClick={() => openEdit("personal")}
               className="text-blue-600 hover:underline text-sm flex items-center"
@@ -113,14 +117,22 @@ const StudentProfileView = () => {
               <FiEdit className="mr-1" /> Edit
             </button>
           </div>
-          <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
-          <p><span className="font-medium">Email:</span> {formData.email}</p>
+          <div className="text-sm sm:text-base space-y-1">
+            <p>
+              <span className="font-medium">Full Name:</span> {formData.fullname}
+            </p>
+            <p>
+              <span className="font-medium">Email:</span> {formData.email}
+            </p>
+          </div>
         </div>
 
         {/* Change Password */}
         <div className="bg-gray-100 rounded-md p-4 mt-4">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-700">Change Password</h2>
+            <h2 className="font-semibold text-gray-700 text-sm sm:text-base">
+              Change Password
+            </h2>
             <button
               onClick={() => openEdit("password")}
               className="text-blue-600 hover:underline text-sm flex items-center"
@@ -128,7 +140,7 @@ const StudentProfileView = () => {
               <FiEdit className="mr-1" /> Edit
             </button>
           </div>
-          <p className="text-gray-700">********</p>
+          <p className="text-gray-700 text-sm sm:text-base">********</p>
         </div>
 
         {/* Modals */}
@@ -142,10 +154,7 @@ const StudentProfileView = () => {
         )}
 
         {isModalOpen && editSection === "password" && (
-          <PopUpChangePassword
-            isOpen={isModalOpen}
-            onClose={closeModal}
-          />
+          <PopUpChangePassword isOpen={isModalOpen} onClose={closeModal} />
         )}
       </div>
     </div>
