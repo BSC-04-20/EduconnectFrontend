@@ -31,9 +31,9 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white p-6 rounded-lg w-96 shadow-lg">
-        <h2 className="text-lg font-bold mb-4">Edit Personal Info</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4 sm:p-6">
+      <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-4 sm:p-6 overflow-y-auto max-h-[90vh]">
+        <h2 className="text-lg sm:text-xl font-bold mb-4">Edit Personal Info</h2>
 
         <TextField
           label="Full Name"
