@@ -3,6 +3,7 @@ import { FiEdit } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
 import PopUpEditBio from "./PopUpEditBio";
+import PopUpChangePassword from "./PopUpChangePassword";
 // import { AuthenticatedUserUrl } from "../../config/urlFetcher";
 
 const LecturerProfileView = () => {
@@ -69,10 +70,11 @@ const LecturerProfileView = () => {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="bg-white rounded-lg shadow-md p-6 max-w-3xl mx-auto">
-        <h1 className="text-xl font-bold text-gray-800 mb-6">Edit Profile</h1>
+        <h1 className="text-xl font-bold text-gray-800 mb-6">Lecturer Profile</h1>
 
+                {/* Profile picture and upload */}
         <div className="flex items-center space-x-6 mb-8">
-          <div className="w-24 h-24 rounded-full overflow-hidden bg-gray-200">
+          <div className="w-40 h-40 rounded-full overflow-hidden bg-gray-200">
             {previewImage ? (
               <img
                 src={previewImage}
@@ -103,6 +105,8 @@ const LecturerProfileView = () => {
           </div>
         </div>
 
+
+        {/* Personal Info */}
         <div className="bg-gray-100 rounded-md p-4 mb-4">
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold text-gray-700">Personal Info</h2>
@@ -117,6 +121,7 @@ const LecturerProfileView = () => {
           <p><span className="font-medium">Email:</span> {formData.email}</p>
         </div>
 
+        {/* Bio */}
         <div className="bg-gray-100 rounded-md p-4">
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold text-gray-700">Bio</h2>
@@ -132,6 +137,21 @@ const LecturerProfileView = () => {
           </p>
         </div>
 
+        {/* Change Password */}
+        <div className="bg-gray-100 rounded-md p-4 mt-4">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="font-semibold text-gray-700">Change Password</h2>
+            <button
+              onClick={() => openEdit("password")}
+              className="text-blue-600 hover:underline text-sm flex items-center"
+            >
+              <FiEdit className="mr-1" /> Edit
+            </button>
+          </div>
+          <p className="text-gray-700">********</p>
+        </div>
+
+        {/* Modals */}
         {isModalOpen && editSection === "personal" && (
           <PopUpEditPersonalInfo
             isOpen={isModalOpen}
@@ -147,6 +167,13 @@ const LecturerProfileView = () => {
             onClose={closeModal}
             formData={formData}
             setFormData={setFormData}
+          />
+        )}
+
+        {isModalOpen && editSection === "password" && (
+          <PopUpChangePassword
+            isOpen={isModalOpen}
+            onClose={closeModal}
           />
         )}
       </div>
