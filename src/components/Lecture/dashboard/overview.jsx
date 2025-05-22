@@ -17,6 +17,13 @@ export default function Overview() {
                     },
                 });
                 
+                const data = response.data;
+                setClassCount(data.total_classes); 
+            } catch (error) {
+                console.error("Error fetching class count:", error);
+            }
+        };
+
                
         fetchClassCount();
     }, []);
