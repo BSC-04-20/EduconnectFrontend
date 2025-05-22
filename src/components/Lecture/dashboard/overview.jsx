@@ -24,6 +24,15 @@ export default function Overview() {
                         'Content-Type': 'application/json',
                     },
                 });
+                setResourceCount(resourceResponse.data.resources_count);
+
+            } catch (error) {
+                console.error("Error fetching counts:", error);
+            }
+        };
+
+        fetchCounts();
+    }, []);
                 
 
     return (
