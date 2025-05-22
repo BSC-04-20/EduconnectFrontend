@@ -1,70 +1,71 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
-// import { StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
 
-const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData }) => {
-  const [localData, setLocalData] = useState({ ...formData });
-  const [loading, setLoading] = useState(false);
+const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave }) => {
+  if (!isOpen) return null;
 
   const handleChange = (e) => {
-    setLocalData({ ...localData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await StudentAuthenticatedUserUrl.put("/student/update-profile", {
-        fullname: localData.fullname,
-        email: localData.email,
-      });
+      await onSave?.(); // Optional chaining
       toast.success("Profile updated successfully");
-      setFormData(localData);
       onClose();
     } catch (error) {
       toast.error("Failed to update profile");
-    } finally {
-      setLoading(false);
+      console.error("Save error:", error);
     }
   };
-
-  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4 sm:p-6">
       <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-4 sm:p-6 overflow-y-auto max-h-[90vh]">
         <h2 className="text-lg sm:text-xl font-bold mb-4">Edit Personal Info</h2>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Full Name"
+            name="fullname"
+            value={formData.fullname}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
+          <TextField
+            label="Phone Number"
+            name="phone"
+            type="tel"
+            value={formData.phone}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+            required
+          />
 
-        <TextField
-          label="Full Name"
-          name="fullname"
-          value={localData.fullname}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-
-        <TextField
-          label="Email"
-          name="email"
-          value={localData.email}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-
-        <div className="flex justify-end mt-4 space-x-2">
-          <Button variant="outlined" onClick={onClose} disabled={loading}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? "Saving..." : "Save Changes"}
-          </Button>
-        </div>
+          <div className="flex justify-end mt-4 space-x-2">
+            <Button variant="outlined" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button variant="contained" type="submit">
+              Save Changes
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );

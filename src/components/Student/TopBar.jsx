@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { CgLogOut } from "react-icons/cg";
+import { CgLogOut, CgProfile } from "react-icons/cg";
 import { CiBellOn, CiCalendar } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { StudentAuthenticatedUserUrl } from "../../config/urlFetcher";

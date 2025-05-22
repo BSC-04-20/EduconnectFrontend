@@ -120,7 +120,7 @@ const LecturerProfileView = () => {
           </div>
           <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
           <p><span className="font-medium">Email:</span> {formData.email}</p>
-          <p><span className="font-medium">Phone:</span> {formData.phone || "Not provided"}</p>
+          <p><span className="font-medium">Phone:</span> {formData.phone}</p>
         </div>
 
         {/* Bio */}
