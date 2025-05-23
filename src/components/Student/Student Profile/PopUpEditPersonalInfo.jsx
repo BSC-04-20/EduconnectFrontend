@@ -1,8 +1,9 @@
 import React from "react";
 import { Button, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
+import { StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
 
-const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave }) => {
+const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData }) => {
   if (!isOpen) return null;
 
   const handleChange = (e) => {
@@ -13,7 +14,15 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData, onSave 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await onSave?.(); // Optional chaining
+      const { fullname, email, phonenumber } = formData;
+
+      // POST to backend
+      await StudentAuthenticatedUserUrl.post("/student/updateProfile", {
+        fullname,
+        email,
+        phonenumber,
+      });
+
       toast.success("Profile updated successfully");
       onClose();
     } catch (error) {

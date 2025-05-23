@@ -2,14 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { FiEdit } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
+import { MdDriveFileRenameOutline, MdEmail  } from "react-icons/md";
+import { FaMobileAlt } from "react-icons/fa";
 import PopUpChangePassword from "./PopUpChangePassword";
-// import { AuthenticatedUserUrl } from "../../config/urlFetcher";
+import { StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
 
 const StudentProfileView = () => {
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
-    phone: "",
+    phonenumber: "",
     password: "",
     profilePicture: null,
   });
@@ -22,13 +24,13 @@ const StudentProfileView = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await AuthenticatedUserUrl.get("/user");
-        const { fullname, email, phone, profilePicture } = response.data;
+        const response = await StudentAuthenticatedUserUrl.get("/user");
+        const { fullname, email, phonenumber, profilePicture } = response.data;
         setFormData(prev => ({
           ...prev,
           fullname,
           email,
-          phone: phone || "",
+          phonenumber: phonenumber || "",
         }));
         if (profilePicture) {
           setPreviewImage(profilePicture);
@@ -105,20 +107,38 @@ const StudentProfileView = () => {
         </div>
 
         {/* Personal Info */}
-        <div className="bg-gray-100 rounded-md p-4 mb-4">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-700">Personal Info</h2>
-            <button
-              onClick={() => openEdit("personal")}
-              className="text-blue-600 hover:underline text-sm flex items-center"
-            >
-              <FiEdit className="mr-1" /> Edit
-            </button>
-          </div>
-          <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
-          <p><span className="font-medium">Email:</span> {formData.email}</p>
-          <p><span className="font-medium">Phone:</span> {formData.phone}</p>
-        </div>
+               <div className="bg-gray-100 rounded-md p-4 mb-4">
+                 <div className="flex justify-between items-center mb-2">
+                   <h2 className="font-semibold text-gray-700">Personal Info</h2>
+                   <button
+                     onClick={() => openEdit("personal")}
+                     className="text-blue-600 hover:underline text-sm flex items-center"
+                   >
+                     <FiEdit className="mr-1" /> Edit
+                   </button>
+                 </div>
+                 <p className="flex gap-2 mb-2">
+                   <span className="font-medium flex gap-2">
+                  < MdDriveFileRenameOutline className="size-5" />
+                   Full Name:
+                   </span> 
+                   {formData.fullname}
+                   </p>
+                 <p className="flex gap-2 mb-2">
+                   <span className="font-medium flex gap-2">
+                 <MdEmail className="size-5"/>
+                 Email:
+                 </span>
+                  {formData.email}
+                  </p>
+                 <p className="flex gap-2 mb-2">
+                   <span className="font-medium flex gap-2">
+                 <FaMobileAlt className="size-5"/>
+                 Phone:
+                 </span>
+                  {formData.phonenumber}
+                  </p>
+               </div>
 
         {/* Change Password */}
         <div className="bg-gray-100 rounded-md p-4 mt-4">
