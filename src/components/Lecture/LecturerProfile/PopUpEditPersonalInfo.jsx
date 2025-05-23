@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, TextField } from "@mui/material";
 import { toast } from "react-hot-toast";
-import { StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 
 const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData }) => {
   if (!isOpen) return null;
@@ -17,7 +17,7 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData }) => {
       const { fullname, email, phone } = formData;
 
       // POST to backend
-      await StudentAuthenticatedUserUrl.post("/student/updateProfile", {
+      await AuthenticatedUserUrl.post("/lecture/updateProfile", {
         fullname,
         email,
         phonenumber: phone, // align with backend field name
