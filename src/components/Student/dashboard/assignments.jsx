@@ -26,7 +26,8 @@ export default function StudentsAssignments() {
         const fetchAssignments = async () => {
             try {
                 const res = await StudentAuthenticatedUserUrl.get("/assignment/student");
-                setAssignments(res.data.assignments || []);
+                setAssignments(res.data || []); // ✅ Use top-level array
+                setError(null);
             } catch (err) {
                 console.error("Error fetching assignments:", err);
                 setError("Failed to load assignments.");
@@ -38,9 +39,16 @@ export default function StudentsAssignments() {
         fetchAssignments();
     }, []);
 
-    const incomplete = assignments.filter(a => a.status === "pending").length;
-    const completed = assignments.filter(a => a.status === "completed").length;
-    const missed = assignments.filter(a => a.status === "missed").length;
+    const getStatus = (assignment) => {
+        if (assignment.status === "not submitted") return "not submitted";
+        if (assignment.status === "completed") return "completed";
+        if (assignment.status === "missed") return "missed";
+        return "unknown";
+    };
+
+    const incomplete = assignments.filter((a) => getStatus(a) === "not submitted").length;
+    const completed = assignments.filter((a) => getStatus(a) === "completed").length;
+    const missed = assignments.filter((a) => getStatus(a) === "missed").length;
 
     return (
         <div className="bg-white p-4 md:p-6 rounded-lg mt-5 w-full md:w-[95%]">
@@ -61,26 +69,26 @@ export default function StudentsAssignments() {
                 <div className="text-red-500">{error}</div>
             ) : (
                 <div className="space-y-2">
-                    {assignments
-                        .filter(a => a.status === "pending" || a.status === "urgent")
-                        .map(({ id, course_code, title, remaining_time, status }) => (
-                            <div
-                                key={id}
-                                className={`p-4 border rounded-lg flex justify-between items-center flex-wrap ${
-                                    status === "urgent" ? "bg-red-100 border-red-400" : "border-gray-300"
-                                }`}
-                            >
-                                <div>
-                                    <span className="text-sm text-gray-600">{course_code || "Unknown Course"}</span>
-                                    <h4 className="font-semibold text-gray-800">{title}</h4>
-                                </div>
-                                <span
-                                    className={`text-sm ${status === "urgent" ? "text-red-500" : "text-gray-500"}`}
+                    {assignments.filter((a) => getStatus(a) === "not submitted").length === 0 ? (
+                        <div className="text-gray-500">No uncompleted assignments found.</div>
+                    ) : (
+                        assignments
+                            .filter((a) => getStatus(a) === "not submitted")
+                            .map(({ id, class: course_code, title, due_date }) => (
+                                <div
+                                    key={id}
+                                    className="p-4 border border-gray-300 rounded-lg flex justify-between items-center flex-wrap"
                                 >
-                                    {remaining_time || "No deadline"}
-                                </span>
-                            </div>
-                        ))}
+                                    <div>
+                                        <span className="text-sm text-gray-600">{course_code || "Unknown Course"}</span>
+                                        <h4 className="font-semibold text-gray-800">{title}</h4>
+                                    </div>
+                                    <span className="text-sm text-gray-500">
+                                        {due_date ? `Due: ${due_date}` : "No deadline"}
+                                    </span>
+                                </div>
+                            ))
+                    )}
                 </div>
             )}
 
@@ -93,6 +101,8 @@ export default function StudentsAssignments() {
         </div>
     );
 }
+
+
 
 
 
