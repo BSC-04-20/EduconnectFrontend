@@ -4,13 +4,13 @@ import { toast } from "react-hot-toast";
 import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
 import PopUpEditBio from "./PopUpEditBio";
 import PopUpChangePassword from "./PopUpChangePassword";
-// import { AuthenticatedUserUrl } from "../../config/urlFetcher";
+import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 
 const LecturerProfileView = () => {
   const [formData, setFormData] = useState({
     fullname: "",
     email: "",
-    phone: "",
+    phonenumber: "",
     password: "",
     description: "",
     profilePicture: null,
@@ -25,12 +25,12 @@ const LecturerProfileView = () => {
     const fetchProfile = async () => {
       try {
         const response = await AuthenticatedUserUrl.get("/user");
-        const { fullname, email, phone, description, profilePicture } = response.data;
+        const { fullname, email, phonenumber, description, profilePicture } = response.data;
         setFormData(prev => ({
           ...prev,
           fullname,
           email,
-          phone: phone || "",
+          phonenumber: phonenumber || "",
           description: description || "",
         }));
         if (profilePicture) {
@@ -120,7 +120,7 @@ const LecturerProfileView = () => {
           </div>
           <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
           <p><span className="font-medium">Email:</span> {formData.email}</p>
-          <p><span className="font-medium">Phone:</span> {formData.phone}</p>
+          <p><span className="font-medium">Phone:</span> {formData.phonenumber}</p>
         </div>
 
         {/* Bio */}

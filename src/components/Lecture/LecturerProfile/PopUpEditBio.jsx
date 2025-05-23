@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import { toast } from "react-hot-toast";
-// import { StudentAuthenticatedUserUrl } from "../../config/urlFetcher";
+import { StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
 
 const PopUpEditBio = ({ isOpen, onClose, formData, setFormData }) => {
   const [localData, setLocalData] = useState({ description: "" });
