@@ -2,9 +2,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { FiEdit } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
+import { MdDriveFileRenameOutline, MdEmail  } from "react-icons/md";
+import { FaMobileAlt } from "react-icons/fa";
 import PopUpEditBio from "./PopUpEditBio";
 import PopUpChangePassword from "./PopUpChangePassword";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+
 
 const LecturerProfileView = () => {
   const [formData, setFormData] = useState({
@@ -118,9 +121,27 @@ const LecturerProfileView = () => {
               <FiEdit className="mr-1" /> Edit
             </button>
           </div>
-          <p><span className="font-medium">Full Name:</span> {formData.fullname}</p>
-          <p><span className="font-medium">Email:</span> {formData.email}</p>
-          <p><span className="font-medium">Phone:</span> {formData.phonenumber}</p>
+          <p className="flex gap-2 mb-2">
+            <span className="font-medium flex gap-2">
+           < MdDriveFileRenameOutline className="size-5" />
+            Full Name:
+            </span> 
+            {formData.fullname}
+            </p>
+          <p className="flex gap-2 mb-2">
+            <span className="font-medium flex gap-2">
+          <MdEmail className="size-5"/>
+          Email:
+          </span>
+           {formData.email}
+           </p>
+          <p className="flex gap-2 mb-2">
+            <span className="font-medium flex gap-2">
+          <FaMobileAlt className="size-5"/>
+          Phone:
+          </span>
+           {formData.phonenumber}
+           </p>
         </div>
 
         {/* Bio */}
