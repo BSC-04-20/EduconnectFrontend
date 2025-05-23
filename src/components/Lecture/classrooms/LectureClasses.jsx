@@ -5,6 +5,7 @@ import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GoPeople } from "react-icons/go";
 import { PiPlus } from "react-icons/pi";
 import Empty from "../../../assets/Empty-pana.svg";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function LectureClasses() {
   const [classes, setClasses] = useState([]);
@@ -41,13 +42,13 @@ export default function LectureClasses() {
       });
 
       if (response.status === 201 || response.status === 200) {
-        alert("Class added successfully!");
+        toast.success("Class added successfully!");
         setClassName("");
         setIsDialogOpen(false);
         fetchClasses();
       }
     } catch (error) {
-      alert("Failed to add class, try again later");
+      toast.error("Failed to add class, try again later");
     } finally {
       setClassAddLoading(false);
     }
@@ -56,6 +57,7 @@ export default function LectureClasses() {
   useEffect(() => {
     fetchClasses();
   }, []);
+  <Toaster/>
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4">

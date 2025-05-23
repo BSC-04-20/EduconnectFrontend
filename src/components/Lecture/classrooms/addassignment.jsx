@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios"; // Import Axios
 import { useNavigate, useParams } from "react-router-dom";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function AssignmentForm() {
   const [title, setTitle] = useState("");
@@ -42,7 +43,7 @@ export default function AssignmentForm() {
       });
 
       if (response.status === 201) {
-        alert("Assignment submitted successfully!");
+        toast.success("Assignment submitted successfully!");
         // Reset form after successful submission
         setTitle("");
         setDescription("");
@@ -51,13 +52,14 @@ export default function AssignmentForm() {
         setDueTime("");
         navigator(`/lecture/classroom/${id.id}`);
       } else {
-        alert("Error submitting the assignment.");
+        toast.error("Error submitting the assignment.");
       }
     } catch (error) {
       console.error("Error submitting assignment:", error);
-      alert("Error submitting the assignment.");
+      toast.error("Error submitting the assignment.");
     }
   };
+  <Toaster/>
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">

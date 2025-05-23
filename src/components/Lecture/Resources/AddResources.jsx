@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { useParams } from "react-router-dom";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function AddResources() {
   const [fileQueue, setFileQueue] = useState([]);
@@ -17,7 +18,7 @@ export default function AddResources() {
         setFileQueue((prev) => [...prev, file]);
         setSelectedFile(file);
       } else {
-        alert("This file is already selected.");
+        toast.error("This file is already selected.");
       }
     }
 
@@ -34,18 +35,18 @@ export default function AddResources() {
     e.preventDefault();
 
     if (!title.trim()) {
-      alert("Please provide a title.");
+      toast.error("Please provide a title.");
       return;
     }
 
     if (fileQueue.length === 0) {
-      alert("Please select at least one file.");
+      toast.error("Please select at least one file.");
       return;
     }
 
     // Check if file is selected in the file input
     if (!selectedFile) {
-      alert("Please choose a file to upload.");
+      toast.error("Please choose a file to upload.");
       return;
     }
     const formData = new FormData();
@@ -62,7 +63,7 @@ export default function AddResources() {
       if (response.status !== 200) {
         throw new Error("Upload failed.");
       }
-      alert("Upload successful!");
+      toast.success("Upload successful!");
 
       // Clear form
       setFileQueue([]);
@@ -72,9 +73,10 @@ export default function AddResources() {
 
     } catch (error) {
       console.error("Error uploading:", error);
-      alert("Error uploading file.");
+      toast.error("Error uploading file.");
     }
   };
+<Toaster/>
 
   return (
     <div className="pt-20 sm:pt-20 md:pt-20 px-4">

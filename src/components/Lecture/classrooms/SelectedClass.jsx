@@ -8,6 +8,7 @@ import ClassroomFeed from './selected/announcements';
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 import { BiBookOpen, BiGroup } from 'react-icons/bi';
+import { Toaster, toast} from "react-hot-toast";
 
 export default function SelectedClassroom() {
     const { id } = useParams();
@@ -58,18 +59,19 @@ export default function SelectedClassroom() {
 
             if (response.status === 201) {
                 // Success: Discussion created
-                alert('Discussion created successfully!');
+                toast.success('Discussion created successfully!');
                 setShowAddModal(false); // Close the modal
             } else {
                 // Failure: Something went wrong
-                alert('Failed to create discussion. Please try again.');
+                toast.error('Failed to create discussion. Please try again.');
             }
         } catch (error) {
             // Catch any errors
             console.error('Error creating discussion:', error);
-            alert('Error creating discussion. Please try again.');
+            toast.error('Error creating discussion. Please try again.');
         }
     };
+    <Toaster/>
 
     return (
         <div className="my-5">

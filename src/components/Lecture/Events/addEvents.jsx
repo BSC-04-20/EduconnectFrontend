@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { useNavigate } from "react-router-dom";
+import { Toaster, toast} from "react-hot-toast";
 
 const EventForm = () => {
   const [formData, setFormData] = useState({
@@ -50,10 +51,10 @@ const EventForm = () => {
       navigator(-1)
     }
     catch(error){
-      alert("Event upload failed")
+      toast.error("Event upload failed")
     }
   };
-
+<Toaster/>
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">

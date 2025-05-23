@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { AuthenticatedUserUrl } from '../../../../config/urlFetcher';
+import { Toaster, toast} from "react-hot-toast";
 
 const getFileIcon = (filename) => {
   const ext = filename.split('.').pop().toLowerCase();
@@ -80,11 +81,11 @@ export default function SelectedAnnouncement() {
 
     try {
       await AuthenticatedUserUrl.delete(endpoint);
-      alert(`${type} deleted successfully!`);
+      toast.error(`${type} deleted successfully!`);
       navigate(-1); // Go back
     } catch (error) {
       console.error(`Failed to delete ${type}:`, error);
-      alert(`Error deleting ${type}`);
+      toast.error(`Error deleting ${type}`);
     } finally {
       setDeleting(false); // Reset loading state
     }
@@ -154,7 +155,7 @@ export default function SelectedAnnouncement() {
           </div>
         </div>
       )}
-
+<Toaster/>
       {/* Content */}
       <span className="block font-light text-sm sm:text-base md:text-lg text-gray-700 mb-2">
         {data.class.name || 'Unknown Subject'}
