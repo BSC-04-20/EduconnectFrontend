@@ -106,39 +106,46 @@ const StudentProfileView = () => {
           </div>
         </div>
 
-        {/* Personal Info */}
-               <div className="bg-gray-100 rounded-md p-4 mb-4">
-                 <div className="flex justify-between items-center mb-2">
-                   <h2 className="font-semibold text-gray-700">Personal Info</h2>
-                   <button
-                     onClick={() => openEdit("personal")}
-                     className="text-blue-600 hover:underline text-sm flex items-center"
-                   >
-                     <FiEdit className="mr-1" /> Edit
-                   </button>
-                 </div>
-                 <p className="flex gap-2 mb-2">
-                   <span className="font-medium flex gap-2">
-                  < MdDriveFileRenameOutline className="size-5" />
-                   Full Name:
-                   </span> 
-                   {formData.fullname}
-                   </p>
-                 <p className="flex gap-2 mb-2">
-                   <span className="font-medium flex gap-2">
-                 <MdEmail className="size-5"/>
-                 Email:
-                 </span>
-                  {formData.email}
-                  </p>
-                 <p className="flex gap-2 mb-2">
-                   <span className="font-medium flex gap-2">
-                 <FaMobileAlt className="size-5"/>
-                 Phone:
-                 </span>
-                  {formData.phonenumber}
-                  </p>
-               </div>
+               {/* Personal Info */}
+        <div className="bg-gray-100 rounded-md p-4 mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="font-semibold text-gray-700">Personal Info</h2>
+            <button
+              onClick={() => openEdit("personal")}
+              className="text-blue-600 hover:underline text-sm flex items-center"
+            >
+              <FiEdit className="mr-1" /> Edit
+            </button>
+          </div>
+
+          {/* Full Name */}
+          <div className="flex items-center gap-4 mb-3">
+            <MdDriveFileRenameOutline className="size-6" />
+            <div>
+              <p className="font-bold">Full Name</p>
+              <p className="">{formData.fullname}</p>
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="flex items-center gap-4 mb-3">
+            <MdEmail className="size-6" />
+            <div>
+              <p className="font-bold">Email</p>
+              <p className="">{formData.email}</p>
+            </div>
+          </div>
+
+          {/* Phone */}
+          <div className="flex items-center gap-4">
+            <FaMobileAlt className="size-6" />
+            <div>
+              <p className=" font-bold ">Phone</p>
+              <p className="">{formData.phonenumber}</p>
+            </div>
+          </div>
+        </div>
+
 
         {/* Change Password */}
         <div className="bg-gray-100 rounded-md p-4 mt-4">
