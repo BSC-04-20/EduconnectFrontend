@@ -6,7 +6,7 @@ const JitsiMeet = () => {
   useEffect(() => {
     const domain = '2b02-105-234-164-6.ngrok-free.app'; // Change if using another server
     const options = {
-      roomName: 'Ethics',
+      roomName: 'Ethics34',
       width: '100%',
       height: 500,
       parentNode: jitsiContainerRef.current,

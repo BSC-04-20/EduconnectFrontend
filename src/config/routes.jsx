@@ -36,6 +36,7 @@ import LectureSelectedAnnouncementScreen from "../screens/LectureSelectedAnnounc
 import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnouncementScreen";
 import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen";
 import LecturerRating from "../screens/LecturerRating";
+import JoinStudentMeeting from "../screens/JoinStudentMeeting";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -69,7 +70,7 @@ const routes = createBrowserRouter([
   },
   {
     path:"jitsi",
-    element:<JitsiComponent/>
+    element:<JoinStudentMeeting/>
   },
   {
     path: "/lecture",

@@ -52,7 +52,7 @@ export default function StudentDiscussions() {
                             {/* Discussion Link */}
                             <Link
                                 to="/jitsi"
-                                state={{ id }}
+                                state={{ id, meeting_name, start_time }}
                                 className="p-4 border rounded-lg flex items-center gap-4 border-gray-300 hover:bg-sky-50 transition"
                             >
                                 {/* Large Video Icon */}
