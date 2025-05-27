@@ -6,6 +6,7 @@ import { MdDriveFileRenameOutline, MdEmail  } from "react-icons/md";
 import { FaMobileAlt } from "react-icons/fa";
 import PopUpChangePassword from "./PopUpChangePassword";
 import { StudentAuthenticatedUserUrl } from "../../../config/urlFetcher";
+import { IoKeyOutline } from "react-icons/io5";
 
 const StudentProfileView = () => {
   const [formData, setFormData] = useState({
@@ -150,7 +151,7 @@ const StudentProfileView = () => {
         {/* Change Password */}
         <div className="bg-gray-100 rounded-md p-4 mt-4">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-700">Change Password</h2>
+            <h2 className="font-semibold text-gray-700">Password</h2>
             <button
               onClick={() => openEdit("password")}
               className="text-blue-600 hover:underline text-sm flex items-center"
@@ -158,7 +159,10 @@ const StudentProfileView = () => {
               <FiEdit className="mr-1" /> Edit
             </button>
           </div>
+          <div className="flex items-center gap-4 mb-3">
+           <IoKeyOutline className="size-6"/>
           <p className="text-gray-700">********</p>
+            </div>
         </div>
 
         {/* Modals */}
