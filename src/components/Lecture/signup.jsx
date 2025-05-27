@@ -176,6 +176,8 @@ export default function LecturerSignup() {
               </button>
             </form>
 
+            <Toaster/>
+
             {/* Sign In button for small screens */}
             <div className="mt-4 block lg:hidden text-center">
               <button

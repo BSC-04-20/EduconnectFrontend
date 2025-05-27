@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios"; // Import Axios
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { useNavigate, useParams } from "react-router-dom";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function AnnouncementForm() {
   const [title, setTitle] = useState("");
@@ -37,17 +38,17 @@ export default function AnnouncementForm() {
         }});
 
       if (response.status === 201) {
-        alert("Announcement submitted successfully!");
+        toast.success("Announcement submitted successfully!");
         setTitle("");
         setDescription("");
         setFiles([]);
         navigator(`/lecture/classroom/${id.id}`)
       } else {
-        alert("Error submitting the announcement.");
+        toast.error("Error submitting the announcement.");
       }
     } catch (error) {
       console.error("Error submitting announcement:", error);
-      alert("Error submitting the announcement.");
+      toast.error("Error submitting the announcement.");
     }
   };
 
