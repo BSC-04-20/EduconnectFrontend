@@ -2,12 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import { FiEdit } from "react-icons/fi";
 import { toast } from "react-hot-toast";
 import PopUpEditPersonalInfo from "./PopUpEditPersonalInfo";
-import { MdDriveFileRenameOutline, MdEmail  } from "react-icons/md";
+import { MdDriveFileRenameOutline, MdEmail } from "react-icons/md";
 import { FaMobileAlt } from "react-icons/fa";
 import PopUpEditBio from "./PopUpEditBio";
 import PopUpChangePassword from "./PopUpChangePassword";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { IoKeyOutline } from "react-icons/io5";
+
+
+const baseApiUrl = import.meta.env.VITE_TOP_LEVEL_DOMAIN;
+
 
 
 const LecturerProfileView = () => {
@@ -25,26 +29,37 @@ const LecturerProfileView = () => {
   const [editSection, setEditSection] = useState(null);
   const fileInputRef = useRef(null);
 
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const response = await AuthenticatedUserUrl.get("/user");
-        const { fullname, email, phonenumber, description, profilePicture } = response.data;
-        setFormData(prev => ({
+        const { fullname, email, phonenumber, description } = response.data;
+
+        setFormData((prev) => ({
           ...prev,
           fullname,
           email,
           phonenumber: phonenumber || "",
           description: description || "",
         }));
-        if (profilePicture) {
-          setPreviewImage(profilePicture);
-        }
       } catch (error) {
         toast.error("Failed to load profile");
       }
     };
+
+    const fetchProfilePicture = async () => {
+      try {
+        const response = await AuthenticatedUserUrl.get("/lecture/profile-picture");
+        setPreviewImage(response.data.data.image_path)
+      } catch (error) {
+        toast.error("Failed to load profile picture");
+      }
+    };
+
     fetchProfile();
+    fetchProfilePicture();
+    
   }, []);
 
   const openEdit = (section) => {
@@ -57,15 +72,42 @@ const LecturerProfileView = () => {
     setEditSection(null);
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageURL = URL.createObjectURL(file);
       setPreviewImage(imageURL);
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         profilePicture: file,
       }));
+
+      const formDataToSend = new FormData();
+      formDataToSend.append("image", file);
+
+      try {
+        const response = await AuthenticatedUserUrl.post(
+          "/lecture/profile-picture",
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        if (response.data?.profilePicture) {
+          setPreviewImage(response.data.profilePicture);
+          setFormData((prev) => ({
+            ...prev,
+            profilePicture: response.data.profilePicture,
+          }));
+        }
+
+        toast.success("Profile picture updated successfully!");
+      } catch (error) {
+        toast.error("Failed to update profile picture.");
+      }
     }
   };
 
@@ -83,12 +125,12 @@ const LecturerProfileView = () => {
           <div className="w-40 h-40 rounded-full overflow-hidden bg-gray-200">
             {previewImage ? (
               <img
-                src={previewImage}
-                alt="Profile"
+                src={`${baseApiUrl}/${previewImage.replace(/\\/, '/')}`}
+                alt="Benjamin"
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gray-200"></div>
+              <div className="w-full h-full bg-gray-200" />
             )}
           </div>
           <div>
@@ -112,44 +154,41 @@ const LecturerProfileView = () => {
         </div>
 
         {/* Personal Info */}
-         <div className="bg-gray-100 rounded-md p-4 mb-4">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold text-gray-700">Personal Info</h2>
-              <button
-                onClick={() => openEdit("personal")}
-                className="text-blue-600 hover:underline text-sm flex items-center"
-              >
-                <FiEdit className="mr-1" /> Edit
-              </button>
-            </div>
-  
-            {/* Full Name */}
-            <div className="flex items-center gap-4 mb-3">
-              <MdDriveFileRenameOutline className="size-6" />
-              <div>
-                <p className="font-bold">Full Name</p>
-                <p className="">{formData.fullname}</p>
-              </div>
-            </div>
-  
-            {/* Email */}
-            <div className="flex items-center gap-4 mb-3">
-              <MdEmail className="size-6" />
-              <div>
-                <p className="font-bold">Email</p>
-                <p className="">{formData.email}</p>
-              </div>
-            </div>
-  
-            {/* Phone */}
-            <div className="flex items-center gap-4">
-              <FaMobileAlt className="size-6" />
-              <div>
-                <p className=" font-bold ">Phone</p>
-                <p className="">{formData.phonenumber}</p>
-              </div>
+        <div className="bg-gray-100 rounded-md p-4 mb-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="font-semibold text-gray-700">Personal Info</h2>
+            <button
+              onClick={() => openEdit("personal")}
+              className="text-blue-600 hover:underline text-sm flex items-center"
+            >
+              <FiEdit className="mr-1" /> Edit
+            </button>
+          </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <MdDriveFileRenameOutline className="size-6" />
+            <div>
+              <p className="font-bold">Full Name</p>
+              <p>{formData.fullname}</p>
             </div>
           </div>
+
+          <div className="flex items-center gap-4 mb-3">
+            <MdEmail className="size-6" />
+            <div>
+              <p className="font-bold">Email</p>
+              <p>{formData.email}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <FaMobileAlt className="size-6" />
+            <div>
+              <p className="font-bold">Phone</p>
+              <p>{formData.phonenumber}</p>
+            </div>
+          </div>
+        </div>
 
         {/* Bio */}
         <div className="bg-gray-100 rounded-md p-4">
@@ -168,21 +207,21 @@ const LecturerProfileView = () => {
         </div>
 
         {/* Change Password */}
-          <div className="bg-gray-100 rounded-md p-4 mt-4">
-            <div className="flex justify-between items-center mb-2">
-              <h2 className="font-semibold text-gray-700">Password</h2>
-              <button
-                onClick={() => openEdit("password")}
-                className="text-blue-600 hover:underline text-sm flex items-center"
-              >
-                <FiEdit className="mr-1" /> Edit
-              </button>
-            </div>
-            <div className="flex items-center gap-4 mb-3">
-              <IoKeyOutline className="size-6"/>
-            <p className="text-gray-700">********</p>
-              </div>
+        <div className="bg-gray-100 rounded-md p-4 mt-4">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="font-semibold text-gray-700">Password</h2>
+            <button
+              onClick={() => openEdit("password")}
+              className="text-blue-600 hover:underline text-sm flex items-center"
+            >
+              <FiEdit className="mr-1" /> Edit
+            </button>
           </div>
+          <div className="flex items-center gap-4 mb-3">
+            <IoKeyOutline className="size-6" />
+            <p className="text-gray-700">********</p>
+          </div>
+        </div>
 
         {/* Modals */}
         {isModalOpen && editSection === "personal" && (
