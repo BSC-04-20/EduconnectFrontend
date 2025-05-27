@@ -11,26 +11,26 @@ import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from '../../../../c
 const baseUrl = import.meta.env.VITE_SANCTUM_TOP_LEVEL_DOMAIN;
 
 const getFileIcon = (filename) => {
-    if (!filename) {
+  if (!filename) {
+    return <FaFileAlt className="text-gray-600 text-3xl" />;
+  }
+
+  const ext = filename.split('.').pop().toLowerCase();
+
+  switch (ext) {
+    case 'pdf':
+      return <FaFilePdf className="text-red-600 text-3xl" />;
+    case 'doc':
+    case 'docx':
+      return <FaFileWord className="text-blue-600 text-3xl" />;
+    case 'jpg':
+    case 'jpeg':
+    case 'png':
+      return <FaFileImage className="text-purple-600 text-3xl" />;
+    default:
       return <FaFileAlt className="text-gray-600 text-3xl" />;
-    }
-    
-    const ext = filename.split('.').pop().toLowerCase();
-    
-    switch (ext) {
-      case 'pdf':
-        return <FaFilePdf className="text-red-600 text-3xl" />;
-      case 'doc':
-      case 'docx':
-        return <FaFileWord className="text-blue-600 text-3xl" />;
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
-        return <FaFileImage className="text-purple-600 text-3xl" />;
-      default:
-        return <FaFileAlt className="text-gray-600 text-3xl" />;
-    }
-  };
+  }
+};
 
 export default function SelectedAnnouncement() {
   const { selectedId } = useParams();
@@ -41,12 +41,10 @@ export default function SelectedAnnouncement() {
   const [data, setData] = useState(null);
   const [resources, setResources] = useState([]);
   const [submittedFiles, setSubmittedFiles] = useState([]);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [status, setStatus] = useState();
+  const [mark, setMarking] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState([]);
-  const [status, setStatus] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,13 +57,16 @@ export default function SelectedAnnouncement() {
 
       try {
         const res = await StudentAuthenticatedUserUrl.get(endpoint);
-        setData(res.data.assignment);
+        {type === "announcement" ? setData(res.data) : setData(res.data.assignment);}
         setStatus(res.data.status);
-        if (res.data.assignment.files) {
+        if (res.data.assignment?.files) {
           setResources(res.data.assignment.files);
         }
         if (res.data.submitted_files) {
           setSubmittedFiles(res.data.submitted_files);
+        }
+        if (res.data.mark) {
+          setMarking(res.data.mark);
         }
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -74,31 +75,6 @@ export default function SelectedAnnouncement() {
 
     fetchData();
   }, [type, selectedId]);
-
-  const handleDelete = async () => {
-    if (!type || !selectedId) return;
-    setDeleting(true);
-
-    const endpoint =
-      type === 'announcement'
-        ? `/announcement/delete/${selectedId}`
-        : `/assignment/delete/${selectedId}`;
-
-    try {
-      await StudentAuthenticatedUserUrl.delete(endpoint);
-      alert(`${type} deleted successfully!`);
-      navigate(-1);
-    } catch (error) {
-      console.error(`Failed to delete ${type}:`, error);
-      alert(`Error deleting ${type}`);
-    } finally {
-      setDeleting(false);
-    }
-  };
-
-  const handleEdit = () => {
-    console.log(`Edit ${type} with ID ${selectedId}`);
-  };
 
   const handleSubmitAssignment = async (e) => {
     e.preventDefault();
@@ -117,7 +93,7 @@ export default function SelectedAnnouncement() {
         }
       });
       alert("Assignment submitted successfully!");
-      window.location.reload(); // Refresh to reflect new state
+      window.location.reload();
     } catch (err) {
       console.error("Submission error:", err);
       alert("Failed to submit assignment.");
@@ -132,64 +108,25 @@ export default function SelectedAnnouncement() {
 
   return (
     <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg max-w-4xl mx-auto relative">
-      {/* Top-right menu */}
-      <div className="absolute top-4 right-4 z-10">
-        <div className="relative">
-          <button
-            className="text-gray-600 hover:text-black text-xl"
-            onClick={() => setMenuOpen((prev) => !prev)}
-          >
-            ⋮
-          </button>
-          {menuOpen && (
-            <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md z-20">
-              <button
-                onClick={handleEdit}
-                className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => setConfirmDelete(true)}
-                className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-              >
-                Delete
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
 
-      {/* Confirmation Modal */}
-      {confirmDelete && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded shadow-md w-80 text-center">
-            <p className="mb-4 text-start text-gray-700">
-              Are you sure you want to delete this {type}?
-            </p>
-            <div className="flex gap-5 justify-end">
-              <button
-                onClick={() => setConfirmDelete(false)}
-                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-sm rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className={`px-4 py-2 ${deleting ? 'bg-red-400 cursor-not-allowed' : 'bg-red-600 hover:bg-red-700'} text-white text-sm rounded`}
-                disabled={deleting}
-              >
-                {deleting ? 'Deleting...' : 'Confirm Delete'}
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* Content Header */}
+      <span className="block font-light text-sm sm:text-base md:text-lg text-gray-700 mb-2">
+        {type === 'assignment' ? data.class?.name || 'Unknown Subject' : data.name || 'Unknown Subject'}
+      </span>
+
+      {/* Marking Section */}
+      {type === 'assignment' && (
+        <>
+          {mark ? (
+            <div className="bg-gray-50 border border-gray-300 rounded p-4 mb-6">
+              <p className="text-lg font-semibold text-green-600">Marks: {mark}</p>
+              </div>
+          ) : (
+            <p className="text-gray-500 italic mb-6">Not marked yet.</p>
+          )}
+        </>
       )}
 
-      {/* Content */}
-      <span className="block font-light text-sm sm:text-base md:text-lg text-gray-700 mb-2">
-        {data.class.name || 'Unknown Subject'}
-      </span>
       <hr className="mb-4 border-gray-300" />
       <h1 className="font-bold text-xl sm:text-2xl md:text-3xl mb-3">
         {data.title}

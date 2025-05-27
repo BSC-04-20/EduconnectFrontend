@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Document, Page } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -8,6 +8,9 @@ import { FaEnvelope, FaUser } from "react-icons/fa";
 
 export default function AssignmentMarking() {
   const { submissionId } = useParams();
+  const { id } = useParams();
+  const {selectedId} = useParams();
+  const navigator = useNavigate();
 
   const [numPages, setNumPages] = useState(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -113,7 +116,7 @@ export default function AssignmentMarking() {
       await AuthenticatedUserUrl.post(`/assignment/mark/${submissionId}`, {
         marks: Number(marks),
       });
-      setSubmissionStatus("success");
+      navigator(`/lecture/classroom/${id}/${selectedId}/submissions`)
     } catch (error) {
       console.error("Failed to submit marks:", error);
       setSubmissionStatus("error");
