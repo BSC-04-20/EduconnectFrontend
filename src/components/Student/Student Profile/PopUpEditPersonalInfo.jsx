@@ -13,21 +13,31 @@ const PopUpEditPersonalInfo = ({ isOpen, onClose, formData, setFormData }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { fullname, email, phone } = formData;
+
+    // Basic email validation
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    // Build payload conditionally
+    const payload = {};
+    if (fullname?.trim()) payload.fullname = fullname.trim();
+    if (email?.trim()) payload.email = email.trim();
+    if (phone?.trim()) payload.phonenumber = phone.trim(); // map to backend key
+
+    if (Object.keys(payload).length === 0) {
+      toast.error("Please provide at least one valid field to update.");
+      return;
+    }
+
     try {
-      const { fullname, email, phonenumber } = formData;
-
-      // POST to backend
-      await StudentAuthenticatedUserUrl.post("/student/updateProfile", {
-        fullname,
-        email,
-        phonenumber,
-      });
-
+      await StudentAuthenticatedUserUrl.post("/student/updateProfile", payload);
       toast.success("Profile updated successfully");
       onClose();
     } catch (error) {
-      toast.error("Failed to update profile");
-      console.error("Save error:", error);
+      toast.error(error.response.data.message)
     }
   };
 

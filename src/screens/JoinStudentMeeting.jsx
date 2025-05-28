@@ -81,11 +81,10 @@ export default function JoinStudentMeeting() {
           console.error("Failed to post join event:", error);
         }
       });
-      externalApi.addEventListener('readyToClose', () => {
+      externalApi.on('readyToClose', () => {
         window.location.href = '/student/discussions';
       });
     }}
-    
 />
     </div>
   );
