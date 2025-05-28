@@ -112,7 +112,7 @@ const routes = createBrowserRouter([
       {path: "assignmentupload/:id", element:<StudentRouterAuthGuard> <AssignmentUploader/> </StudentRouterAuthGuard>},
       { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>},
       {path: "classroom/:id/students", element:<StudentRouterAuthGuard><ClassmatesScreen/></StudentRouterAuthGuard>},
-      {path:"classroom/meeting/:meetingId", element:<StudentRouterAuthGuard><JoinStudentMeeting/></StudentRouterAuthGuard>},
+      {path:"meeting/:meetingId", element:<StudentRouterAuthGuard><JoinStudentMeeting/></StudentRouterAuthGuard>},
     ],
   },
 ]);
