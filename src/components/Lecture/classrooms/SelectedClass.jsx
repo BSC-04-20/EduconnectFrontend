@@ -14,12 +14,14 @@ export default function SelectedClassroom() {
     const [classData, setClassData] = useState(null);
     const [enrolled, setEnrolled] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
+    const [discussions, setDiscussions] = useState([]);
     const [open, setOpen] = useState(false); // State for floating action button
     const [showAddModal, setShowAddModal] = useState(false); // State for Add Discussion Modal
     const [discussionData, setDiscussionData] = useState({
         name: '',
         time: '',
     });
+    const [activeTab, setActiveTab] = useState('resources'); // 'resources' or 'discussions'
 
     useEffect(() => {
         const fetchClassData = async () => {
@@ -39,7 +41,19 @@ export default function SelectedClassroom() {
             }
         };
 
+        const fetchDiscussions = async () => {
+            try {
+                const response = await AuthenticatedUserUrl(`/classes/${id}/discussions`);
+                if (response.status === 200) {
+                    setDiscussions(response.data.discussions || []);
+                }
+            } catch (error) {
+                console.error('Error fetching discussions:', error);
+            }
+        };
+
         fetchClassData();
+        fetchDiscussions();
     }, [id]);
 
     if (!classData) {
@@ -57,15 +71,15 @@ export default function SelectedClassroom() {
             const response = await AuthenticatedUserUrl.post(`/classes/${id}/discussion`, formData);
 
             if (response.status === 201) {
-                // Success: Discussion created
                 alert('Discussion created successfully!');
-                setShowAddModal(false); // Close the modal
+                setShowAddModal(false);
+                // Refresh discussions
+                const res = await AuthenticatedUserUrl(`/classes/${id}/discussions`);
+                setDiscussions(res.data.discussions || []);
             } else {
-                // Failure: Something went wrong
                 alert('Failed to create discussion. Please try again.');
             }
         } catch (error) {
-            // Catch any errors
             console.error('Error creating discussion:', error);
             alert('Error creating discussion. Please try again.');
         }
@@ -80,7 +94,61 @@ export default function SelectedClassroom() {
                     <RegisteredStudents total={enrolled} />
                     <PostedResources />
                 </div>
-                <ClassroomFeed announcements={announcements} />
+                <div>
+                    {/* Tabs */}
+                    <div className="flex gap-2 mb-4 mt-5">
+                        <button
+                            className={`px-4 py-2 rounded-t-md font-semibold ${activeTab === 'resources' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                            onClick={() => setActiveTab('resources')}
+                        >
+                            Announcements
+                        </button>
+                        <button
+                            className={`px-4 py-2 rounded-t-md font-semibold ${activeTab === 'discussions' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700'}`}
+                            onClick={() => setActiveTab('discussions')}
+                        >
+                            Discussions
+                        </button>
+                    </div>
+                    {/* Tab Content */}
+                    <div className="bg-white rounded-b-md shadow p-4 min-h-[200px]">
+                        {activeTab === 'resources' ? (
+                            <ClassroomFeed announcements={announcements} />
+                        ) : (
+                            <div>
+                                {discussions.length === 0 ? (
+                                    <div className="text-gray-500">No discussions yet.</div>
+                                ) : (
+                                    <ul className="space-y-3">
+                                        {discussions.map(discussion => {
+                                            const date = new Date(discussion.start_time);
+                                            const formattedDate = date.toLocaleDateString();
+                                            const formattedTime = date.toLocaleTimeString();
+                                            return (
+                                                <li key={discussion.id}>
+                                                    <Link
+                                                        to="/jitsi"
+                                                        state={{
+                                                            id: discussion.id,
+                                                            meeting_name: discussion.meeting_name,
+                                                            start_time: discussion.start_time
+                                                        }}
+                                                        className="block p-4 border rounded-lg hover:bg-sky-50 transition"
+                                                    >
+                                                        <div className="font-semibold text-gray-800">{discussion.meeting_name}</div>
+                                                        <div className="text-sm text-gray-500">
+                                                            {formattedDate} &middot; {formattedTime}
+                                                        </div>
+                                                    </Link>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                </div>
             </div>
 
             {/* Floating Action Menu */}
