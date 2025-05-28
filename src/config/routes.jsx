@@ -37,6 +37,7 @@ import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnounc
 import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen";
 import LecturerRating from "../screens/LecturerRating";
 import JoinStudentMeeting from "../screens/JoinStudentMeeting";
+import JoinLectureMeeting from "../screens/JoinLectureMeeting";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -68,10 +69,7 @@ const routes = createBrowserRouter([
     path:"about",
     element:<AboutUs/>
   },
-  {
-    path:"jitsi",
-    element:<JoinStudentMeeting/>
-  },
+ 
   {
     path: "/lecture",
     children: [
@@ -91,7 +89,9 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/:selectedId/submissions", element:<RouterAuthGuard><AssignmentSubmissionsScreen/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
-      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
+      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>},
+      //  {path: "ati", element: <RouterAuthGuard> <JoinLectureMeeting/> </RouterAuthGuard>}
+      {path: "classroom/:id/meeting/:meetingId", element: <JoinLectureMeeting/>},
     ],
   },
   {
@@ -112,6 +112,7 @@ const routes = createBrowserRouter([
       {path: "assignmentupload/:id", element:<StudentRouterAuthGuard> <AssignmentUploader/> </StudentRouterAuthGuard>},
       { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>},
       {path: "classroom/:id/students", element:<StudentRouterAuthGuard><ClassmatesScreen/></StudentRouterAuthGuard>},
+      {path:"classroom/meeting/:meetingId", element:<StudentRouterAuthGuard><JoinStudentMeeting/></StudentRouterAuthGuard>},
     ],
   },
 ]);

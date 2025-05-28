@@ -127,7 +127,7 @@ export default function SelectedClassroom() {
                                             return (
                                                 <li key={discussion.id}>
                                                     <Link
-                                                        to="/jitsi"
+                                                        to={`/classroom/${id}/meeting/${discussion.id}`}
                                                         state={{
                                                             id: discussion.id,
                                                             meeting_name: discussion.meeting_name,
