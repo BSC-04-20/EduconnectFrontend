@@ -38,6 +38,7 @@ import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen"
 import LecturerRating from "../screens/LecturerRating";
 import JoinStudentMeeting from "../screens/JoinStudentMeeting";
 import JoinLectureMeeting from "../screens/JoinLectureMeeting";
+import LecturerTimeTable from "../screens/LecturerTimeTable";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -78,7 +79,7 @@ const routes = createBrowserRouter([
       { path: "dashboard", element: <RouterAuthGuard> <LectureDashboard /> </RouterAuthGuard>},
       { path: "events", element: <RouterAuthGuard> < LectureEvents/> </RouterAuthGuard> },
       { path: "mentorship", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard> },
-      { path: "timetable", element: <RouterAuthGuard> <Construction /> </RouterAuthGuard>},
+      { path: "timetable", element: <RouterAuthGuard> <LecturerTimeTable /> </RouterAuthGuard>},
       { path: "resources", element: <RouterAuthGuard> <LectureResources /> </RouterAuthGuard> },
       { path: "ratings", element: <RouterAuthGuard> <LecturerRating /> </RouterAuthGuard>},
       { path: "classroom", element: <RouterAuthGuard> <LectureClassroomScreen /> </RouterAuthGuard>},
