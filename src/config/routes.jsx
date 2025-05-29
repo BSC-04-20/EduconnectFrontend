@@ -30,14 +30,15 @@ import AssignmentUploader from "../components/AssignmentUploader";
 import AddResources from "../components/Lecture/Resources/AddResources";
 import StudentAnnouncementScreen from "../screens/StudentAnnouncementPage";
 import ClassmatesScreen from "../screens/ClassmatesScreen";
-import JitsiComponent from "../Jitsi/JitsiComponent";
-import SelectedAnnouncement from "../components/Lecture/classrooms/Announcement/SelectedAnnouncement";
+// import JitsiComponent from "../Jitsi/JitsiComponent";
+// import SelectedAnnouncement from "../components/Lecture/classrooms/Announcement/SelectedAnnouncement";
 import LectureSelectedAnnouncementScreen from "../screens/LectureSelectedAnnouncementScreen";
 import StudentSelectedAnnouncementScreen from "../screens/StudentSelectedAnnouncementScreen";
 import AssignmentSubmissionsScreen from "../screens/AssignmentSubmissionsScreen";
 import LecturerRating from "../screens/LecturerRating";
 import AssignmentMarking from "../components/Lecture/classrooms/Announcement/AssignmentMarking";
 import JoinStudentMeeting from "../screens/JoinStudentMeeting";
+import JoinLectureMeeting from "../screens/JoinLectureMeeting";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -69,10 +70,7 @@ const routes = createBrowserRouter([
     path:"about",
     element:<AboutUs/>
   },
-  {
-    path:"jitsi",
-    element:<JoinStudentMeeting/>
-  },
+ 
   {
     path: "/lecture",
     children: [
@@ -93,7 +91,9 @@ const routes = createBrowserRouter([
       {path: "classroom/:id/:selectedId/submissions/:submissionId", element:<RouterAuthGuard><AssignmentMarking/></RouterAuthGuard>},
       {path: "classroom/:id/assignment", element:<RouterAuthGuard><AssignmentForm/></RouterAuthGuard>},
       { path: "event/add", element: <RouterAuthGuard> <EventForm /> </RouterAuthGuard>},
-      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>}
+      { path: "classroom/:id/addresources", element: <RouterAuthGuard> <AddResources/> </RouterAuthGuard>},
+      //  {path: "ati", element: <RouterAuthGuard> <JoinLectureMeeting/> </RouterAuthGuard>}
+      {path: "classroom/:id/meeting/:meetingId", element: <JoinLectureMeeting/>},
     ],
   },
   {
@@ -114,6 +114,7 @@ const routes = createBrowserRouter([
       {path: "assignmentupload/:id", element:<StudentRouterAuthGuard> <AssignmentUploader/> </StudentRouterAuthGuard>},
       { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>},
       {path: "classroom/:id/students", element:<StudentRouterAuthGuard><ClassmatesScreen/></StudentRouterAuthGuard>},
+      {path:"meeting/:meetingId", element:<StudentRouterAuthGuard><JoinStudentMeeting/></StudentRouterAuthGuard>},
     ],
   },
 ]);
