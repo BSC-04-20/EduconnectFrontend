@@ -189,46 +189,34 @@ export default function SelectedClassroom() {
                                                 // Tooltip logic
                                                 let tooltipText = "";
                                                 if (now < fiveMinutesBefore) {
-                                                  tooltipText = "You may join 5 minutes before the meeting starts.";
+                                                    tooltipText = "You may join 5 minutes before the meeting starts.";
                                                 } else if (now > oneDayAfter) {
-                                                  tooltipText = "You can no longer join this meeting (more than a day late).";
+                                                    tooltipText = "You can no longer join this meeting (more than a day late).";
                                                 } else if (canJoin && now <= start) {
-                                                  tooltipText = "You can join this meeting now.";
+                                                    tooltipText = "You can join this meeting now.";
                                                 } else if (now >= start && now <= oneDayAfter) {
-                                                  tooltipText = "The meeting is live.";
+                                                    tooltipText = "The meeting is live.";
                                                 } else {
-                                                  tooltipText = "You cannot join this meeting.";
+                                                    tooltipText = "You cannot join this meeting.";
                                                 }
 
                                                 return (
                                                     <li key={discussion.id}>
                                                         <div className="relative group">
-                                                          {/* Tooltip */}
-                                                          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
-                                                            {tooltipText}
-                                                          </div>
-                                                          {/* Join/Participants Button */}
-                                                          {canJoin ? (
-                                                            <button
-                                                              onClick={() => handleDiscussionClick(discussion)}
-                                                              className="w-full text-left block p-4 border rounded-lg hover:bg-sky-50 transition"
-                                                            >
-                                                              <div className="font-semibold text-gray-800">{discussion.meeting_name}</div>
-                                                              <div className="text-sm text-gray-500">
-                                                                {formattedDate} &middot; {formattedTime}
-                                                              </div>
-                                                            </button>
-                                                          ) : (
-                                                            <div
-                                                              className="w-full text-left block p-4 border rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
-                                                              title={tooltipText}
-                                                            >
-                                                              <div className="font-semibold">{discussion.meeting_name}</div>
-                                                              <div className="text-sm">
-                                                                {formattedDate} &middot; {formattedTime}
-                                                              </div>
+                                                            {/* Tooltip */}
+                                                            <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
+                                                                {tooltipText}
                                                             </div>
-                                                          )}
+                                                            {/* Join/Participants Button */}
+                                                            <button
+                                                                onClick={() => handleDiscussionClick(discussion)}
+                                                                className="w-full text-left block p-4 border rounded-lg hover:bg-sky-50 transition"
+                                                            >
+                                                                <div className="font-semibold text-gray-800">{discussion.meeting_name}</div>
+                                                                <div className="text-sm text-gray-500">
+                                                                    {formattedDate} &middot; {formattedTime}
+                                                                </div>
+                                                            </button>
                                                         </div>
                                                     </li>
                                                 );
@@ -384,24 +372,40 @@ export default function SelectedClassroom() {
                         <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
                             <h2 className="text-xl font-semibold mb-4">{selectedDiscussion.meeting_name}</h2>
                             <div className="flex flex-col gap-3">
-                                <button
-                                    onClick={handleJoinMeeting}
-                                    className="px-4 py-2 bg-sky-600 text-white rounded-md font-semibold"
-                                >
-                                    Join Meeting
-                                </button>
-                                <button
-                                    onClick={handleViewParticipants}
-                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold"
-                                >
-                                    See Participants
-                                </button>
-                                <button
-                                    onClick={() => setShowJoinModal(false)}
-                                    className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md"
-                                >
-                                    Cancel
-                                </button>
+                                {(() => {
+                                    const now = new Date();
+                                    const start = new Date(selectedDiscussion.start_time);
+                                    const fiveMinutesBefore = new Date(start.getTime() - 5 * 60 * 1000);
+                                    const oneDayAfter = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+                                    const canJoin = now >= fiveMinutesBefore && now <= oneDayAfter;
+                                    return (
+                                        <>
+                                            <button
+                                                onClick={handleJoinMeeting}
+                                                className={`px-4 py-2 rounded-md font-semibold ${
+                                                    canJoin
+                                                        ? "bg-sky-600 text-white"
+                                                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                                }`}
+                                                disabled={!canJoin}
+                                            >
+                                                Join Meeting
+                                            </button>
+                                            <button
+                                                onClick={handleViewParticipants}
+                                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold"
+                                            >
+                                                See Participants
+                                            </button>
+                                            <button
+                                                onClick={() => setShowJoinModal(false)}
+                                                className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </>
+                                    );
+                                })()}
                             </div>
                         </div>
                     </div>

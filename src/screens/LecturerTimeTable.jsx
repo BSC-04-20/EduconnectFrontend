@@ -93,7 +93,7 @@ export default function LecturerTimeTable() {
               // Wait for all assignment due date fetches for this class
               await Promise.all(assignmentPromises);
             } catch (err) {
-              // Ignore errors for individual classes
+              console.log(err)
             }
 
             // Discussions
@@ -113,7 +113,7 @@ export default function LecturerTimeTable() {
                 }
               });
             } catch (err) {
-              // Ignore errors for individual classes
+              console.log(err)
             }
           })
         );
