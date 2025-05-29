@@ -5,6 +5,7 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [files, setFiles] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false); // New state
 
     const handleFileChange = (event) => {
         setFiles([...event.target.files]);
@@ -12,14 +13,13 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsSubmitting(true); // Set loading
 
-        // Create a FormData object to send form data including files
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("class_id", classId)
+        formData.append("class_id", classId);
 
-        // Append each file to FormData
         files.forEach((file) => {
             formData.append("announcement_files[]", file);
         });
@@ -37,8 +37,7 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
                 setTitle("");
                 setDescription("");
                 setFiles([]);
-                onClose(); // Close the modal
-                // Optionally refresh the page or update the announcements list
+                onClose();
                 window.location.reload();
             } else {
                 alert("Error submitting the announcement.");
@@ -46,6 +45,8 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
         } catch (error) {
             console.error("Error submitting announcement:", error);
             alert("Error submitting the announcement.");
+        } finally {
+            setIsSubmitting(false); // Reset loading
         }
     };
 
@@ -89,14 +90,16 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
                             type="button"
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-sky-900 text-white rounded-lg hover:bg-sky-700"
+                            className="px-4 py-2 bg-sky-900 text-white rounded-lg hover:bg-sky-700 disabled:opacity-60"
+                            disabled={isSubmitting}
                         >
-                            Submit Announcement
+                            {isSubmitting ? "Submitting..." : "Submit Announcement"}
                         </button>
                     </div>
                 </form>
