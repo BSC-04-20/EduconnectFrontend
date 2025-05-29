@@ -61,6 +61,7 @@ export default function LecturerTimeTable() {
                     type: "event",
                     title: a.title || "Announcement",
                     time: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    className: cls.name || "Class", // Add class name
                   });
                 }
               });
@@ -80,6 +81,7 @@ export default function LecturerTimeTable() {
                     type: "discussion",
                     title: d.meeting_name || "Discussion",
                     time: start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                    className: cls.name || "Class", // Add class name
                   });
                 }
               });
@@ -158,7 +160,7 @@ export default function LecturerTimeTable() {
     <div className="flex flex-row gap-5">
       <LectureSideBar />
       <section className="mt-[5vh] md:mt-0 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
-        <div className="bg-white rounded-md shadow-md w-[100%] h-[95%] mb-3 mt-[10vh] p-6">
+        <div className="bg-white rounded-md shadow-md w-[100%] mt-[10vh] mb-[10vh] p-5">
           <h1 className="text-2xl font-bold text-sky-900 mb-4">Lecturer Timetable</h1>
           {view === "month" && (
             <>
@@ -225,7 +227,7 @@ export default function LecturerTimeTable() {
                         key={idx}
                         className={`flex items-center gap-4 p-3 rounded border-l-4 shadow-sm ${
                           item.type === "event"
-                            ? "border-blue-500 bg-blue-50"
+                            ? "border-blue-900 bg-blue-50"
                             : item.type === "discussion"
                             ? "border-green-500 bg-green-50"
                             : "border-yellow-500 bg-yellow-50"
@@ -233,7 +235,11 @@ export default function LecturerTimeTable() {
                       >
                         <span className="font-bold w-16">{item.time}</span>
                         <span className="capitalize font-semibold">{item.type}</span>
+                        <span className=" text-sky-700 font-semibold px-2 py-1 bg-sky-100 rounded">
+                          {item.className}
+                        </span>
                         <span>{item.title}</span>
+                        
                       </div>
                     ))
                   )}
@@ -243,6 +249,7 @@ export default function LecturerTimeTable() {
           )}
         </div>
       </section>
+      <div className="mb-20"></div>
     </div>
   );
 }
