@@ -44,36 +44,77 @@ export default function StudentDiscussions() {
             const formattedDate = date.toLocaleDateString();
             const formattedTime = date.toLocaleTimeString();
 
+            // Calculate if joining is allowed
+            const now = new Date();
+            const start = new Date(start_time);
+            const fiveMinutesBefore = new Date(start.getTime() - 5 * 60 * 1000);
+            const oneDayAfter = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+            const isLive = now >= start && now <= oneDayAfter;
+            const canJoin = now >= fiveMinutesBefore && now <= oneDayAfter;
+
+            // Tooltip logic
+            let tooltipText = "";
+            if (now < fiveMinutesBefore) {
+              tooltipText = "You may join 5 minutes before the meeting starts.";
+            } else if (now > oneDayAfter) {
+              tooltipText = "You can no longer join this meeting (more than a day late).";
+            } else if (canJoin && now<=start) {
+              tooltipText = "You can join this meeting now.";
+            }else if (isLive) {
+                tooltipText = "The meeting is live.";
+            } else {
+              tooltipText = "You cannot join this meeting.";
+            }
+
             return (
               <div className="relative group" key={id}>
                 {/* Tooltip */}
                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
-                  Join video conferencing session
+                  {tooltipText}
                 </div>
 
                 {/* Discussion Link */}
-                <Link
-                  to={`/student/meeting/${id}`}
-                  state={{ id, meeting_name, start_time }}
-                  className="p-4 border rounded-lg flex items-center gap-4 border-gray-300 hover:bg-sky-50 transition"
-                >
-                  {/* Large Video Icon */}
-                  <MdVideoCameraFront className="text-[2rem] text-sky-700 shrink-0" />
+                {canJoin ? (
+                  <Link
+                    to={`/student/meeting/${id}`}
+                    state={{ id, meeting_name, start_time }}
+                    className="p-4 border rounded-lg flex items-center gap-4 border-gray-300 hover:bg-sky-50 transition"
+                  >
+                    {/* Large Video Icon */}
+                    <MdVideoCameraFront className="text-[2rem] text-sky-700 shrink-0" />
 
-                  {/* Meeting Info */}
-                  <div className="flex-grow">
-                    <h4 className="font-semibold text-gray-800">{meeting_name}</h4>
-                    <div className="flex items-center text-sm text-gray-500 gap-2 mt-1">
-                      <IoCalendarOutline />
-                      <span>{formattedDate}</span>
-                      <IoTimeOutline />
-                      <span>{formattedTime}</span>
+                    {/* Meeting Info */}
+                    <div className="flex-grow">
+                      <h4 className="font-semibold text-gray-800">{meeting_name}</h4>
+                      <div className="flex items-center text-sm text-gray-500 gap-2 mt-1">
+                        <IoCalendarOutline />
+                        <span>{formattedDate}</span>
+                        <IoTimeOutline />
+                        <span>{formattedTime}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Forward Icon */}
-                  <FaArrowRight className="text-gray-400" />
-                </Link>
+                    {/* Forward Icon */}
+                    <FaArrowRight className="text-gray-400" />
+                  </Link>
+                ) : (
+                  <div
+                    className="p-4 border rounded-lg flex items-center gap-4 border-gray-200 bg-gray-100 cursor-not-allowed opacity-60"
+                    title={tooltipText}
+                  >
+                    <MdVideoCameraFront className="text-[2rem] text-gray-400 shrink-0" />
+                    <div className="flex-grow">
+                      <h4 className="font-semibold text-gray-400">{meeting_name}</h4>
+                      <div className="flex items-center text-sm text-gray-400 gap-2 mt-1">
+                        <IoCalendarOutline />
+                        <span>{formattedDate}</span>
+                        <IoTimeOutline />
+                        <span>{formattedTime}</span>
+                      </div>
+                    </div>
+                    <FaArrowRight className="text-gray-300" />
+                  </div>
+                )}
               </div>
             );
           })
