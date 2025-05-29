@@ -5,17 +5,33 @@ import { X } from "lucide-react";
 export default function AddDiscussionModal({ isOpen, onClose, onSubmit, classId }) {
   const [meetingName, setMeetingName] = useState("");
   const [startTime, setStartTime] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false); // Loading state
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit({
-      class_id: classId,
-      meeting_name: meetingName,
-      start_time: startTime,
-    });
-    onClose(); // Close the modal after submission
-    setMeetingName("");
-    setStartTime("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true); // Set loading
+
+    try {
+      const result = onSubmit({
+        class_id: classId,
+        meeting_name: meetingName,
+        start_time: startTime,
+      });
+      
+      // Check if onSubmit returns a Promise
+      if (result && typeof result.then === 'function') {
+        await result;
+      }
+      
+      setMeetingName("");
+      setStartTime("");
+      onClose();
+    } catch (error) {
+      console.error("Error submitting discussion:", error);
+      alert("Error submitting discussion.");
+    } finally {
+      setIsSubmitting(false); // Reset loading
+    }
   };
 
   return (
@@ -23,7 +39,11 @@ export default function AddDiscussionModal({ isOpen, onClose, onSubmit, classId 
       <div className="flex items-center justify-center min-h-screen px-4">
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40" />
         <div className="bg-white rounded-2xl shadow-lg p-6 z-50 w-full max-w-md relative">
-          <button onClick={onClose} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+            disabled={isSubmitting}
+          >
             <X size={20} />
           </button>
           <Dialog.Title className="text-xl font-semibold mb-4">Add Discussion</Dialog.Title>
@@ -36,6 +56,7 @@ export default function AddDiscussionModal({ isOpen, onClose, onSubmit, classId 
                 onChange={(e) => setMeetingName(e.target.value)}
                 className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm p-2"
                 required
+                disabled={isSubmitting}
               />
             </div>
             <div>
@@ -46,14 +67,24 @@ export default function AddDiscussionModal({ isOpen, onClose, onSubmit, classId 
                 onChange={(e) => setStartTime(e.target.value)}
                 className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm p-2"
                 required
+                disabled={isSubmitting}
               />
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300"
+                disabled={isSubmitting}
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
-                className="bg-indigo-600 text-white rounded-xl px-4 py-2 hover:bg-indigo-700 text-sm shadow"
+                className="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-60"
+                disabled={isSubmitting}
               >
-                Create
+                {isSubmitting ? "Creating..." : "Create Discussion"}
               </button>
             </div>
           </form>

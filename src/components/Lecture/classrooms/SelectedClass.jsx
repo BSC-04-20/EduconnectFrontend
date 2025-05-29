@@ -22,6 +22,7 @@ export default function SelectedClassroom() {
     const [showResourcesModal, setShowResourcesModal] = useState(false); // State for Add Resources Modal
     const [showAssignmentModal, setShowAssignmentModal] = useState(false); // State for Assignment Modal
     const [showAnnouncementModal, setShowAnnouncementModal] = useState(false); // State for Announcement Modal
+    const [isSubmittingDiscussion, setIsSubmittingDiscussion] = useState(false); // Loading state for discussion
     const [discussionData, setDiscussionData] = useState({
         name: '',
         time: '',
@@ -54,6 +55,7 @@ export default function SelectedClassroom() {
 
     const handleCreateDiscussion = async (e) => {
         e.preventDefault();
+        setIsSubmittingDiscussion(true); // Set loading
 
         const formData = new FormData();
         formData.append('meeting_name', discussionData.name);
@@ -65,6 +67,7 @@ export default function SelectedClassroom() {
             if (response.status === 201) {
                 // Success: Discussion created
                 alert('Discussion created successfully!');
+                setDiscussionData({ name: '', time: '' }); // Reset form
                 setShowAddModal(false); // Close the modal
             } else {
                 // Failure: Something went wrong
@@ -74,6 +77,8 @@ export default function SelectedClassroom() {
             // Catch any errors
             console.error('Error creating discussion:', error);
             alert('Error creating discussion. Please try again.');
+        } finally {
+            setIsSubmittingDiscussion(false); // Reset loading
         }
     };
 
@@ -191,6 +196,7 @@ export default function SelectedClassroom() {
                                     value={discussionData.name}
                                     onChange={(e) => setDiscussionData({ ...discussionData, name: e.target.value })}
                                     required
+                                    disabled={isSubmittingDiscussion}
                                 />
                             </div>
                             <div className="mb-4">
@@ -204,21 +210,24 @@ export default function SelectedClassroom() {
                                     value={discussionData.time}
                                     onChange={(e) => setDiscussionData({ ...discussionData, time: e.target.value })}
                                     required
+                                    disabled={isSubmittingDiscussion}
                                 />
                             </div>
                             <div className="flex justify-end gap-2">
                                 <button
                                     type="button"
                                     onClick={() => setShowAddModal(false)}
-                                    className="px-4 py-2 bg-gray-200 rounded-md"
+                                    className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                                    disabled={isSubmittingDiscussion}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-sky-600 text-white rounded-md"
+                                    className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700 disabled:opacity-60"
+                                    disabled={isSubmittingDiscussion}
                                 >
-                                    Create
+                                    {isSubmittingDiscussion ? "Creating..." : "Create"}
                                 </button>
                             </div>
                         </form>

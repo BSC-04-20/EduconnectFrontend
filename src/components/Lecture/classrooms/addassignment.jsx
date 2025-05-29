@@ -8,6 +8,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
     const [files, setFiles] = useState([]);
     const [dueDate, setDueDate] = useState("");
     const [dueTime, setDueTime] = useState("");
+    const [loading, setLoading] = useState(false);
     const navigator = useNavigate();
 
     const handleFileChange = (event) => {
@@ -16,6 +17,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setLoading(true);
 
         const dueDateTime = `${dueDate} ${dueTime}:00`;
         console.log(dueDateTime);
@@ -26,34 +28,34 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
         formData.append("due_date", dueDateTime);
         formData.append("class_id", classId);
 
-        // Append each file to FormData
         files.forEach((file) => {
             formData.append("files[]", file);
         });
 
         try {
-            // Send a POST request with the form data to the API
             const response = await AuthenticatedUserUrl.post("/assignment/create", formData, {
                 headers: {
-                    "Content-Type": "multipart/form-data", // Required for file uploads
+                    "Content-Type": "multipart/form-data",
                 },
             });
 
-            if (response.status === 201) {
+            // Check for successful status codes (200-299 range)
+            if (response.status >= 200 && response.status < 300) {
                 alert("Assignment submitted successfully!");
-                // Reset form after successful submission
                 setTitle("");
                 setDescription("");
                 setFiles([]);
                 setDueDate("");
                 setDueTime("");
-                onClose(); // Close the modal instead of navigating
+                onClose();
             } else {
                 alert("Error submitting the assignment.");
             }
         } catch (error) {
             console.error("Error submitting assignment:", error);
             alert("Error submitting the assignment.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -67,6 +69,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                     <button
                         onClick={onClose}
                         className="text-gray-500 hover:text-gray-700 text-2xl"
+                        disabled={loading}
                     >
                         ×
                     </button>
@@ -80,6 +83,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                             onChange={(e) => setTitle(e.target.value)}
                             required
                             className="mt-1 p-2 w-full border rounded-lg"
+                            disabled={loading}
                         />
                     </div>
                     <div>
@@ -88,6 +92,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                             className="mt-1 p-2 w-full border rounded-lg"
+                            disabled={loading}
                         ></textarea>
                     </div>
                     <div>
@@ -97,6 +102,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                             multiple
                             onChange={handleFileChange}
                             className="mt-1 w-full p-2 border rounded-lg"
+                            disabled={loading}
                         />
                     </div>
                     <div className="flex gap-4">
@@ -108,6 +114,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                                 onChange={(e) => setDueDate(e.target.value)}
                                 required
                                 className="mt-1 p-2 w-full border rounded-lg"
+                                disabled={loading}
                             />
                         </div>
                         <div className="flex-1">
@@ -118,6 +125,7 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                                 onChange={(e) => setDueTime(e.target.value)}
                                 required
                                 className="mt-1 p-2 w-full border rounded-lg"
+                                disabled={loading}
                             />
                         </div>
                     </div>
@@ -126,14 +134,16 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                             type="button"
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+                            disabled={loading}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-sky-900 text-white rounded-lg hover:bg-sky-700"
+                            className="px-4 py-2 bg-sky-900 text-white rounded-lg hover:bg-sky-700 disabled:opacity-60"
+                            disabled={loading}
                         >
-                            Submit Assignment
+                            {loading ? "Submitting..." : "Submit Assignment"}
                         </button>
                     </div>
                 </form>
