@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from '../../../../config/urlFetcher';
+import { Toaster, toast} from "react-hot-toast";
 
 const baseUrl = import.meta.env.VITE_SANCTUM_TOP_LEVEL_DOMAIN;
 
@@ -78,7 +79,7 @@ export default function SelectedAnnouncement() {
 
   const handleSubmitAssignment = async (e) => {
     e.preventDefault();
-    if (!selectedFile || selectedFile.length === 0) return alert("Please choose at least one file.");
+    if (!selectedFile || selectedFile.length === 0) return toast.error("Please choose at least one file.");
 
     const formData = new FormData();
     for (const file of selectedFile) {
@@ -92,11 +93,11 @@ export default function SelectedAnnouncement() {
           "Content-Type": "multipart/form-data"
         }
       });
-      alert("Assignment submitted successfully!");
+      toast.success("Assignment submitted successfully!");
       window.location.reload();
     } catch (err) {
       console.error("Submission error:", err);
-      alert("Failed to submit assignment.");
+      toast.error("Failed to submit assignment.");
     } finally {
       setUploading(false);
     }
@@ -106,6 +107,7 @@ export default function SelectedAnnouncement() {
     return <p className="text-center mt-10 text-gray-600">Loading...</p>;
   }
 
+  
   return (
     <div className="bg-white p-6 sm:p-8 md:p-10 rounded-lg max-w-4xl mx-auto relative">
 
@@ -113,7 +115,7 @@ export default function SelectedAnnouncement() {
       <span className="block font-light text-sm sm:text-base md:text-lg text-gray-700 mb-2">
         {type === 'assignment' ? data.class?.name || 'Unknown Subject' : data.name || 'Unknown Subject'}
       </span>
-
+      <Toaster/>
       {/* Marking Section */}
       {type === 'assignment' && (
         <>

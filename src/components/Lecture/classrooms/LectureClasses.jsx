@@ -57,7 +57,8 @@ export default function LectureClasses() {
   useEffect(() => {
     fetchClasses();
   }, []);
-  <Toaster/>
+
+  
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-4">
@@ -72,7 +73,7 @@ export default function LectureClasses() {
           <p className="text-sm text-gray-500">Click the + button to create your first class.</p>
         </div>
       )}
-
+        <Toaster/>
       {/* Classes grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {classes.map((classItem) => (

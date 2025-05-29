@@ -76,7 +76,7 @@ export default function AddResources() {
       toast.error("Error uploading file.");
     }
   };
-<Toaster/>
+
 
   return (
     <div className="pt-20 sm:pt-20 md:pt-20 px-4">
@@ -87,7 +87,7 @@ export default function AddResources() {
         <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800">
           Upload Resources
         </h2>
-
+        <Toaster/>
         {/* Title Input */}
         <input
           type="text"

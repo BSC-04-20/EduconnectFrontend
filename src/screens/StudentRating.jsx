@@ -3,6 +3,7 @@ import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import StudentTopBar from "../components/Student/TopBar";
 import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
+import { Toaster, toast} from "react-hot-toast";
 
 
 export default function StudentRating() {
@@ -19,7 +20,7 @@ export default function StudentRating() {
         // const data = await response.json();
         setRatings(response.data.average_rating);
       } catch (error) {
-        alert("Error fetching rating:", error);
+        toast.error("Error fetching rating:", error);
       }
     };
     fetchRating();
@@ -58,7 +59,7 @@ export default function StudentRating() {
 
         setLecturers(formattedLecturers);
       } catch (error) {
-        alert("Error fetching lecturers: " + error);
+        toast.error("Error fetching lecturers: " + error);
       }
     };
 
@@ -75,16 +76,17 @@ export default function StudentRating() {
       );
 
       if (response.status === 200) {
-        alert("Rating submitted successfully!");
+        toast.success("Rating submitted successfully!");
       } else {
-        alert("Something went wrong. Try again.");
+        toast.error("Something went wrong. Try again.");
       }
     } catch (error) {
-      alert("Error submitting rating: " + error.message);
+      toast.error("Error submitting rating: " + error.message);
     }
   };
 
   const [showAll, setShowAll] = useState(false);
+
 
   return (
     <div className="flex flex-row gap-5">
@@ -99,7 +101,7 @@ export default function StudentRating() {
             <p className="text-gray-600 mb-4">
               Tap on Give a rating to rate a lecturer
             </p>
-
+            <Toaster/>
             <div className="space-y-4">
               {(showAll ? lecturers : lecturers.slice(0, 3)).map(
                 (lecturer, index) => (

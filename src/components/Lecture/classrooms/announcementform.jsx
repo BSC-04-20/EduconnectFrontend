@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios"; // Import Axios
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Toaster, toast} from "react-hot-toast";
 
 export default function AnnouncementForm() {
@@ -38,13 +38,24 @@ export default function AnnouncementForm() {
         }});
 
       if (response.status === 201) {
-        toast.success("Announcement submitted successfully!");
+        toast.success("Announcement submitted successfully!", {
+          onClose: () => {
+            navigator(`/lecture/classroom/${id.id}`);
+
+          }
+        });
+        
         setTitle("");
         setDescription("");
         setFiles([]);
-        navigator(`/lecture/classroom/${id.id}`)
+        // setTimeout(() => {
+        //   ;
+        // }, 5000)
+        
       } else {
         toast.error("Error submitting the announcement.");
+
+
       }
     } catch (error) {
       console.error("Error submitting announcement:", error);
@@ -52,7 +63,9 @@ export default function AnnouncementForm() {
     }
   };
 
+
   return (
+    
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
       <h2 className="text-2xl font-semibold mb-4">Make an Announcement</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -66,6 +79,7 @@ export default function AnnouncementForm() {
             className="mt-1 p-2 w-full border rounded-lg"
           />
         </div>
+        <Toaster/>
         <div>
           <label className="block text-sm font-medium text-gray-700">Description (optional)</label>
           <textarea

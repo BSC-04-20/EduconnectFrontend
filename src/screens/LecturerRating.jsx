@@ -3,6 +3,7 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import LectureSideBar from "../components/Lecture/SideBar";
 import { AuthenticatedUserUrl } from "../config/urlFetcher";
 import TopBar from "../components/Lecture/TopBar";
+import { Toaster, toast} from "react-hot-toast";
 
 export default function LecturerRatings() {
 //   const [showAll, setShowAll] = useState(false);
@@ -14,12 +15,11 @@ export default function LecturerRatings() {
         // const data = await response.json();
         setRatings(response.data.average_rating);
       } catch (error) {
-        alert("Error fetching rating:", error);
+        toast.error("Error fetching rating:", error);
       }
     };
     fetchRating();
   }, []);
-
 
   return (
     <div>
@@ -33,7 +33,7 @@ export default function LecturerRatings() {
           <p className="text-gray-600 mb-6">
             This shows your average rating for each class you teach.
           </p>
-
+          <Toaster/>
           <div className="space-y-3">
               <div
                 className="flex justify-between items-center p-4 bg-white border rounded-lg shadow-sm"

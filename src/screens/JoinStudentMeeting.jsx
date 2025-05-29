@@ -1,7 +1,7 @@
 import { JitsiMeeting } from "@jitsi/react-sdk";
 import { useState, useEffect } from "react";
 import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
-
+import { Toaster, toast} from "react-hot-toast";
 
 export default function JoinStudentMeeting() {
 
@@ -16,7 +16,7 @@ export default function JoinStudentMeeting() {
         setUsername(response.data.fullname);
         // alert(username + "2")
       } catch (error) {
-        alert("Failed to get username");
+        toast.error("Failed to get username");
       }
     }
       getUsername()
@@ -33,7 +33,9 @@ export default function JoinStudentMeeting() {
       </div>
     )
   }
+  
   return(
+    
     <div >
       <JitsiMeeting
     domain = {domain}
@@ -65,6 +67,7 @@ export default function JoinStudentMeeting() {
       SHOW_POWERED_BY: false,
       LANG_DETECTION: true,
     }}
+    
     getIFrameRef = { (iframeRef) => { iframeRef.style.height = '585px'; } }
     userInfo={{ displayName: username }}
     onApiReady={(externalApi) => {
@@ -76,5 +79,7 @@ export default function JoinStudentMeeting() {
     
 />
     </div>
+  
   );
+  <Toaster/>
 }

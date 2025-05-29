@@ -71,7 +71,7 @@ export default function SelectedClassroom() {
             toast.error('Error creating discussion. Please try again.');
         }
     };
-    <Toaster/>
+
 
     return (
         <div className="my-5">
@@ -84,7 +84,7 @@ export default function SelectedClassroom() {
                 </div>
                 <ClassroomFeed announcements={announcements} />
             </div>
-
+            <Toaster/>
             {/* Floating Action Menu */}
             <div className="fixed bottom-24 right-5 flex flex-col items-end space-y-3">
                 {open && (

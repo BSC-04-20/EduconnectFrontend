@@ -42,27 +42,25 @@ export default function AssignmentForm() {
         },
       });
 
-      if (response.status === 201) {
-        toast.success("Assignment submitted successfully!");
-        // Reset form after successful submission
-        setTitle("");
-        setDescription("");
-        setFiles([]);
-        setDueDate("");
-        setDueTime("");
-        navigator(`/lecture/classroom/${id.id}`);
-      } else {
-        toast.error("Error submitting the assignment.");
-      }
+      console.log(response.status)
+
+      toast.success("Assignment submitted successfully!" , {
+        onClose: () => {
+          navigator(`/lecture/classroom/${id.id}`);
+        }
+      })
+
+    
     } catch (error) {
       console.error("Error submitting assignment:", error);
       toast.error("Error submitting the assignment.");
     }
   };
-  <Toaster/>
+
 
   return (
     <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-2xl mt-10">
+      <Toaster/>
       <h2 className="text-2xl font-semibold mb-4">Add an Assignment</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>

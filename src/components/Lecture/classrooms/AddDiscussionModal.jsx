@@ -1,21 +1,32 @@
 import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { X } from "lucide-react";
+import { toast, Toaster } from "react-hot-toast";
 
 export default function AddDiscussionModal({ isOpen, onClose, onSubmit, classId }) {
   const [meetingName, setMeetingName] = useState("");
   const [startTime, setStartTime] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSubmit({
-      class_id: classId,
-      meeting_name: meetingName,
-      start_time: startTime,
-    });
-    onClose(); // Close the modal after submission
-    setMeetingName("");
-    setStartTime("");
+
+    try {
+      await onSubmit({
+        class_id: classId,
+        meeting_name: meetingName,
+        start_time: startTime,
+      });
+
+      toast.success("Discussion created successfully!");
+      onClose(); // Close the modal after success
+
+      // Reset form
+      setMeetingName("");
+      setStartTime("");
+    } catch (error) {
+      console.error("Error creating discussion:", error);
+      toast.error("Failed to create discussion. Please try again.");
+    }
   };
 
   return (
@@ -23,6 +34,7 @@ export default function AddDiscussionModal({ isOpen, onClose, onSubmit, classId 
       <div className="flex items-center justify-center min-h-screen px-4">
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-40" />
         <div className="bg-white rounded-2xl shadow-lg p-6 z-50 w-full max-w-md relative">
+          <Toaster />
           <button onClick={onClose} className="absolute top-3 right-3 text-gray-500 hover:text-gray-700">
             <X size={20} />
           </button>
