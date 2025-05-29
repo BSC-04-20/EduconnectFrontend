@@ -3,23 +3,58 @@ import StudentsSideBar from "../components/Student/SideBar";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import StudentTopBar from "../components/Student/TopBar";
 import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
+import { FaChalkboardTeacher } from "react-icons/fa";
 
+import PropTypes from "prop-types";
+
+// Simple custom toast component
+function CustomToast({ message, type, onClose }) {
+  return (
+    <div
+      className={`fixed top-5 left-1/2 transform -translate-x-1/2 z-50 px-4 py-2 rounded shadow-lg text-white transition-all
+        ${type === "error" ? "bg-red-600" : "bg-green-600"}`}
+      style={{ minWidth: 200 }}
+    >
+      <div className="flex items-center justify-between gap-4">
+        <span className="mx-auto text-center w-full">{message}</span>
+        <button onClick={onClose} className="ml-2 font-bold">
+          ×
+        </button>
+      </div>
+    </div>
+  );
+}
+
+CustomToast.propTypes = {
+  message: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
 
 export default function StudentRating() {
   const [lecturers, setLecturers] = useState([]);
   const [ratings, setRatings] = useState({});
   const [rates, setRates] = useState({});
+  const [showAll, setShowAll] = useState(false);
 
-  // const id = useParams();
+  // Toast state
+  const [toast, setToast] = useState({
+    show: false,
+    message: "",
+    type: "success",
+  });
+  const showToast = (message, type = "success") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type }), 3000);
+  };
 
   useEffect(() => {
     const fetchRating = async () => {
       try {
         const response = await StudentAuthenticatedUserUrl.get(`/ratings/get`);
-        // const data = await response.json();
         setRatings(response.data.average_rating);
       } catch (error) {
-        alert("Error fetching rating:", error);
+        showToast("Error fetching rating", "error");
       }
     };
     fetchRating();
@@ -33,7 +68,6 @@ export default function StudentRating() {
   };
   const handleStarClick = (index, starValue) => {
     if (rates[index] === "Rate") {
-      // Allow rating only when it's "Rate"
       setRatings((prevRatings) => ({
         ...prevRatings,
         [index]: starValue,
@@ -47,18 +81,15 @@ export default function StudentRating() {
           `/student/lecturers`
         );
         const lecturersData = response.data.lecturers;
-
-        // Transform the object into an array of lecturer objects
         const formattedLecturers = Object.entries(lecturersData).map(
           ([name, id]) => ({
             fullname: name,
             id: id,
           })
         );
-
         setLecturers(formattedLecturers);
       } catch (error) {
-        alert("Error fetching lecturers: " + error);
+        showToast("Error fetching lecturers", "error");
       }
     };
 
@@ -75,22 +106,29 @@ export default function StudentRating() {
       );
 
       if (response.status === 200) {
-        alert("Rating submitted successfully!");
+        showToast("Rating submitted successfully!", "success");
       } else {
-        alert("Something went wrong. Try again.");
+        showToast("Something went wrong. Try again.", "error");
       }
     } catch (error) {
-      alert("Error submitting rating: " + error.message);
+      showToast("Error submitting rating", "error");
     }
   };
 
-  const [showAll, setShowAll] = useState(false);
-
   return (
     <div className="flex flex-row gap-5">
+      {toast.show && (
+        <CustomToast
+          message={toast.message}
+          type={toast.type}
+          onClose={() =>
+            setToast({ show: false, message: "", type: "success" })
+          }
+        />
+      )}
       <StudentsSideBar />
       <section className="mt-[5vh] md:mt-10 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
-      <StudentTopBar/>
+        <StudentTopBar />
         <div className="bg-white rounded-md shadow-md w-[100%] h-[95%] mb-20">
           <div className="p-6">
             <h1 className="text-xl font-semibold text-blue-700">
@@ -107,12 +145,8 @@ export default function StudentRating() {
                     key={index}
                     className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-full"
                   >
-                    {/* Profile image */}
-                    <img
-                      src={`..\\assets\\profile.png`}
-                      alt={lecturer.fullname}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
+                    {/* Profile icon replaces image */}
+                    <FaChalkboardTeacher className="w-12 h-12 text-sky-700" />
 
                     {/* Lecturer name (left content) */}
                     <div className="ml-4 flex-1">
@@ -149,21 +183,36 @@ export default function StudentRating() {
                       {/* Button */}
                       <button
                         onClick={() => {
-                            // alert(ratings[index]); 
-                            handleRateClick(index);
-                          if((ratings[index] || ratings[index] !== 0) && rates[index] === "Rate"){
-                          postRating(lecturer.id, ratings[index]);
+                          handleRateClick(index);
+                          if (
+                            (ratings[index] || ratings[index] !== 0) &&
+                            rates[index] === "Rate"
+                          ) {
+                            postRating(lecturer.id, ratings[index]);
                           }
-                      }}
-                        disabled={(ratings[index] === '0'|| ratings[index] === '.' || ratings[index] === 0 || !ratings[index]) 
-                          && rates[index] === "Rate"}
+                        }}
+                        disabled={
+                          (ratings[index] === "0" ||
+                            ratings[index] === "." ||
+                            ratings[index] === 0 ||
+                            !ratings[index]) &&
+                          rates[index] === "Rate"
+                        }
                         className={` w-[10vw] h-[4.5vh] rounded-2xl border-2 
-                            ${rates[index] === "Rate" ? "text-sky-900 bg-white hover:bg-sky-900 hover:text-white  border-sky-900" 
-                            : "bg-sky-900 text-white hover:bg-white hover:text-sky-900 hover:border-sky-900"}
-                            ${(ratings[index] === '0'|| ratings[index] === '.'  || ratings[index] === 0 || !ratings[index]) 
-                              && rates[index] === "Rate" ? "opacity-50 hover:bg-stone-500 cursor-not-allowed" : ""}`}
-
-
+                            ${
+                              rates[index] === "Rate"
+                                ? "text-sky-900 bg-white hover:bg-sky-900 hover:text-white  border-sky-900"
+                                : "bg-sky-900 text-white hover:bg-white hover:text-sky-900 hover:border-sky-900"
+                            }
+                            ${
+                              (ratings[index] === "0" ||
+                                ratings[index] === "." ||
+                                ratings[index] === 0 ||
+                                !ratings[index]) &&
+                              rates[index] === "Rate"
+                                ? "opacity-50 hover:bg-stone-500 cursor-not-allowed"
+                                : ""
+                            }`}
                       >
                         {rates[index] === "Rate" ? "Rate" : "Give Rating"}
                       </button>
