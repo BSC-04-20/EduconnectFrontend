@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+// import { FaPlus } from "react-icons/fa6";
+import { Link} from "react-router-dom";
 import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
 import { GoPeople } from "react-icons/go";
 import { PiPlus } from "react-icons/pi";
@@ -15,7 +15,7 @@ export default function LectureClasses() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const navigator = useNavigate();
+  // const navigator = useNavigate();
 
   const handleAddClick = () => {
     setIsDialogOpen(true);
@@ -27,6 +27,7 @@ export default function LectureClasses() {
       setClasses(response.data.data);
     } catch (err) {
       setError("Failed to fetch classes. Please try again.");
+      console.log(err)
     } finally {
       setLoading(false);
     }
