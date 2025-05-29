@@ -5,6 +5,8 @@ import ClassCode from './selected/classCode';
 import RegisteredStudents from './selected/StudentsNumber';
 import PostedResources from './selected/classResourcesNumber';
 import ClassroomFeed from './selected/announcements';
+import AddResources from '../Resources/AddResources';
+import AssignmentModal from '../classrooms/addassignment'; // Import the separated component
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 import { BiBookOpen, BiGroup } from 'react-icons/bi';
@@ -16,6 +18,8 @@ export default function SelectedClassroom() {
     const [announcements, setAnnouncements] = useState([]);
     const [open, setOpen] = useState(false); // State for floating action button
     const [showAddModal, setShowAddModal] = useState(false); // State for Add Discussion Modal
+    const [showResourcesModal, setShowResourcesModal] = useState(false); // State for Add Resources Modal
+    const [showAssignmentModal, setShowAssignmentModal] = useState(false); // State for Assignment Modal
     const [discussionData, setDiscussionData] = useState({
         name: '',
         time: '',
@@ -91,12 +95,12 @@ export default function SelectedClassroom() {
                             className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                         >
                             <div className="group relative">
-                                <Link
-                                    to={`/lecture/classroom/${id}/assignment`}
+                                <button
+                                    onClick={() => setShowAssignmentModal(true)}
                                     className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
                                 >
                                     <MdLibraryBooks className="text-sky-600" size={20} />
-                                </Link>
+                                </button>
                                 {/* Tooltip */}
                                 <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     Create Assignment
@@ -125,12 +129,12 @@ export default function SelectedClassroom() {
                             className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
                         >
                             <div className="group relative">
-                                <Link
-                                    to={`/lecture/classroom/${id}/addresources`}
+                                <button
+                                    onClick={() => setShowResourcesModal(true)}
                                     className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
                                 >
                                     <BiBookOpen className="text-sky-600" size={20} />
-                                </Link>
+                                </button>
                                 {/* Tooltip */}
                                 <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                     Upload Resources
@@ -219,6 +223,20 @@ export default function SelectedClassroom() {
                     </div>
                 </div>
             )}
+
+            {/* Assignment Modal */}
+            <AssignmentModal 
+                isOpen={showAssignmentModal} 
+                onClose={() => setShowAssignmentModal(false)} 
+                classId={id} 
+            />
+
+            {/* Add Resources Modal Component */}
+            <AddResources 
+                isOpen={showResourcesModal} 
+                onClose={() => setShowResourcesModal(false)}
+                classId={id}
+            />
         </div>
     );
 }
