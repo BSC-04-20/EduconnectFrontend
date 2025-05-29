@@ -55,6 +55,7 @@ export default function StudentRating() {
         setRatings(response.data.average_rating);
       } catch (error) {
         showToast("Error fetching rating", "error");
+        console.log(error)
       }
     };
     fetchRating();
@@ -90,6 +91,7 @@ export default function StudentRating() {
         setLecturers(formattedLecturers);
       } catch (error) {
         showToast("Error fetching lecturers", "error");
+        console.log(error)
       }
     };
 
@@ -112,6 +114,7 @@ export default function StudentRating() {
       }
     } catch (error) {
       showToast("Error submitting rating", "error");
+      console.log(error)
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { IoCalendarOutline, IoTimeOutline } from "react-icons/io5";
 import { MdVideoCameraFront } from "react-icons/md";

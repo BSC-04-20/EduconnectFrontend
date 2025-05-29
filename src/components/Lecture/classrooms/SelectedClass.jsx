@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { AuthenticatedUserUrl } from '../../../config/urlFetcher';
 import ClassCode from './selected/classCode';
@@ -125,6 +125,7 @@ export default function SelectedClassroom() {
             setParticipantsData(res.data);
         } catch (error) {
             setParticipantsData({ attended: [], not_attended: [] });
+            console.log(error)
         }
         setLoadingParticipants(false);
     };
@@ -461,6 +462,8 @@ export default function SelectedClassroom() {
     );
 }
 
+import PropTypes from 'prop-types';
+
 function ClassWallpaper({ name }) {
     return (
         <div className="h-[20vh] md:h-[30vh] bg-gradient-to-r from-sky-700 to-pink-200 mr-[5%] py-5 px-2 rounded-md">
@@ -468,3 +471,7 @@ function ClassWallpaper({ name }) {
         </div>
     );
 }
+
+ClassWallpaper.propTypes = {
+    name: PropTypes.string.isRequired,
+};

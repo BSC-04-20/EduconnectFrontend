@@ -27,7 +27,7 @@ export default function JoinStudentMeeting() {
   const roomName = meeting_name; //custom room name
   const domain = "srv820256.hstgr.cloud"; // the host and port
   // const displayName = String(username);
-  const roomID = id; // the room ID, if you have one
+  // const roomID = id; // the room ID, if you have one
 
   if(!username){
     return(

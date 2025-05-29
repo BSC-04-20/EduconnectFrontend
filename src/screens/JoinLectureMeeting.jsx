@@ -1,14 +1,14 @@
 import { JitsiMeeting } from "@jitsi/react-sdk";
 import { useState, useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom"; // Correct import
+import { useLocation} from "react-router-dom"; // Correct import
 import { AuthenticatedUserUrl } from "../config/urlFetcher";
 
 
 export default function JoinLectureMeeting() {
   const location = useLocation();
   const { meeting_name } = location.state || {};
-  const { id } = location.state || {};
-  const { classId, meetingId } = useParams();
+  // const { id } = location.state || {};
+  // const { classId, meetingId } = useParams();
   const [username, setUsername] = useState(null);
   
 
