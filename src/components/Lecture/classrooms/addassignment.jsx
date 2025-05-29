@@ -1,8 +1,6 @@
-import { useState } from "react";
-import axios from "axios"; // Import Axios
-import { useNavigate, useParams } from "react-router-dom";
-import { AuthenticatedUserUrl } from "../../../config/urlFetcher";
-import { Toaster, toast} from "react-hot-toast";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { AuthenticatedUserUrl } from '../../../config/urlFetcher';
 
 export default function AssignmentModal({ isOpen, onClose, classId }) {
     const [title, setTitle] = useState("");
@@ -41,24 +39,23 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
                 },
             });
 
-      if (response.status === 201) {
-        toast.success("Assignment submitted successfully!");
-        // Reset form after successful submission
-        setTitle("");
-        setDescription("");
-        setFiles([]);
-        setDueDate("");
-        setDueTime("");
-        navigator(`/lecture/classroom/${id.id}`);
-      } else {
-        toast.error("Error submitting the assignment.");
-      }
-    } catch (error) {
-      console.error("Error submitting assignment:", error);
-      toast.error("Error submitting the assignment.");
-    }
-  };
-  <Toaster/>
+            if (response.status === 201) {
+                alert("Assignment submitted successfully!");
+                // Reset form after successful submission
+                setTitle("");
+                setDescription("");
+                setFiles([]);
+                setDueDate("");
+                setDueTime("");
+                onClose(); // Close the modal instead of navigating
+            } else {
+                alert("Error submitting the assignment.");
+            }
+        } catch (error) {
+            console.error("Error submitting assignment:", error);
+            alert("Error submitting the assignment.");
+        }
+    };
 
     if (!isOpen) return null;
 

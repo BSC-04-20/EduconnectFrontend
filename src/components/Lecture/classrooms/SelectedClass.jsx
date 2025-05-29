@@ -11,6 +11,7 @@ import AnnouncementModal from '../classrooms/announcementform';
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 import { BiBookOpen, BiGroup } from 'react-icons/bi';
+import { Toaster, toast } from 'react-hot-toast';
 
 export default function SelectedClassroom() {
     const { id } = useParams();
@@ -34,6 +35,12 @@ export default function SelectedClassroom() {
     const [showParticipantsModal, setShowParticipantsModal] = useState(false);
     const [participantsData, setParticipantsData] = useState(null);
     const [loadingParticipants, setLoadingParticipants] = useState(false);
+    const [loadingStates, setLoadingStates] = useState({
+        discussion: false,
+        assignment: false,
+        resource: false,
+        announcement: false
+    });
 
     useEffect(() => {
         const fetchClassData = async () => {
@@ -68,12 +75,9 @@ export default function SelectedClassroom() {
         fetchDiscussions();
     }, [id]);
 
-    if (!classData) {
-        return <div>Loading...</div>;
-    }
-
     const handleCreateDiscussion = async (e) => {
         e.preventDefault();
+        setLoadingStates(prev => ({...prev, discussion: true}));
 
         const formData = new FormData();
         formData.append('meeting_name', discussionData.name);
@@ -83,16 +87,17 @@ export default function SelectedClassroom() {
             const response = await AuthenticatedUserUrl.post(`/classes/${id}/discussion`, formData);
 
             if (response.status === 201) {
-                alert('Discussion created successfully!');
+                toast.success('Discussion created successfully!');
                 setShowAddModal(false);
-                const res = await AuthenticatedUserUrl(`/classes/${id}/discussions`);
-                setDiscussions(res.data.discussions || []);
+                window.location.reload();
             } else {
-                alert('Failed to create discussion. Please try again.');
+                toast.error('Failed to create discussion. Please try again.');
             }
         } catch (error) {
             console.error('Error creating discussion:', error);
-            alert('Error creating discussion. Please try again.');
+            toast.error('Error creating discussion. Please try again.');
+        } finally {
+            setLoadingStates(prev => ({...prev, discussion: false}));
         }
     };
 
@@ -102,35 +107,56 @@ export default function SelectedClassroom() {
     };
 
     const handleJoinMeeting = () => {
+        // Implement join meeting logic
+        navigate(`/meeting/${selectedDiscussion.meeting_id}`);
         setShowJoinModal(false);
-        navigate(`/lecture/classroom/${id}/meeting/${selectedDiscussion.id}`, {
-            state: {
-                id: selectedDiscussion.id,
-                meeting_name: selectedDiscussion.meeting_name,
-                start_time: selectedDiscussion.start_time
-            }
-        });
     };
 
     const handleViewParticipants = async () => {
         setLoadingParticipants(true);
-        setShowJoinModal(false);
-        setShowParticipantsModal(true);
         try {
-            const res = await AuthenticatedUserUrl(`/classes/discussion/summary/${selectedDiscussion.id}`);
-            setParticipantsData(res.data);
+            const response = await AuthenticatedUserUrl(`/classes/${id}/discussion/${selectedDiscussion.id}/participants`);
+            if (response.status === 200) {
+                setParticipantsData(response.data);
+                setShowParticipantsModal(true);
+                setShowJoinModal(false);
+            }
         } catch (error) {
-            setParticipantsData({ attended: [], not_attended: [] });
-            console.log(error);
+            console.error('Error fetching participants:', error);
+            toast.error('Failed to load participants');
+        } finally {
+            setLoadingParticipants(false);
         }
-        setLoadingParticipants(false);
     };
 
     const handleCloseParticipants = () => {
         setShowParticipantsModal(false);
         setParticipantsData(null);
-        setSelectedDiscussion(null);
     };
+
+    const handleAssignmentSuccess = () => {
+        setLoadingStates(prev => ({...prev, assignment: false}));
+        setShowAssignmentModal(false);
+        window.location.reload();
+    };
+
+    const handleResourceSuccess = () => {
+        setLoadingStates(prev => ({...prev, resource: false}));
+        setShowResourcesModal(false);
+        window.location.reload();
+    };
+
+    const handleAnnouncementSuccess = () => {
+        setLoadingStates(prev => ({...prev, announcement: false}));
+        setShowAnnouncementModal(false);
+        window.location.reload();
+    };
+
+    if (!classData) {
+        return <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sky-600"></div>
+        </div>;
+    }
 
     return (
         <>
@@ -240,8 +266,13 @@ export default function SelectedClassroom() {
                                     <button
                                         onClick={() => setShowAssignmentModal(true)}
                                         className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                        disabled={loadingStates.assignment}
                                     >
-                                        <MdLibraryBooks className="text-sky-600" size={20} />
+                                        {loadingStates.assignment ? (
+                                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></div>
+                                        ) : (
+                                            <MdLibraryBooks className="text-sky-600" size={20} />
+                                        )}
                                     </button>
                                     <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         Create Assignment
@@ -254,8 +285,13 @@ export default function SelectedClassroom() {
                                     <button
                                         onClick={() => setShowAnnouncementModal(true)}
                                         className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                        disabled={loadingStates.announcement}
                                     >
-                                        <FaBullhorn className="text-sky-600" size={20} />
+                                        {loadingStates.announcement ? (
+                                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></div>
+                                        ) : (
+                                            <FaBullhorn className="text-sky-600" size={20} />
+                                        )}
                                     </button>
                                     <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         Create Announcement
@@ -268,8 +304,13 @@ export default function SelectedClassroom() {
                                     <button
                                         onClick={() => setShowResourcesModal(true)}
                                         className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                        disabled={loadingStates.resource}
                                     >
-                                        <BiBookOpen className="text-sky-600" size={20} />
+                                        {loadingStates.resource ? (
+                                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></div>
+                                        ) : (
+                                            <BiBookOpen className="text-sky-600" size={20} />
+                                        )}
                                     </button>
                                     <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         Upload Resources
@@ -282,8 +323,13 @@ export default function SelectedClassroom() {
                                     <button
                                         onClick={() => setShowAddModal(true)}
                                         className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                                        disabled={loadingStates.discussion}
                                     >
-                                        <BiGroup className="text-sky-600" size={20} />
+                                        {loadingStates.discussion ? (
+                                            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></div>
+                                        ) : (
+                                            <BiGroup className="text-sky-600" size={20} />
+                                        )}
                                     </button>
                                     <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                         Add Discussion
@@ -339,56 +385,67 @@ export default function SelectedClassroom() {
                                         type="button"
                                         onClick={() => setShowAddModal(false)}
                                         className="px-4 py-2 bg-gray-200 rounded-md"
+                                        disabled={loadingStates.discussion}
                                     >
                                         Cancel
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-sky-600 text-white rounded-md"
+                                        className="px-4 py-2 bg-sky-600 text-white rounded-md flex items-center justify-center min-w-20"
+                                        disabled={loadingStates.discussion}
                                     >
-                                        Create
+                                        {loadingStates.discussion ? (
+                                            <>
+                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                                Creating...
+                                            </>
+                                        ) : (
+                                            'Create'
+                                        )}
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 )}
+            </div>
 
-                {/* Join/Participants Modal */}
-                {showJoinModal && selectedDiscussion && (
-                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
-                            <h2 className="text-xl font-semibold mb-4">{selectedDiscussion.meeting_name}</h2>
-                            <div className="flex flex-col gap-3">
-                                <button
-                                    onClick={handleJoinMeeting}
-                                    className="px-4 py-2 bg-sky-600 text-white rounded-md font-semibold"
-                                >
-                                    Join Meeting
-                                </button>
-                                <button
-                                    onClick={handleViewParticipants}
-                                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold"
-                                >
-                                    See Participants
-                                </button>
-                                <button
-                                    onClick={() => setShowJoinModal(false)}
-                                    className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md"
-                                >
-                                    Cancel
-                                </button>
-                            </div>
+            {/* Join/Participants Modal */}
+            {showJoinModal && selectedDiscussion && (
+                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                    <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
+                        <h2 className="text-xl font-semibold mb-4">{selectedDiscussion.meeting_name}</h2>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={handleJoinMeeting}
+                                className="px-4 py-2 bg-sky-600 text-white rounded-md font-semibold"
+                            >
+                                Join Meeting
+                            </button>
+                            <button
+                                onClick={handleViewParticipants}
+                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold"
+                            >
+                                See Participants
+                            </button>
+                            <button
+                                onClick={() => setShowJoinModal(false)}
+                                className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md"
+                            >
+                                Cancel
+                            </button>
                         </div>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
 
             {/* Assignment Modal */}
             <AssignmentModal 
                 isOpen={showAssignmentModal} 
                 onClose={() => setShowAssignmentModal(false)} 
-                classId={id} 
+                classId={id}
+                setLoading={(loading) => setLoadingStates(prev => ({...prev, assignment: loading}))}
+                onSuccess={handleAssignmentSuccess}
             />
 
             {/* Add Resources Modal */}
@@ -396,6 +453,8 @@ export default function SelectedClassroom() {
                 isOpen={showResourcesModal} 
                 onClose={() => setShowResourcesModal(false)}
                 classId={id}
+                setLoading={(loading) => setLoadingStates(prev => ({...prev, resource: loading}))}
+                onSuccess={handleResourceSuccess}
             />
 
             {/* Announcement Modal */}
@@ -403,6 +462,8 @@ export default function SelectedClassroom() {
                 isOpen={showAnnouncementModal}
                 onClose={() => setShowAnnouncementModal(false)}
                 classId={id}
+                setLoading={(loading) => setLoadingStates(prev => ({...prev, announcement: loading}))}
+                onSuccess={handleAnnouncementSuccess}
             />
 
             {/* Participants Modal */}
@@ -417,7 +478,9 @@ export default function SelectedClassroom() {
                         </button>
                         <h2 className="text-xl font-semibold mb-4">Participants</h2>
                         {loadingParticipants ? (
-                            <div>Loading...</div>
+                            <div className="flex justify-center">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-600"></div>
+                            </div>
                         ) : participantsData ? (
                             <div>
                                 <div className="mb-3">
@@ -455,6 +518,8 @@ export default function SelectedClassroom() {
                     </div>
                 </div>
             )}
+
+            <Toaster position="top-right" />
         </>
     );
 }
