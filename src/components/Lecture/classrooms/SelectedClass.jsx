@@ -207,15 +207,15 @@ export default function SelectedClassroom() {
 
                                                 let tooltipText = "";
                                                 if (now < fiveMinutesBefore) {
-                                                  tooltipText = "You may join 5 minutes before the meeting starts.";
+                                                    tooltipText = "You may join 5 minutes before the meeting starts.";
                                                 } else if (now > oneDayAfter) {
-                                                  tooltipText = "You can no longer join this meeting (more than a day late).";
+                                                    tooltipText = "You can no longer join this meeting (more than a day late).";
                                                 } else if (canJoin && now <= start) {
-                                                  tooltipText = "You can join this meeting now.";
+                                                    tooltipText = "You can join this meeting now.";
                                                 } else if (now >= start && now <= oneDayAfter) {
-                                                  tooltipText = "The meeting is live.";
+                                                    tooltipText = "The meeting is live.";
                                                 } else {
-                                                  tooltipText = "You cannot join this meeting.";
+                                                    tooltipText = "You cannot join this meeting.";
                                                 }
 
                                                 return (
@@ -243,8 +243,18 @@ export default function SelectedClassroom() {
                                                               <div className="text-sm">
                                                                 {formattedDate} &middot; {formattedTime}
                                                               </div>
-                                                            </div>
-                                                          )}
+                                                            </div>)}
+                                                            
+                                                            {/* Join/Participants Button */}
+                                                            <button
+                                                                onClick={() => handleDiscussionClick(discussion)}
+                                                                className="w-full text-left block p-4 border rounded-lg hover:bg-sky-50 transition"
+                                                            >
+                                                                <div className="font-semibold text-gray-800">{discussion.meeting_name}</div>
+                                                                <div className="text-sm text-gray-500">
+                                                                    {formattedDate} &middot; {formattedTime}
+                                                                </div>
+                                                            </button>
                                                         </div>
                                                     </li>
                                                 );
