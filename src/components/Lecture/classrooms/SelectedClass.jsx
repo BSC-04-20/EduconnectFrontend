@@ -227,7 +227,7 @@ export default function SelectedClassroom() {
                     </div>
                 </div>
             )}
-
+            {/* ============ All modals ======== */}
             {/* Assignment Modal */}
             <AssignmentModal 
                 isOpen={showAssignmentModal} 
