@@ -5,12 +5,12 @@ import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStarOutline, 
 
 const navLinks = [
     { to: "/lecture/dashboard", label: "Dashboard", icon: <MdOutlineSpaceDashboard className="size-[1.5rem]" /> },
-    { to: "/lecture/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
-    { to: "/lecture/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
-    { to: "/lecture/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
+        { to: "/lecture/classroom", label: "Classroom", icon: <MdGroup className="size-[1.5rem]" /> },
+    // { to: "/lecture/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
+    // { to: "/lecture/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
+    // { to: "/lecture/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
     { to: "/lecture/resources", label: "Resources", icon: <IoBookOutline className="size-[1.5rem]" /> },
     { to: "/lecture/ratings", label: "Ratings", icon: <IoStarOutline className="size-[1.5rem]" /> },
-    { to: "/lecture/classroom", label: "Classroom", icon: <MdGroup className="size-[1.5rem]" /> },
 ];
 
 export default function LectureSideBar() {

@@ -40,6 +40,7 @@ import AssignmentMarking from "../components/Lecture/classrooms/Announcement/Ass
 import JoinStudentMeeting from "../screens/JoinStudentMeeting";
 import LecturerProfile from "../screens/LecturerProfile";
 import StudentProfile from "../screens/StudentProfile";
+import StudentAnalytics from "../screens/StudentAnalytics";
 
 // import LecturerTimeTable from "../screens/LecturerTimetable";
 const routes = createBrowserRouter([
@@ -118,6 +119,7 @@ const routes = createBrowserRouter([
       { path: "classroom/:id/announcement", element:<StudentRouterAuthGuard> <StudentAnnouncementScreen/> </StudentRouterAuthGuard>},
       {path: "classroom/:id/students", element:<StudentRouterAuthGuard><ClassmatesScreen/></StudentRouterAuthGuard>},
       {path: "studentprofile", element:<StudentRouterAuthGuard><StudentProfile/></StudentRouterAuthGuard>},
+      {path: "analytics", element:<StudentRouterAuthGuard><StudentAnalytics/></StudentRouterAuthGuard>}
     ],
   },
 ]);

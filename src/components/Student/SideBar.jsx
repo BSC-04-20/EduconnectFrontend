@@ -1,18 +1,19 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom"; // Added useNavigate
-import { MdGroup, MdOutlineSpaceDashboard, MdMenu, MdClose } from "react-icons/md";
+import { MdGroup, MdOutlineSpaceDashboard, MdMenu, MdClose, MdOutlineAnalytics } from "react-icons/md";
 import { IoBookOutline, IoCalendarClearOutline, IoPeopleOutline, IoStarOutline, IoTimeOutline } from "react-icons/io5";
 import { GrGroup } from "react-icons/gr";
 
 const navLinks = [
     { to: "/student/dashboard", label: "Dashboard", icon: <MdOutlineSpaceDashboard className="size-[1.5rem]" /> },
-    { to: "/student/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
-    { to: "/student/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
-    { to: "/student/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
+    { to: "/student/classroom", label: "Classroom", icon: <MdGroup className="size-[1.5rem]" /> },
+    // { to: "/student/mentorship", label: "Mentorship", icon: <IoPeopleOutline className="size-[1.5rem]" /> },
+    // { to: "/student/events", label: "Events", icon: <IoCalendarClearOutline className="size-[1.5rem]" /> },
+    // { to: "/student/timetable", label: "Timetable", icon: <IoTimeOutline className="size-[1.5rem]" /> },
     { to: "/student/discussions", label: "Discussions", icon: <GrGroup className="size-[1.5rem]" /> },
     { to: "/student/resources", label: "Learning Materials", icon: <IoBookOutline className="size-[1.5rem]" /> },
     { to: "/student/ratings", label: "Ratings", icon: <IoStarOutline className="size-[1.5rem]" /> },
-    { to: "/student/classroom", label: "Classroom", icon: <MdGroup className="size-[1.5rem]" /> },
+    { to: "/student/analytics", label: "Analytics", icon: <MdOutlineAnalytics className="size-[1.5rem]" /> },
 ];
 
 export default function StudentSideBar() {

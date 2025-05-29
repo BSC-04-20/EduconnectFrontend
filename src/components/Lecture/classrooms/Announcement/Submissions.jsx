@@ -44,21 +44,22 @@ export default function Submissions() {
   }, [selectedId]);
 
   // Helper: is submission marked? marks exist and not null or empty string
-  const isMarked = (sub) => sub.marks && sub.marks.trim() !== "";
+  const isMarked = (sub) => sub.marks !== null && sub.marks !== undefined && sub.marks.toString().trim() !== "";
 
+  // Filter students based on active filter
   const filteredStudents = students.filter((student) => {
     if (activeFilter === "Submitted") {
-      return submissions.some((sub) => sub.student.id === student.id);
+      return submissions.some((sub) => sub.student && sub.student.id === student.id);
     }
     if (activeFilter === "Marked") {
       return submissions.some(
-        (sub) => sub.student.id === student.id && isMarked(sub)
+        (sub) => sub.student && sub.student.id === student.id && isMarked(sub)
       );
     }
     if (activeFilter === "Missed") {
-      return !submissions.some((sub) => sub.student.id === student.id);
+      return !submissions.some((sub) => sub.student && sub.student.id === student.id);
     }
-    return true;
+    return true; // "All"
   });
 
   const stats = [
@@ -104,11 +105,13 @@ export default function Submissions() {
           <div
             key={stat.label}
             onClick={() => setActiveFilter(stat.filter)}
-            className={`flex items-center gap-2 rounded cursor-pointer font-medium px-4 py-3 transition-all duration-150 bg-${stat.color}-100 text-${stat.color}-900 ${
-              activeFilter === stat.filter
-                ? `ring-2 ring-offset-2 ${ringColors[stat.color]}`
-                : ""
-            }`}
+            className={`flex items-center gap-2 rounded cursor-pointer font-medium px-4 py-3 transition-all duration-150
+              bg-${stat.color}-100 text-${stat.color}-900
+              ${
+                activeFilter === stat.filter
+                  ? `ring-2 ring-offset-2 ${ringColors[stat.color]}`
+                  : ""
+              }`}
           >
             <span className="text-lg">{stat.icon}</span>
             <span className="hidden sm:inline">{stat.label}</span>
@@ -124,7 +127,6 @@ export default function Submissions() {
             <tr className="bg-gray-100 text-left text-sm sm:text-base">
               <th className="py-3 px-4 border-b">Name</th>
               <th className="py-3 px-4 border-b">Email</th>
-              {/* Changed header from Phone to Marks */}
               <th className="py-3 px-4 border-b">Marks</th>
               <th className="py-3 px-4 border-b">Submission Status</th>
             </tr>
@@ -133,7 +135,7 @@ export default function Submissions() {
             {filteredStudents.length > 0 ? (
               filteredStudents.map((student) => {
                 const submission = submissions.find(
-                  (sub) => sub.student.id === student.id
+                  (sub) => sub.student && sub.student.id === student.id
                 );
                 const hasSubmitted = !!submission;
                 const submissionStatus = hasSubmitted ? (
@@ -143,7 +145,7 @@ export default function Submissions() {
                 );
 
                 const handleRowClick = () => {
-                  if (hasSubmitted) {
+                  if (hasSubmitted && submission.submission_id) {
                     navigate(
                       `/lecture/classroom/${id}/${selectedId}/submissions/${submission.submission_id}`
                     );
@@ -160,9 +162,10 @@ export default function Submissions() {
                   >
                     <td className="py-3 px-4 border-b">{student.fullname}</td>
                     <td className="py-3 px-4 border-b">{student.email}</td>
-                    {/* Show marks or N/A */}
                     <td className="py-3 px-4 border-b">
-                      {submission && submission.marks ? submission.marks : "N/A"}
+                      {submission && isMarked(submission)
+                        ? submission.marks
+                        : "N/A"}
                     </td>
                     <td className="py-3 px-4 border-b">{submissionStatus}</td>
                   </tr>
