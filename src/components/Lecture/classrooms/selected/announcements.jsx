@@ -12,6 +12,8 @@ export default function ClassroomFeed({ announcements }) {
   const [localAnnouncements, setLocalAnnouncements] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [announcementToDelete, setAnnouncementToDelete] = useState(null);
+  const [deleteType, setDeleteType] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false); // 🔁 new state
 
   useEffect(() => {
     setLocalAnnouncements(announcements);
@@ -23,38 +25,48 @@ export default function ClassroomFeed({ announcements }) {
     });
   };
 
-  const handleDeleteClick = (announcementId, e) => {
+  const handleDeleteClick = (announcementId, type, e) => {
     e.stopPropagation();
     setAnnouncementToDelete(announcementId);
+    setDeleteType(type);
     setShowModal(true);
   };
 
   const confirmDelete = async () => {
+    setIsDeleting(true);
     try {
-      const response = await AuthenticatedUserUrl(`/announcement/delete/${announcementToDelete}`, {
+      const endpoint =
+        deleteType === "assignment"
+          ? `/assignment/delete/${announcementToDelete}`
+          : `/announcement/delete/${announcementToDelete}`;
+
+      const response = await AuthenticatedUserUrl(endpoint, {
         method: 'DELETE',
       });
 
-      // Only remove from state if response doesn't return an error object
       if (response && response.success !== false) {
         setLocalAnnouncements(prev =>
-          prev.filter(announcement => announcement.id !== announcementToDelete)
+          prev.filter(item => item.id !== announcementToDelete)
         );
       } else {
-        throw new Error("Failed to delete announcement");
+        throw new Error("Failed to delete item");
       }
     } catch (error) {
       console.error(error);
-      alert("Error deleting the announcement.");
+      alert("Error deleting the item.");
     } finally {
+      setIsDeleting(false);
       setShowModal(false);
       setAnnouncementToDelete(null);
+      setDeleteType(null);
     }
   };
 
   const cancelDelete = () => {
+    if (isDeleting) return; // prevent cancel during deletion
     setShowModal(false);
     setAnnouncementToDelete(null);
+    setDeleteType(null);
   };
 
   return (
@@ -86,7 +98,7 @@ export default function ClassroomFeed({ announcements }) {
               </div>
               <BiTrash
                 className="text-gray-500 hover:text-red-500 cursor-pointer"
-                onClick={(e) => handleDeleteClick(announcement.id, e)}
+                onClick={(e) => handleDeleteClick(announcement.id, announcement.type, e)}
               />
             </li>
           ))}
@@ -106,20 +118,32 @@ export default function ClassroomFeed({ announcements }) {
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 className="text-lg font-semibold mb-4">Delete Announcement</h2>
-            <p className="mb-6">Are you sure you want to delete this announcement? This action cannot be undone.</p>
+            <h2 className="text-lg font-semibold mb-4">
+              Delete {deleteType === 'assignment' ? 'Assignment' : 'Announcement'}
+            </h2>
+            <p className="mb-6">
+              Are you sure you want to delete this {deleteType === 'assignment' ? 'assignment' : 'announcement'}? This action cannot be undone.
+            </p>
             <div className="flex justify-end gap-3">
               <button
                 onClick={cancelDelete}
-                className="px-4 py-2 rounded-md bg-gray-300 text-gray-800 hover:bg-gray-400"
+                disabled={isDeleting}
+                className={`px-4 py-2 rounded-md ${
+                  isDeleting ? 'bg-gray-200 text-gray-500' : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+                }`}
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 rounded-md bg-red-500 text-white hover:bg-red-600"
+                disabled={isDeleting}
+                className={`px-4 py-2 rounded-md ${
+                  isDeleting
+                    ? 'bg-red-300 text-white cursor-not-allowed'
+                    : 'bg-red-500 text-white hover:bg-red-600'
+                }`}
               >
-                Delete
+                {isDeleting ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>

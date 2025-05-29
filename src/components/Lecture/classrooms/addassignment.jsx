@@ -49,7 +49,6 @@ export default function AssignmentModal({ isOpen, onClose, classId }) {
         setFiles([]);
         setDueDate("");
         setDueTime("");
-        navigator(`/lecture/classroom/${id.id}`);
       } else {
         toast.error("Error submitting the assignment.");
       }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { AuthenticatedUserUrl } from '../../../config/urlFetcher';
 import ClassCode from './selected/classCode';
 import RegisteredStudents from './selected/StudentsNumber';
@@ -7,51 +7,48 @@ import PostedResources from './selected/classResourcesNumber';
 import ClassroomFeed from './selected/announcements';
 import AddResources from '../Resources/AddResources';
 import AssignmentModal from '../classrooms/addassignment';
-import AnnouncementModal from '../classrooms/announcementform'; // Import the separated component
+import AnnouncementModal from '../classrooms/announcementform';
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 import { BiBookOpen, BiGroup } from 'react-icons/bi';
-import { Toaster, toast} from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function SelectedClassroom() {
     const { id } = useParams();
     const [classData, setClassData] = useState(null);
     const [enrolled, setEnrolled] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
-    const [open, setOpen] = useState(false); // State for floating action button
-    const [showAddModal, setShowAddModal] = useState(false); // State for Add Discussion Modal
-    const [showResourcesModal, setShowResourcesModal] = useState(false); // State for Add Resources Modal
-    const [showAssignmentModal, setShowAssignmentModal] = useState(false); // State for Assignment Modal
-    const [showAnnouncementModal, setShowAnnouncementModal] = useState(false); // State for Announcement Modal
-    const [discussionData, setDiscussionData] = useState({
-        name: '',
-        time: '',
-    });
+    const [loading, setLoading] = useState(true); // loading state
+    const [open, setOpen] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showResourcesModal, setShowResourcesModal] = useState(false);
+    const [showAssignmentModal, setShowAssignmentModal] = useState(false);
+    const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
+    const [discussionData, setDiscussionData] = useState({ name: '', time: '' });
+
+    // Fetch class data and announcements
+    const fetchClassData = async () => {
+        setLoading(true);
+        try {
+            const response = await AuthenticatedUserUrl(`/classes/get/${id}`);
+            if (response.status === 200) {
+                const data = response.data.data;
+                setClassData(data);
+                setEnrolled(response.data.total);
+                setAnnouncements(response.data.announcements);
+            } else {
+                console.error('Class not found');
+            }
+        } catch (error) {
+            console.error('Error fetching class data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const fetchClassData = async () => {
-            try {
-                const response = await AuthenticatedUserUrl(`/classes/get/${id}`);
-                const data = response.data.data;
-
-                if (response.status === 200) {
-                    setClassData(data);
-                    setEnrolled(response.data.total);
-                    setAnnouncements(response.data.announcements);
-                } else {
-                    console.error('Class not found');
-                }
-            } catch (error) {
-                console.error('Error fetching class data:', error);
-            }
-        };
-
         fetchClassData();
     }, [id]);
-
-    if (!classData) {
-        return <div>Loading...</div>;
-    }
 
     const handleCreateDiscussion = async (e) => {
         e.preventDefault();
@@ -59,28 +56,36 @@ export default function SelectedClassroom() {
         const formData = new FormData();
         formData.append('meeting_name', discussionData.name);
         formData.append('start_time', discussionData.time);
-        
+
         try {
             const response = await AuthenticatedUserUrl.post(`/classes/${id}/discussion`, formData);
 
             if (response.status === 201) {
-                // Success: Discussion created
                 toast.success('Discussion created successfully!');
-                setShowAddModal(false); // Close the modal
+                setShowAddModal(false);
+                // Optionally, refetch data if discussions are part of announcements or classData
+                fetchClassData();
             } else {
-                // Failure: Something went wrong
                 toast.error('Failed to create discussion. Please try again.');
             }
         } catch (error) {
-            // Catch any errors
             console.error('Error creating discussion:', error);
             toast.error('Error creating discussion. Please try again.');
         }
     };
-    <Toaster/>
+
+    // Callback for after adding assignment or announcement to refresh data
+    const handleDataUpdated = () => {
+        fetchClassData();
+    };
+
+    if (loading) {
+        return <div className="text-center mt-10">Loading...</div>;
+    }
 
     return (
         <div className="my-5">
+            <Toaster />
             <ClassWallpaper name={classData.name} />
             <div className="flex flex-col md:grid md:grid-cols-[15%_75%] md:gap-10">
                 <div className="flex flex-row md:flex-col gap-2 mt-5 mr-[5%] md:mr-0">
@@ -95,78 +100,56 @@ export default function SelectedClassroom() {
             <div className="fixed bottom-24 right-5 flex flex-col items-end space-y-3">
                 {open && (
                     <>
-                        <div
-                            className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
-                        >
-                            <div className="group relative">
-                                <button
-                                    onClick={() => setShowAssignmentModal(true)}
-                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                                >
-                                    <MdLibraryBooks className="text-sky-600" size={20} />
-                                </button>
-                                {/* Tooltip */}
-                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    Create Assignment
-                                </span>
-                            </div>
+                        <div className="group relative transition-opacity transition-transform duration-500 ease-in-out transform opacity-100 translate-y-0">
+                            <button
+                                onClick={() => setShowAssignmentModal(true)}
+                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                            >
+                                <MdLibraryBooks className="text-sky-600" size={20} />
+                            </button>
+                            <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Create Assignment
+                            </span>
                         </div>
 
-                        <div
-                            className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
-                        >
-                            <div className="group relative">
-                                <button
-                                    onClick={() => setShowAnnouncementModal(true)}
-                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                                >
-                                    <FaBullhorn className="text-sky-600" size={20} />
-                                </button>
-                                {/* Tooltip */}
-                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    Create Announcement
-                                </span>
-                            </div>
+                        <div className="group relative transition-opacity transition-transform duration-500 ease-in-out transform opacity-100 translate-y-0">
+                            <button
+                                onClick={() => setShowAnnouncementModal(true)}
+                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                            >
+                                <FaBullhorn className="text-sky-600" size={20} />
+                            </button>
+                            <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Create Announcement
+                            </span>
                         </div>
 
-                        <div
-                            className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
-                        >
-                            <div className="group relative">
-                                <button
-                                    onClick={() => setShowResourcesModal(true)}
-                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                                >
-                                    <BiBookOpen className="text-sky-600" size={20} />
-                                </button>
-                                {/* Tooltip */}
-                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    Upload Resources
-                                </span>
-                            </div>
+                        <div className="group relative transition-opacity transition-transform duration-500 ease-in-out transform opacity-100 translate-y-0">
+                            <button
+                                onClick={() => setShowResourcesModal(true)}
+                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                            >
+                                <BiBookOpen className="text-sky-600" size={20} />
+                            </button>
+                            <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Upload Resources
+                            </span>
                         </div>
 
-                        {/* This is for adding a discussion */}
-                        <div
-                            className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}
-                        >
-                            <div className="group relative">
-                                <button
-                                    onClick={() => setShowAddModal(true)}
-                                    className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
-                                >
-                                    <BiGroup className="text-sky-600" size={20} />
-                                </button>
-                                {/* Tooltip */}
-                                <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    Add Discussion
-                                </span>
-                            </div>
+                        <div className="group relative transition-opacity transition-transform duration-500 ease-in-out transform opacity-100 translate-y-0">
+                            <button
+                                onClick={() => setShowAddModal(true)}
+                                className="w-16 h-16 bg-white hover:bg-gray-50 rounded-full shadow-lg flex items-center justify-center"
+                            >
+                                <BiGroup className="text-sky-600" size={20} />
+                            </button>
+                            <span className="absolute bottom-20 left-1/2 transform -translate-x-1/2 w-max bg-black text-white text-xs py-1 px-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                Add Discussion
+                            </span>
                         </div>
                     </>
                 )}
 
-                {/* Toggle Button */}
                 <button
                     onClick={() => setOpen(!open)}
                     className="w-16 h-16 bg-sky-600 hover:bg-sky-700 text-white rounded-full shadow-lg flex items-center justify-center transition duration-300 text-3xl"
@@ -227,17 +210,18 @@ export default function SelectedClassroom() {
                     </div>
                 </div>
             )}
-            {/* ============ All modals ======== */}
+
             {/* Assignment Modal */}
-            <AssignmentModal 
-                isOpen={showAssignmentModal} 
-                onClose={() => setShowAssignmentModal(false)} 
-                classId={id} 
+            <AssignmentModal
+                isOpen={showAssignmentModal}
+                onClose={() => setShowAssignmentModal(false)}
+                classId={id}
+                onDataUpdated={handleDataUpdated} // refresh data after adding
             />
 
-            {/* Add Resources Modal Component */}
-            <AddResources 
-                isOpen={showResourcesModal} 
+            {/* Add Resources Modal */}
+            <AddResources
+                isOpen={showResourcesModal}
                 onClose={() => setShowResourcesModal(false)}
                 classId={id}
             />
@@ -247,6 +231,7 @@ export default function SelectedClassroom() {
                 isOpen={showAnnouncementModal}
                 onClose={() => setShowAnnouncementModal(false)}
                 classId={id}
+                onDataUpdated={handleDataUpdated} // refresh data after adding
             />
         </div>
     );

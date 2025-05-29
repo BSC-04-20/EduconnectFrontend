@@ -36,15 +36,18 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
             });
 
       if (response.status === 201) {
-        toast.success("Announcement submitted successfully!");
+        toast.success("Announcement submitted successfully!", {
+            onClose: ()=>{
+                window.location.reload();
+                navigator("lecture")
+            }
+        });
         setTitle("");
         setDescription("");
         setFiles([]);
-        navigator(`/lecture/classroom/${id.id}`)
-      } else {
-        toast.error("Error submitting the announcement.");
       }
     } catch (error) {
+    
       console.error("Error submitting announcement:", error);
       toast.error("Error submitting the announcement.");
     }
@@ -54,6 +57,7 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
 
     return (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+            <Toaster/>
             <div className="max-w-lg mx-auto p-6 bg-white shadow-lg rounded-2xl">
                 <h2 className="text-2xl font-semibold mb-4">Make an Announcement</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
