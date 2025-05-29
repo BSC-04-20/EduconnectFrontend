@@ -40,31 +40,57 @@ export default function LecturerTimeTable() {
     fetchClasses();
   }, []);
 
-  // Fetch announcements and discussions for all classes and build events for the calendar
+  // Fetch announcements, assignments, and discussions for all classes and build events for the calendar
   useEffect(() => {
     const fetchAllEvents = async () => {
       setLoading(true);
       let events = [];
       try {
-        // For each class, fetch announcements and discussions
         await Promise.all(
           classes.map(async (cls) => {
-            // Announcements
+            // Announcements & Assignments
             try {
               const classRes = await AuthenticatedUserUrl(`/classes/get/${cls.id}`);
               const announcements = classRes.data.announcements || [];
+              // Collect assignment IDs to fetch due dates
+              const assignmentPromises = [];
               announcements.forEach(a => {
-                if (a.posted) {
-                  const date = new Date(a.posted);
+                // Announcements
+                if (a.type === "announcement") {
+                  const date = new Date(a.created_at);
                   events.push({
                     date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
-                    type: "event",
+                    type: "announcement",
                     title: a.title || "Announcement",
                     time: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-                    className: cls.name || "Class", // Add class name
+                    className: classRes.data.data?.name || cls.name || "Class",
                   });
                 }
+                // Assignments: fetch due date from assignment endpoint
+                if (a.type === "assignment" && a.id) {
+                  assignmentPromises.push(
+                    AuthenticatedUserUrl(`/assignment/get/${a.id}`)
+                      .then(res => {
+                        const assignment = res.data.assignment;
+                        if (assignment && assignment.due_date) {
+                          const due = new Date(assignment.due_date);
+                          events.push({
+                            date: `${due.getFullYear()}-${pad(due.getMonth() + 1)}-${pad(due.getDate())}`,
+                            type: "assignment",
+                            title: assignment.title || "Assignment",
+                            time: due.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+                            className: assignment.class?.name || classRes.data.data?.name || cls.name || "Class",
+                          });
+                        }
+                      })
+                      .catch(() => {
+                        // Ignore errors for individual assignments
+                      })
+                  );
+                }
               });
+              // Wait for all assignment due date fetches for this class
+              await Promise.all(assignmentPromises);
             } catch (err) {
               // Ignore errors for individual classes
             }
@@ -81,7 +107,7 @@ export default function LecturerTimeTable() {
                     type: "discussion",
                     title: d.meeting_name || "Discussion",
                     time: start.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-                    className: cls.name || "Class", // Add class name
+                    className: cls.name || "Class",
                   });
                 }
               });
@@ -91,7 +117,6 @@ export default function LecturerTimeTable() {
           })
         );
       } catch (err) {
-        // General error
         console.error("Failed to fetch events for timetable:", err);
       }
       setMonthlyEvents(events);
@@ -138,11 +163,13 @@ export default function LecturerTimeTable() {
             <span
               key={type}
               className={`w-2 h-2 rounded-full ${
-                type === "event"
+                type === "announcement"
                   ? "bg-blue-500"
                   : type === "discussion"
                   ? "bg-green-500"
-                  : "bg-yellow-500"
+                  : type === "assignment"
+                  ? "bg-yellow-500"
+                  : ""
               }`}
               title={type.charAt(0).toUpperCase() + type.slice(1)}
             />
@@ -197,9 +224,9 @@ export default function LecturerTimeTable() {
                 {calendarCells}
               </div>
               <div className="mt-4 flex gap-4">
-                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded-full inline-block" /> Event</span>
+                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded-full inline-block" /> Announcement</span>
                 <span className="flex items-center gap-1"><span className="w-3 h-3 bg-green-500 rounded-full inline-block" /> Discussion</span>
-                {/* If you add assignments, add here */}
+                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-yellow-500 rounded-full inline-block" /> Assignment</span>
               </div>
             </>
           )}
@@ -226,20 +253,21 @@ export default function LecturerTimeTable() {
                       <div
                         key={idx}
                         className={`flex items-center gap-4 p-3 rounded border-l-4 shadow-sm ${
-                          item.type === "event"
-                            ? "border-blue-900 bg-blue-50"
+                          item.type === "announcement"
+                            ? "border-blue-500 bg-blue-50"
                             : item.type === "discussion"
                             ? "border-green-500 bg-green-50"
-                            : "border-yellow-500 bg-yellow-50"
+                            : item.type === "assignment"
+                            ? "border-yellow-500 bg-yellow-50"
+                            : ""
                         }`}
                       >
                         <span className="font-bold w-16">{item.time}</span>
-                        <span className="capitalize font-semibold">{item.type}</span>
+                        <span className="capitalize font-semibold">{item.type === "announcement" ? "Announcement" : item.type}</span>
                         <span className=" text-sky-700 font-semibold px-2 py-1 bg-sky-100 rounded">
                           {item.className}
                         </span>
                         <span>{item.title}</span>
-                        
                       </div>
                     ))
                   )}
