@@ -1,6 +1,16 @@
 import { FaChartLine, FaCheckCircle, FaClock, FaSpinner, FaTrophy } from "react-icons/fa";
+import { FaVideo } from "react-icons/fa6";
 
-const QuickStats = ({ loadingStats, statsError, getAssignmentCompletionRate, loadingAverage, averageError, averageScore, studentData }) => (
+const QuickStats = ({
+  loadingStats,
+  statsError,
+  getAssignmentCompletionRate,
+  loadingAverage,
+  averageError,
+  averageScore,
+  loadingAttendance,
+  attendance
+}) => (
   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <MetricCard
       icon={FaCheckCircle}
@@ -18,10 +28,16 @@ const QuickStats = ({ loadingStats, statsError, getAssignmentCompletionRate, loa
       color="green"
     />
     <MetricCard
-      icon={FaClock}
-      title="Meeting attendance"
-      value={`${studentData.onTimeSubmissionRate}%`}
-      subtitle="Punctual"
+      icon={FaVideo}
+      title="Meeting Attendance"
+      value={loadingAttendance ? (
+        <FaSpinner className="animate-spin text-xl" />
+      ) : attendance !== null && attendance !== undefined ? (
+        `${attendance}%`
+      ) : (
+        "N/A"
+      )}
+      subtitle={loadingAttendance ? "Loading..." : "Attended"}
       color="blue"
     />
     <MetricCard

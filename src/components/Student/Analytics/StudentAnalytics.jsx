@@ -6,7 +6,6 @@ import SubmissionTrends from './SubmissionTrends';
 import GradeTrends from './GradeTrends';
 import { FaGraduationCap } from 'react-icons/fa';
 
-
 // ==================== COMPONENTS ====================
 
 const Header = ({ studentData }) => (
@@ -19,7 +18,7 @@ const Header = ({ studentData }) => (
         <h1 className="text-3xl font-bold text-gray-800">Student Analytics</h1>
         <p className="flex flex-col gap-1 text-gray-600">
           <span>{studentData?.fullname || 'Loading...'}</span>
-          <span>{studentData?.studentId ? studentData.studentId :  studentData.email}</span>
+          <span>{studentData?.studentId ? studentData.studentId : studentData.email}</span>
         </p>
       </div>
     </div>
@@ -29,46 +28,27 @@ const Header = ({ studentData }) => (
 // ==================== MAIN COMPONENT ====================
 
 const StudentAnalyticsDashboard = () => {
-  // State for API data
   const [submissionData, setSubmissionData] = useState(null);
   const [averageScore, setAverageScore] = useState(null);
   const [assignmentStats, setAssignmentStats] = useState(null);
   const [marksData, setMarksData] = useState(null);
+  const [studentInfo, setStudentInfo] = useState({ fullname: 'Loading...', studentId: '' });
+  const [attendancePercentage, setAttendancePercentage] = useState(0);
+
   const [loading, setLoading] = useState(true);
   const [loadingAverage, setLoadingAverage] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
   const [loadingMarks, setLoadingMarks] = useState(true);
+
   const [error, setError] = useState(null);
   const [averageError, setAverageError] = useState(null);
   const [statsError, setStatsError] = useState(null);
   const [marksError, setMarksError] = useState(null);
-  const [studentInfo, setStudentInfo] = useState({
-    fullname: 'Loading...',
-    studentId: ''
-  });
-  
-  // Sample data for other metrics (replace with API calls as needed)
-  const [studentData] = useState({
-    name: "Alex Johnson",
-    studentId: "ST001234",
-    assignmentCompletionRate: 87,
-    onTimeSubmissionRate: 73,
-    gradeHistory: [
-      { month: 'Jan', math: 85, science: 92, english: 78, history: 88 },
-      { month: 'Feb', math: 88, science: 89, english: 82, history: 85 },
-      { month: 'Mar', math: 92, science: 94, english: 85, history: 91 },
-      { month: 'Apr', math: 89, science: 91, english: 88, history: 87 },
-      { month: 'May', math: 93, science: 96, english: 91, history: 89 }
-    ],
-    currentGrades: {
-      math: 91,
-      science: 94,
-      english: 87,
-      history: 88
-    }
-  });
 
-  // Fetch submission data from API
+  // Attendance State;
+  const [attendance, setAttendance] = useState();
+  const [loadingAttendance, setLoadingAttendance] = useState(false);
+
   useEffect(() => {
     const fetchSubmissionData = async () => {
       try {
@@ -78,7 +58,7 @@ const StudentAnalyticsDashboard = () => {
         setError(null);
       } catch (err) {
         setError('Failed to fetch submission data');
-        console.error('Error fetching submission data:', err);
+        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -92,7 +72,7 @@ const StudentAnalyticsDashboard = () => {
         setAverageError(null);
       } catch (err) {
         setAverageError('Failed to fetch average score');
-        console.error('Error fetching average score:', err);
+        console.error(err);
       } finally {
         setLoadingAverage(false);
       }
@@ -106,7 +86,7 @@ const StudentAnalyticsDashboard = () => {
         setStatsError(null);
       } catch (err) {
         setStatsError('Failed to fetch assignment statistics');
-        console.error('Error fetching assignment statistics:', err);
+        console.error(err);
       } finally {
         setLoadingStats(false);
       }
@@ -120,7 +100,7 @@ const StudentAnalyticsDashboard = () => {
         setMarksError(null);
       } catch (err) {
         setMarksError('Failed to fetch marks data');
-        console.error('Error fetching marks data:', err);
+        console.error(err);
       } finally {
         setLoadingMarks(false);
       }
@@ -128,94 +108,87 @@ const StudentAnalyticsDashboard = () => {
 
     const fetchUserData = async () => {
       try {
-        setLoading(true);
         const response = await StudentAuthenticatedUserUrl.get('/user');
-        setStudentInfo(response.data)
-      } catch (error) {
-        console.log(error)
-      }finally{
-        setLoading(false)
+        setStudentInfo(response.data);
+      } catch (err) {
+        console.error(err);
       }
-    }
+    };
+
+    const fetchAttendance = async () => {
+      try {
+        setLoadingAttendance(true);
+        const response = await StudentAuthenticatedUserUrl.get('/classes/discussion/summary');
+        console.log(response.data)
+        setAttendance(response.data);
+        setAttendancePercentage((response.data.total_discussions / response.data.attended_discussions) * 100)
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingAttendance(false);
+      }
+    };
 
     fetchUserData();
     fetchSubmissionData();
     fetchAverageScore();
     fetchAssignmentStats();
     fetchMarksData();
+    fetchAttendance();
+    console.log(attendancePercentage)
   }, []);
 
-  // Process marks data for charts
   const getMarksChartData = () => {
     if (!marksData) return [];
-    
     return marksData
-      .filter(assignment => assignment.marks_obtained !== null)
-      .map((assignment, index) => ({
-        name: assignment.title.length > 20 ? 
-          assignment.title.substring(0, 20) + '...' : 
-          assignment.title,
-        fullName: assignment.title,
-        marks: parseFloat(assignment.marks_obtained),
-        submittedAt: assignment.submitted_at,
-        index: index + 1
+      .filter(a => a.marks_obtained !== null)
+      .map((a, i) => ({
+        name: a.title.length > 20 ? a.title.substring(0, 20) + '...' : a.title,
+        fullName: a.title,
+        marks: parseFloat(a.marks_obtained),
+        submittedAt: a.submitted_at,
+        index: i + 1,
       }))
       .sort((a, b) => new Date(a.submittedAt) - new Date(b.submittedAt));
   };
 
-  // Get grade statistics
   const getGradeStats = () => {
     if (!marksData) return null;
-    
-    const gradedAssignments = marksData.filter(assignment => assignment.marks_obtained !== null);
-    const totalGraded = gradedAssignments.length;
-    const totalAssignments = marksData.length;
-    
-    if (totalGraded === 0) return null;
-    
-    const marks = gradedAssignments.map(a => parseFloat(a.marks_obtained));
-    const average = marks.reduce((sum, mark) => sum + mark, 0) / marks.length;
-    const highest = Math.max(...marks);
-    const lowest = Math.min(...marks);
-    
+    const graded = marksData.filter(a => a.marks_obtained !== null);
+    const total = marksData.length;
+    if (graded.length === 0) return null;
+
+    const scores = graded.map(a => parseFloat(a.marks_obtained));
+    const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
+
     return {
-      totalAssignments,
-      totalGraded,
-      ungraded: totalAssignments - totalGraded,
-      average: Math.round(average * 100) / 100,
-      highest,
-      lowest
+      totalAssignments: total,
+      totalGraded: graded.length,
+      ungraded: total - graded.length,
+      average: Math.round(avg * 100) / 100,
+      highest: Math.max(...scores),
+      lowest: Math.min(...scores),
     };
   };
 
   const getAssignmentCompletionRate = () => {
     if (!assignmentStats) return null;
-    
     const total = parseInt(assignmentStats.total_assignments);
     const missed = parseInt(assignmentStats.missed_assignments);
-    
     if (isNaN(total) || isNaN(missed) || total === 0) return null;
-    
-    const completed = total - missed;
-    return Math.round((completed / total) * 100);
+    return Math.round(((total - missed) / total) * 100);
   };
 
   const getSubmissionTrends = () => {
     if (!submissionData) return null;
-
-    const totalAssignments = 
-      (submissionData["Very Early"]?.length || 0) +
-      (submissionData["Early"]?.length || 0) +
-      (submissionData["Late"]?.length || 0) +
-      (submissionData["Very Late"]?.length || 0);
-
-    if (totalAssignments === 0) return null;
-
+    const total = ["Very Early", "Early", "Late", "Very Late"]
+      .reduce((acc, key) => acc + (submissionData[key]?.length || 0), 0);
+    if (total === 0) return null;
     return {
-      veryEarly: Math.round(((submissionData["Very Early"]?.length || 0) / totalAssignments) * 100),
-      early: Math.round(((submissionData["Early"]?.length || 0) / totalAssignments) * 100),
-      late: Math.round(((submissionData["Late"]?.length || 0) / totalAssignments) * 100),
-      veryLate: Math.round(((submissionData["Very Late"]?.length || 0) / totalAssignments) * 100)
+      veryEarly: Math.round(((submissionData["Very Early"]?.length || 0) / total) * 100),
+      early: Math.round(((submissionData["Early"]?.length || 0) / total) * 100),
+      late: Math.round(((submissionData["Late"]?.length || 0) / total) * 100),
+      veryLate: Math.round(((submissionData["Very Late"]?.length || 0) / total) * 100),
     };
   };
 
@@ -237,34 +210,36 @@ const StudentAnalyticsDashboard = () => {
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <Header studentData={studentInfo} />
-        
-        <QuickStats 
+
+        <QuickStats
           loadingStats={loadingStats}
           statsError={statsError}
           getAssignmentCompletionRate={getAssignmentCompletionRate}
           loadingAverage={loadingAverage}
+          loadingAttendance={loadingAttendance}
           averageError={averageError}
           averageScore={averageScore}
-          studentData={studentData}
+          attendance={attendancePercentage}
         />
-        
-        <AcademicProgress 
+
+        <AcademicProgress
           loadingStats={loadingStats}
           statsError={statsError}
           assignmentStats={assignmentStats}
           getAssignmentCompletionRate={getAssignmentCompletionRate}
           getProgressColor={getProgressColor}
-          studentData={studentData}
+          studentData={studentInfo}
+          attendance={attendancePercentage}
         />
-        
-        <SubmissionTrends 
+
+        <SubmissionTrends
           loading={loading}
           error={error}
           submissionData={submissionData}
           getSubmissionTrends={getSubmissionTrends}
         />
-        
-        <GradeTrends 
+
+        <GradeTrends
           loadingMarks={loadingMarks}
           marksError={marksError}
           marksData={marksData}
