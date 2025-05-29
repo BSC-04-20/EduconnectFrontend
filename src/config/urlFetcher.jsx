@@ -2,7 +2,7 @@ import axios from "axios"
 import store from "../redux/store";
 
 const baseUrl = import.meta.env.VITE_BASE_API_URL
-const token = localStorage.getItem("token")
+// const token = localStorage.getItem("token")
 
  const UrlFetcher = axios.create({
     baseURL:baseUrl,

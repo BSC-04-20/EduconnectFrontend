@@ -1,20 +1,21 @@
 import { JitsiMeeting } from "@jitsi/react-sdk";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom"; // Correct import
-import { StudentAuthenticatedUserUrl } from "../config/urlFetcher";
+import { useLocation} from "react-router-dom"; // Correct import
+import { AuthenticatedUserUrl } from "../config/urlFetcher";
 
 
-export default function JoinStudentMeeting() {
+export default function JoinLectureMeeting() {
   const location = useLocation();
   const { meeting_name } = location.state || {};
-  const { id } = location.state || {};
+  // const { id } = location.state || {};
+  // const { classId, meetingId } = useParams();
   const [username, setUsername] = useState(null);
   
 
   useEffect(()=>{
     const getUsername = async () => {
       try {
-        const response = await StudentAuthenticatedUserUrl.get("/user");
+        const response = await AuthenticatedUserUrl.get("/user");
         setUsername(response.data.fullname);
       } catch (error) {
         alert("Failed to get username");
@@ -61,7 +62,7 @@ export default function JoinStudentMeeting() {
       SHOW_JITSI_WATERMARK: false,
       SHOW_WATERMARK_FOR_GUESTS: false,
       HIDE_INVITE_MORE_HEADER: true,
-      DEFAULT_REMOTE_DISPLAY_NAME: "Participant",
+      DEFAULT_REMOTE_DISPLAY_NAME: "Moderator",
       DEFAULT_BACKGROUND:"#0c4a6e",
       TOOLBAR_ALWAYS_VISIBLE: true,
       DISPLAY_WELCOME_PAGE_CONTENT: false,
@@ -71,20 +72,21 @@ export default function JoinStudentMeeting() {
     getIFrameRef = { (iframeRef) => { iframeRef.style.height = `${window.innerHeight}px`; } }
     userInfo={{ displayName: username }}
     onApiReady={(externalApi) => {
-      externalApi.on('videoConferenceJoined', async (participant) => {
-        console.log(`Participant joined: ${participant.displayName}`);
-        // Post to your endpoint here
-        try {
-          await StudentAuthenticatedUserUrl.post(`/classes/discussion/${id}/attend`);
-          console.log("Posted join event to backend");
-        } catch (error) {
-          console.error("Failed to post join event:", error);
-        }
-      });
+    //   externalApi.on('videoConferenceJoined', async (participant) => {
+    //     console.log(`Participant joined: ${participant.displayName}`);
+    //     // Post to your endpoint here
+    //     try {
+    //       await AuthenticatedUserUrl.post(`/classes/discussion/${id}/attend`);
+    //       console.log("Posted join event to backend");
+    //     } catch (error) {
+    //       console.error("Failed to post join event:", error);
+    //     }
+    //   });
       externalApi.on('readyToClose', () => {
-        window.location.href = '/student/discussions';
+        window.location.href = '/lecture/classroom';
       });
     }}
+    
 />
     </div>
   );
