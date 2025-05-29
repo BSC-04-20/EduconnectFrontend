@@ -8,6 +8,7 @@ export default function AddResources({ isOpen, onClose, classId }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isUploading, setIsUploading] = useState(false); // New state
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -44,18 +45,20 @@ export default function AddResources({ isOpen, onClose, classId }) {
       return;
     }
 
-    // Check if file is selected in the file input
     if (!selectedFile) {
       toast.error("Please choose a file to upload.");
       return;
     }
+
+    setIsUploading(true); // Start loading
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description || "");
     formData.append("class_id", classId);
 
     fileQueue.forEach((file) => {
-      formData.append("files[]", file); // Multiple files with the same key
+      formData.append("files[]", file);
     });
 
     try {
@@ -63,15 +66,14 @@ export default function AddResources({ isOpen, onClose, classId }) {
       if (response.status !== 200) {
         throw new Error("Upload failed.");
       }
-      toast.success("Upload successful!");
-
-      // Clear form and close modal
+      alert("Upload successful!");
       clearForm();
       onClose();
-
     } catch (error) {
       console.error("Error uploading:", error);
-      toast.error("Error uploading file.");
+      alert("Error uploading file.");
+    } finally {
+      setIsUploading(false); // End loading
     }
   };
 <Toaster/>
@@ -88,7 +90,6 @@ export default function AddResources({ isOpen, onClose, classId }) {
     onClose();
   };
 
-  // Don't render if not open
   if (!isOpen) return null;
 
   return (
@@ -99,13 +100,13 @@ export default function AddResources({ isOpen, onClose, classId }) {
           <button
             onClick={handleClose}
             className="text-gray-500 hover:text-gray-700 text-xl font-bold"
+            disabled={isUploading}
           >
             ×
           </button>
         </div>
-        
+
         <form onSubmit={handleUpload} className="flex flex-col gap-4">
-          {/* Title Input */}
           <input
             type="text"
             value={title}
@@ -113,23 +114,24 @@ export default function AddResources({ isOpen, onClose, classId }) {
             placeholder="Title"
             required
             className="border border-gray-300 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500"
+            disabled={isUploading}
           />
 
-          {/* Description Input */}
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Description"
             className="border border-gray-300 rounded-md px-4 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-sky-500"
             rows={3}
+            disabled={isUploading}
           />
 
-          {/* File Input */}
           <div className="relative w-full mb-2">
             <input
               type="file"
               onChange={handleFileChange}
               className="block w-full text-sm text-gray-500 opacity-0 absolute inset-0 z-10 cursor-pointer"
+              disabled={isUploading}
             />
             <div className="flex items-center justify-between text-sm bg-white border border-gray-300 rounded-md px-4 py-2 cursor-pointer">
               <span className="truncate text-gray-600">
@@ -138,7 +140,6 @@ export default function AddResources({ isOpen, onClose, classId }) {
             </div>
           </div>
 
-          {/* File Queue List */}
           {fileQueue.length > 0 && (
             <div className="text-sm text-gray-600 space-y-1 max-h-32 overflow-y-auto">
               {fileQueue.map((file, index) => (
@@ -153,6 +154,7 @@ export default function AddResources({ isOpen, onClose, classId }) {
                     type="button"
                     onClick={() => handleRemove(index)}
                     className="ml-2 text-red-600 hover:text-red-400 text-xs"
+                    disabled={isUploading}
                   >
                     Remove
                   </button>
@@ -161,20 +163,21 @@ export default function AddResources({ isOpen, onClose, classId }) {
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className="flex justify-end gap-2 mt-4">
             <button
               type="button"
               onClick={handleClose}
               className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition"
+              disabled={isUploading}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-sky-900 text-white rounded-md hover:bg-sky-700 transition"
+              className="px-4 py-2 bg-sky-900 text-white rounded-md hover:bg-sky-700 transition disabled:opacity-60"
+              disabled={isUploading}
             >
-              Upload
+              {isUploading ? "Uploading..." : "Upload"}
             </button>
           </div>
         </form>

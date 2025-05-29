@@ -8,6 +8,7 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [files, setFiles] = useState([]);
+    const [isSubmitting, setIsSubmitting] = useState(false); // New state
 
     const handleFileChange = (event) => {
         setFiles([...event.target.files]);
@@ -15,14 +16,13 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        setIsSubmitting(true); // Set loading
 
-        // Create a FormData object to send form data including files
         const formData = new FormData();
         formData.append("title", title);
         formData.append("description", description);
-        formData.append("class_id", classId)
+        formData.append("class_id", classId);
 
-        // Append each file to FormData
         files.forEach((file) => {
             formData.append("announcement_files[]", file);
         });
@@ -35,23 +35,22 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
                 }
             });
 
-      if (response.status === 201) {
-        toast.success("Announcement submitted successfully!", {
-            onClose: ()=>{
+            if (response.status === 201) {
+                alert("Announcement submitted successfully!");
+                setTitle("");
+                setDescription("");
+                setFiles([]);
+                onClose();
                 window.location.reload();
                 navigator("lecture")
             }
-        });
-        setTitle("");
-        setDescription("");
-        setFiles([]);
-      }
-    } catch (error) {
-    
-      console.error("Error submitting announcement:", error);
-      toast.error("Error submitting the announcement.");
-    }
-  };
+        } catch (error) {
+            console.error("Error submitting announcement:", error);
+            alert("Error submitting the announcement.");
+        } finally {
+            setIsSubmitting(false); // Reset loading
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -94,14 +93,16 @@ export default function AnnouncementModal({ isOpen, onClose, classId }) {
                             type="button"
                             onClick={onClose}
                             className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300"
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
-                            className="px-4 py-2 bg-sky-900 text-white rounded-lg hover:bg-sky-700"
+                            className="px-4 py-2 bg-sky-900 text-white rounded-lg hover:bg-sky-700 disabled:opacity-60"
+                            disabled={isSubmitting}
                         >
-                            Submit Announcement
+                            {isSubmitting ? "Submitting..." : "Submit Announcement"}
                         </button>
                     </div>
                 </form>
