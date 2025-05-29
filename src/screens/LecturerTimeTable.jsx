@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import LectureSideBar from "../components/Lecture/SideBar";
 import { AuthenticatedUserUrl } from "../config/urlFetcher";
+import { FaSpinner } from "react-icons/fa"; // Add this at the top if using react-icons
 
 // Helper functions
 const months = [
@@ -189,91 +190,96 @@ export default function LecturerTimeTable() {
       <section className="mt-[5vh] md:mt-0 ml-[2%] md:ml-[5%] lg:ml-[17%] w-[100%]">
         <div className="bg-white rounded-md shadow-md w-[100%] mt-[10vh] mb-[10vh] p-5">
           <h1 className="text-2xl font-bold text-sky-900 mb-4">Lecturer Timetable</h1>
-          {view === "month" && (
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-16">
+              <FaSpinner className="animate-spin text-sky-600 text-4xl mb-4" />
+              <span className="text-sky-700 font-semibold text-lg">Loading...</span>
+            </div>
+          ) : (
             <>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <button
-                    className="px-2 py-1 rounded bg-sky-100 hover:bg-sky-200"
-                    onClick={() => setYear(y => y - 1)}
-                  >
-                    &lt;
-                  </button>
-                  <span className="font-semibold">{year}</span>
-                  <button
-                    className="px-2 py-1 rounded bg-sky-100 hover:bg-sky-200"
-                    onClick={() => setYear(y => y + 1)}
-                  >
-                    &gt;
-                  </button>
-                </div>
-                <select
-                  className="border rounded px-2 py-1"
-                  value={month}
-                  onChange={e => setMonth(Number(e.target.value))}
-                >
-                  {months.map((m, idx) => (
-                    <option key={m} value={idx}>{m}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid grid-cols-7 gap-2 bg-sky-50 p-2 rounded">
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
-                  <div key={day} className="text-center font-semibold text-sky-700">{day}</div>
-                ))}
-                {calendarCells}
-              </div>
-              <div className="mt-4 flex gap-4">
-                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded-full inline-block" /> Announcement</span>
-                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-green-500 rounded-full inline-block" /> Discussion</span>
-                <span className="flex items-center gap-1"><span className="w-3 h-3 bg-yellow-500 rounded-full inline-block" /> Assignment</span>
-              </div>
-            </>
-          )}
-
-          {view === "day" && (
-            <div className="mt-4">
-              <button
-                className="mb-4 px-3 py-1 rounded bg-sky-100 hover:bg-sky-200"
-                onClick={() => setView("month")}
-              >
-                &larr; Back to Month
-              </button>
-              <h2 className="text-xl font-semibold mb-2">
-                {months[Number(selectedDate.split("-")[1]) - 1]} {Number(selectedDate.split("-")[2])}, {selectedDate.split("-")[0]}
-              </h2>
-              {loading ? (
-                <div>Loading...</div>
-              ) : (
-                <div className="space-y-3">
-                  {dailySchedule.length === 0 ? (
-                    <div className="text-gray-500">No scheduled items for this day.</div>
-                  ) : (
-                    dailySchedule.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className={`flex items-center gap-4 p-3 rounded border-l-4 shadow-sm ${
-                          item.type === "announcement"
-                            ? "border-blue-500 bg-blue-50"
-                            : item.type === "discussion"
-                            ? "border-green-500 bg-green-50"
-                            : item.type === "assignment"
-                            ? "border-yellow-500 bg-yellow-50"
-                            : ""
-                        }`}
+              {view === "month" && (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="px-2 py-1 rounded bg-sky-100 hover:bg-sky-200"
+                        onClick={() => setYear(y => y - 1)}
                       >
-                        <span className="font-bold w-16">{item.time}</span>
-                        <span className="capitalize font-semibold">{item.type === "announcement" ? "Announcement" : item.type}</span>
-                        <span className=" text-sky-700 font-semibold px-2 py-1 bg-sky-100 rounded">
-                          {item.className}
-                        </span>
-                        <span>{item.title}</span>
-                      </div>
-                    ))
-                  )}
+                        &lt;
+                      </button>
+                      <span className="font-semibold">{year}</span>
+                      <button
+                        className="px-2 py-1 rounded bg-sky-100 hover:bg-sky-200"
+                        onClick={() => setYear(y => y + 1)}
+                      >
+                        &gt;
+                      </button>
+                    </div>
+                    <select
+                      className="border rounded px-2 py-1"
+                      value={month}
+                      onChange={e => setMonth(Number(e.target.value))}
+                    >
+                      {months.map((m, idx) => (
+                        <option key={m} value={idx}>{m}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="grid grid-cols-7 gap-2 bg-sky-50 p-2 rounded">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(day => (
+                      <div key={day} className="text-center font-semibold text-sky-700">{day}</div>
+                    ))}
+                    {calendarCells}
+                  </div>
+                  <div className="mt-4 flex gap-4">
+                    <span className="flex items-center gap-1"><span className="w-3 h-3 bg-blue-500 rounded-full inline-block" /> Announcement</span>
+                    <span className="flex items-center gap-1"><span className="w-3 h-3 bg-green-500 rounded-full inline-block" /> Discussion</span>
+                    <span className="flex items-center gap-1"><span className="w-3 h-3 bg-yellow-500 rounded-full inline-block" /> Assignment</span>
+                  </div>
+                </>
+              )}
+
+              {view === "day" && (
+                <div className="mt-4">
+                  <button
+                    className="mb-4 px-3 py-1 rounded bg-sky-100 hover:bg-sky-200"
+                    onClick={() => setView("month")}
+                  >
+                    &larr; Back to Month
+                  </button>
+                  <h2 className="text-xl font-semibold mb-2">
+                    {months[Number(selectedDate.split("-")[1]) - 1]} {Number(selectedDate.split("-")[2])}, {selectedDate.split("-")[0]}
+                  </h2>
+                  <div className="space-y-3">
+                    {dailySchedule.length === 0 ? (
+                      <div className="text-gray-500">No scheduled items for this day.</div>
+                    ) : (
+                      dailySchedule.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex items-center gap-4 p-3 rounded border-l-4 shadow-sm ${
+                            item.type === "announcement"
+                              ? "border-blue-500 bg-blue-50"
+                              : item.type === "discussion"
+                              ? "border-green-500 bg-green-50"
+                              : item.type === "assignment"
+                              ? "border-yellow-500 bg-yellow-50"
+                              : ""
+                          }`}
+                        >
+                          <span className="font-bold w-16">{item.time}</span>
+                          <span className="capitalize font-semibold">{item.type === "announcement" ? "Announcement" : item.type}</span>
+                          <span className=" text-sky-700 font-semibold px-2 py-1 bg-sky-100 rounded">
+                            {item.className}
+                          </span>
+                          <span>{item.title}</span>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
               )}
-            </div>
+            </>
           )}
         </div>
       </section>
