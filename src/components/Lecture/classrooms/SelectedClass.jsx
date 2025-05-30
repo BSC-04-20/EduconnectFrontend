@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { AuthenticatedUserUrl } from '../../../config/urlFetcher';
 import ClassCode from './selected/classCode';
 import RegisteredStudents from './selected/StudentsNumber';
 import PostedResources from './selected/classResourcesNumber';
 import ClassroomFeed from './selected/announcements';
-import AddResources from '../Resources/AddResources';
-import AssignmentModal from '../classrooms/addassignment';
-import AnnouncementModal from '../classrooms/announcementform';
 import { FaBullhorn } from 'react-icons/fa';
 import { MdLibraryBooks } from 'react-icons/md';
 import { BiBookOpen, BiGroup } from 'react-icons/bi';
 import { Toaster, toast } from 'react-hot-toast';
+import DiscussionFeed from './selected/discussions';
 
 export default function SelectedClassroom() {
     const { id } = useParams();
-    const navigate = useNavigate();
     const [classData, setClassData] = useState(null);
     const [enrolled, setEnrolled] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
@@ -25,10 +22,10 @@ export default function SelectedClassroom() {
     const [showResourcesModal, setShowResourcesModal] = useState(false);
     const [showAssignmentModal, setShowAssignmentModal] = useState(false);
     const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
-    const [discussionData, setDiscussionData] = useState({
-        name: '',
-        time: '',
-    });
+    const [discussionData, setDiscussionData] = useState({ name: '', time: '' });
+    const [assignmentData, setAssignmentData] = useState({ title: '', description: '', due_date: '', file: null });
+    const [announcementData, setAnnouncementData] = useState({ title: '', content: '' });
+    const [resourceData, setResourceData] = useState({ title: '', file: null });
     const [activeTab, setActiveTab] = useState('resources');
     const [selectedDiscussion, setSelectedDiscussion] = useState(null);
     const [showJoinModal, setShowJoinModal] = useState(false);
@@ -41,25 +38,22 @@ export default function SelectedClassroom() {
         resource: false,
         announcement: false
     });
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchClassData = async () => {
             try {
                 const response = await AuthenticatedUserUrl(`/classes/get/${id}`);
                 const data = response.data.data;
-
                 if (response.status === 200) {
                     setClassData(data);
                     setEnrolled(response.data.total);
                     setAnnouncements(response.data.announcements);
-                } else {
-                    console.error('Class not found');
                 }
             } catch (error) {
                 console.error('Error fetching class data:', error);
             }
         };
-
         const fetchDiscussions = async () => {
             try {
                 const response = await AuthenticatedUserUrl(`/classes/${id}/discussions`);
@@ -70,85 +64,141 @@ export default function SelectedClassroom() {
                 console.error('Error fetching discussions:', error);
             }
         };
-
         fetchClassData();
         fetchDiscussions();
     }, [id]);
 
+    // --- Discussion Modal Logic ---
     const handleCreateDiscussion = async (e) => {
         e.preventDefault();
-        setLoadingStates(prev => ({...prev, discussion: true}));
-
+        setLoadingStates(prev => ({ ...prev, discussion: true }));
         const formData = new FormData();
         formData.append('meeting_name', discussionData.name);
         formData.append('start_time', discussionData.time);
-        
         try {
             const response = await AuthenticatedUserUrl.post(`/classes/${id}/discussion`, formData);
-
             if (response.status === 201) {
                 toast.success('Discussion created successfully!');
                 setShowAddModal(false);
-                window.location.reload();
+                const res = await AuthenticatedUserUrl(`/classes/${id}/discussions`);
+                setDiscussions(res.data.discussions || []);
             } else {
                 toast.error('Failed to create discussion. Please try again.');
             }
         } catch (error) {
-            console.error('Error creating discussion:', error);
+            console.log(error);
             toast.error('Error creating discussion. Please try again.');
         } finally {
-            setLoadingStates(prev => ({...prev, discussion: false}));
+            setLoadingStates(prev => ({ ...prev, discussion: false }));
         }
     };
 
+    // --- Assignment Modal Logic ---
+    const handleCreateAssignment = async (e) => {
+        e.preventDefault();
+        setLoadingStates(prev => ({ ...prev, assignment: true }));
+        try {
+            const formData = new FormData();
+            formData.append('title', assignmentData.title);
+            formData.append('description', assignmentData.description);
+            formData.append('due_date', assignmentData.due_date);
+            if (assignmentData.file) formData.append('file', assignmentData.file);
+
+            const response = await AuthenticatedUserUrl.post(`/classes/${id}/assignment`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            if (response.status === 201) {
+                toast.success('Assignment created successfully!');
+                setShowAssignmentModal(false);
+            } else {
+                toast.error('Failed to create assignment. Please try again.');
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Error creating assignment. Please try again.');
+        } finally {
+            setLoadingStates(prev => ({ ...prev, assignment: false }));
+        }
+    };
+
+    // --- Announcement Modal Logic ---
+    const handleCreateAnnouncement = async (e) => {
+        e.preventDefault();
+        setLoadingStates(prev => ({ ...prev, announcement: true }));
+        try {
+            const response = await AuthenticatedUserUrl.post(`/classes/${id}/announcement`, announcementData);
+            if (response.status === 201) {
+                toast.success('Announcement created successfully!');
+                setShowAnnouncementModal(false);
+            } else {
+                toast.error('Failed to create announcement. Please try again.');
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Error creating announcement. Please try again.');
+        } finally {
+            setLoadingStates(prev => ({ ...prev, announcement: false }));
+        }
+    };
+
+    // --- Resource Modal Logic ---
+    const handleCreateResource = async (e) => {
+        e.preventDefault();
+        setLoadingStates(prev => ({ ...prev, resource: true }));
+        const formData = new FormData();
+        formData.append('title', resourceData.title);
+        if (resourceData.file) formData.append('file', resourceData.file);
+        try {
+            const response = await AuthenticatedUserUrl.post(`/classes/${id}/resource`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            if (response.status === 201) {
+                toast.success('Resource uploaded successfully!');
+                setShowResourcesModal(false);
+            } else {
+                toast.error('Failed to upload resource. Please try again.');
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Error uploading resource. Please try again.');
+        } finally {
+            setLoadingStates(prev => ({ ...prev, resource: false }));
+        }
+    };
+
+    // --- Other handlers ---
     const handleDiscussionClick = (discussion) => {
         setSelectedDiscussion(discussion);
         setShowJoinModal(true);
     };
-
     const handleJoinMeeting = () => {
-        navigate(`/meeting/${selectedDiscussion.meeting_id}`);
         setShowJoinModal(false);
+        navigate(`/lecture/classroom/${id}/meeting/${selectedDiscussion.id}`, {
+            state: {
+                id: selectedDiscussion.id,
+                meeting_name: selectedDiscussion.meeting_name,
+                start_time: selectedDiscussion.start_time
+            }
+        });
     };
-
     const handleViewParticipants = async () => {
         setLoadingParticipants(true);
+        setShowJoinModal(false);
+        setShowParticipantsModal(true);
         try {
-            const response = await AuthenticatedUserUrl(`/classes/${id}/discussion/${selectedDiscussion.id}/participants`);
-            if (response.status === 200) {
-                setParticipantsData(response.data);
-                setShowParticipantsModal(true);
-                setShowJoinModal(false);
-            }
+            const res = await AuthenticatedUserUrl(`/classes/discussion/summary/${selectedDiscussion.id}`);
+            setParticipantsData(res.data);
         } catch (error) {
-            console.error('Error fetching participants:', error);
+            console.log(error);
+            setParticipantsData({ attended: [], not_attended: [] });
             toast.error('Failed to load participants');
-        } finally {
-            setLoadingParticipants(false);
         }
+        setLoadingParticipants(false);
     };
-
     const handleCloseParticipants = () => {
         setShowParticipantsModal(false);
         setParticipantsData(null);
-    };
-
-    const handleAssignmentSuccess = () => {
-        setLoadingStates(prev => ({...prev, assignment: false}));
-        setShowAssignmentModal(false);
-        window.location.reload();
-    };
-
-    const handleResourceSuccess = () => {
-        setLoadingStates(prev => ({...prev, resource: false}));
-        setShowResourcesModal(false);
-        window.location.reload();
-    };
-
-    const handleAnnouncementSuccess = () => {
-        setLoadingStates(prev => ({...prev, announcement: false}));
-        setShowAnnouncementModal(false);
-        window.location.reload();
+        setSelectedDiscussion(null);
     };
 
     if (!classData) {
@@ -186,67 +236,7 @@ export default function SelectedClassroom() {
                             {activeTab === 'resources' ? (
                                 <ClassroomFeed announcements={announcements} />
                             ) : (
-                                <div>
-                                    {discussions.length === 0 ? (
-                                        <div className="text-gray-500">No discussions yet.</div>
-                                    ) : (
-                                        <ul className="space-y-3">
-                                            {discussions.map(discussion => {
-                                                const date = new Date(discussion.start_time);
-                                                const formattedDate = date.toLocaleDateString();
-                                                const formattedTime = date.toLocaleTimeString();
-                                                const now = new Date();
-                                                const start = new Date(discussion.start_time);
-                                                const fiveMinutesBefore = new Date(start.getTime() - 5 * 60 * 1000);
-                                                const oneDayAfter = new Date(start.getTime() + 24 * 60 * 60 * 1000);
-                                                const canJoin = now >= fiveMinutesBefore && now <= oneDayAfter;
-
-                                                let tooltipText = "";
-                                                if (now < fiveMinutesBefore) {
-                                                    tooltipText = "You may join 5 minutes before the meeting starts.";
-                                                } else if (now > oneDayAfter) {
-                                                    tooltipText = "You can no longer join this meeting (more than a day late).";
-                                                } else if (canJoin && now <= start) {
-                                                    tooltipText = "You can join this meeting now.";
-                                                } else if (now >= start && now <= oneDayAfter) {
-                                                    tooltipText = "The meeting is live.";
-                                                } else {
-                                                    tooltipText = "You cannot join this meeting.";
-                                                }
-
-                                                return (
-                                                    <li key={discussion.id}>
-                                                        <div className="relative group">
-                                                          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 pointer-events-none">
-                                                            {tooltipText}
-                                                          </div>
-                                                          {canJoin ? (
-                                                            <button
-                                                              onClick={() => handleDiscussionClick(discussion)}
-                                                              className="w-full text-left block p-4 border rounded-lg hover:bg-sky-50 transition"
-                                                            >
-                                                              <div className="font-semibold text-gray-800">{discussion.meeting_name}</div>
-                                                              <div className="text-sm text-gray-500">
-                                                                {formattedDate} &middot; {formattedTime}
-                                                              </div>
-                                                            </button>
-                                                          ) : (
-                                                            <div
-                                                              className="w-full text-left block p-4 border rounded-lg bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
-                                                              title={tooltipText}
-                                                            >
-                                                              <div className="font-semibold">{discussion.meeting_name}</div>
-                                                              <div className="text-sm">
-                                                                {formattedDate} &middot; {formattedTime}
-                                                              </div>
-                                                            </div>)}
-                                                        </div>
-                                                    </li>
-                                                );
-                                            })}
-                                        </ul>
-                                    )}
-                                </div>
+                                <DiscussionFeed discussions={discussions} handleDiscussionClick={handleDiscussionClick}/>
                             )}
                         </div>
                     </div>
@@ -255,6 +245,7 @@ export default function SelectedClassroom() {
                 <div className="fixed bottom-24 right-5 flex flex-col items-end space-y-3">
                     {open && (
                         <>
+                            {/* Assignment Modal Button */}
                             <div className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 <div className="group relative">
                                     <button
@@ -273,7 +264,7 @@ export default function SelectedClassroom() {
                                     </span>
                                 </div>
                             </div>
-
+                            {/* Announcement Modal Button */}
                             <div className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 <div className="group relative">
                                     <button
@@ -292,7 +283,7 @@ export default function SelectedClassroom() {
                                     </span>
                                 </div>
                             </div>
-
+                            {/* Resource Modal Button */}
                             <div className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 <div className="group relative">
                                     <button
@@ -311,7 +302,7 @@ export default function SelectedClassroom() {
                                     </span>
                                 </div>
                             </div>
-
+                            {/* Discussion Modal Button */}
                             <div className={`transition-opacity transition-transform duration-500 ease-in-out transform ${open ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}`}>
                                 <div className="group relative">
                                     <button
@@ -332,7 +323,6 @@ export default function SelectedClassroom() {
                             </div>
                         </>
                     )}
-
                     <button
                         onClick={() => setOpen(!open)}
                         className="w-16 h-16 bg-sky-600 hover:bg-sky-700 text-white rounded-full shadow-lg flex items-center justify-center transition duration-300 text-3xl"
@@ -343,118 +333,284 @@ export default function SelectedClassroom() {
                 </div>
 
                 {showAddModal && (
-                    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-                        <div className="bg-white p-6 rounded-lg w-96">
-                            <h2 className="text-2xl mb-4">Add a Discussion</h2>
-                            <form onSubmit={handleCreateDiscussion}>
-                                <div className="mb-4">
-                                    <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                                        Discussion Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                        value={discussionData.name}
-                                        onChange={(e) => setDiscussionData({ ...discussionData, name: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="time" className="block text-sm font-medium text-gray-700">
-                                        Time
-                                    </label>
-                                    <input
-                                        type="datetime-local"
-                                        id="time"
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                                        value={discussionData.time}
-                                        onChange={(e) => setDiscussionData({ ...discussionData, time: e.target.value })}
-                                        required
-                                    />
-                                </div>
-                                <div className="flex justify-end gap-2">
-                                    <button
-                                        type="button"
-                                        onClick={() => setShowAddModal(false)}
-                                        className="px-4 py-2 bg-gray-200 rounded-md"
-                                        disabled={loadingStates.discussion}
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        type="submit"
-                                        className="px-4 py-2 bg-sky-600 text-white rounded-md flex items-center justify-center min-w-20"
-                                        disabled={loadingStates.discussion}
-                                    >
-                                        {loadingStates.discussion ? (
-                                            <>
-                                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                                Creating...
-                                            </>
-                                        ) : (
-                                            'Create'
-                                        )}
-                                    </button>
-                                </div>
-                            </form>
+                    <ModalWrapper onClose={() => setShowAddModal(false)}>
+                        <h2 className="text-2xl mb-4">Add a Discussion</h2>
+                        <form onSubmit={handleCreateDiscussion}>
+                            <div className="mb-4">
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                                    Discussion Name
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={discussionData.name}
+                                    onChange={(e) => setDiscussionData({ ...discussionData, name: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label htmlFor="time" className="block text-sm font-medium text-gray-700">
+                                    Time
+                                </label>
+                                <input
+                                    type="datetime-local"
+                                    id="time"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={discussionData.time}
+                                    onChange={(e) => setDiscussionData({ ...discussionData, time: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAddModal(false)}
+                                    className="px-4 py-2 bg-gray-200 rounded-md"
+                                    disabled={loadingStates.discussion}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-sky-600 text-white rounded-md flex items-center justify-center min-w-20"
+                                    disabled={loadingStates.discussion}
+                                >
+                                    {loadingStates.discussion ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                            Creating...
+                                        </>
+                                    ) : (
+                                        'Create'
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </ModalWrapper>
+                )}
+
+                {/* Assignment Modal */}
+                {showAssignmentModal && (
+                    <ModalWrapper onClose={() => setShowAssignmentModal(false)}>
+                        <h2 className="text-2xl mb-4">Create Assignment</h2>
+                        <form onSubmit={handleCreateAssignment}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Title</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={assignmentData.title}
+                                    onChange={e => setAssignmentData({ ...assignmentData, title: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={assignmentData.description}
+                                    onChange={e => setAssignmentData({ ...assignmentData, description: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Due Date</label>
+                                <input
+                                    type="datetime-local"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={assignmentData.due_date}
+                                    onChange={e => setAssignmentData({ ...assignmentData, due_date: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">File</label>
+                                <input
+                                    type="file"
+                                    className="w-full"
+                                    onChange={e => setAssignmentData({ ...assignmentData, file: e.target.files[0] })}
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAssignmentModal(false)}
+                                    className="px-4 py-2 bg-gray-200 rounded-md"
+                                    disabled={loadingStates.assignment}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-sky-600 text-white rounded-md flex items-center justify-center min-w-20"
+                                    disabled={loadingStates.assignment}
+                                >
+                                    {loadingStates.assignment ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                            Creating...
+                                        </>
+                                    ) : (
+                                        'Create'
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </ModalWrapper>
+                )}
+
+                {/* Announcement Modal */}
+                {showAnnouncementModal && (
+                    <ModalWrapper onClose={() => setShowAnnouncementModal(false)}>
+                        <h2 className="text-2xl mb-4">Create Announcement</h2>
+                        <form onSubmit={handleCreateAnnouncement}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Title</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={announcementData.title}
+                                    onChange={e => setAnnouncementData({ ...announcementData, title: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Content</label>
+                                <textarea
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={announcementData.content}
+                                    onChange={e => setAnnouncementData({ ...announcementData, content: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowAnnouncementModal(false)}
+                                    className="px-4 py-2 bg-gray-200 rounded-md"
+                                    disabled={loadingStates.announcement}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-sky-600 text-white rounded-md flex items-center justify-center min-w-20"
+                                    disabled={loadingStates.announcement}
+                                >
+                                    {loadingStates.announcement ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                            Creating...
+                                        </>
+                                    ) : (
+                                        'Create'
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </ModalWrapper>
+                )}
+
+                {/* Resource Modal */}
+                {showResourcesModal && (
+                    <ModalWrapper onClose={() => setShowResourcesModal(false)}>
+                        <h2 className="text-2xl mb-4">Upload Resource</h2>
+                        <form onSubmit={handleCreateResource}>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">Title</label>
+                                <input
+                                    type="text"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                                    value={resourceData.title}
+                                    onChange={e => setResourceData({ ...resourceData, title: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-gray-700">File</label>
+                                <input
+                                    type="file"
+                                    className="w-full"
+                                    onChange={e => setResourceData({ ...resourceData, file: e.target.files[0] })}
+                                    required
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <button
+                                    type="button"
+                                    onClick={() => setShowResourcesModal(false)}
+                                    className="px-4 py-2 bg-gray-200 rounded-md"
+                                    disabled={loadingStates.resource}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="px-4 py-2 bg-sky-600 text-white rounded-md flex items-center justify-center min-w-20"
+                                    disabled={loadingStates.resource}
+                                >
+                                    {loadingStates.resource ? (
+                                        <>
+                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                            Uploading...
+                                        </>
+                                    ) : (
+                                        'Upload'
+                                    )}
+                                </button>
+                            </div>
+                        </form>
+                    </ModalWrapper>
+                )}
+
+                {/* Join/Participants Modal */}
+                {showJoinModal && selectedDiscussion && (
+                    <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+                        <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
+                            <h2 className="text-xl font-semibold mb-4">{selectedDiscussion.meeting_name}</h2>
+                            <div className="flex flex-col gap-3">
+                                {(() => {
+                                    const now = new Date();
+                                    const start = new Date(selectedDiscussion.start_time);
+                                    const fiveMinutesBefore = new Date(start.getTime() - 5 * 60 * 1000);
+                                    const oneDayAfter = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+                                    const canJoin = now >= fiveMinutesBefore && now <= oneDayAfter;
+                                    return (
+                                        <>
+                                            <button
+                                                onClick={handleJoinMeeting}
+                                                className={`px-4 py-2 rounded-md font-semibold ${
+                                                    canJoin
+                                                        ? "bg-sky-600 text-white"
+                                                        : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                                                }`}
+                                                disabled={!canJoin}
+                                            >
+                                                Join Meeting
+                                            </button>
+                                            <button
+                                                onClick={handleViewParticipants}
+                                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold"
+                                            >
+                                                See Participants
+                                            </button>
+                                            <button
+                                                onClick={() => setShowJoinModal(false)}
+                                                className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </>
+                                    );
+                                })()}
+                            </div>
                         </div>
                     </div>
                 )}
             </div>
 
-            {showJoinModal && selectedDiscussion && (
-                <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
-                        <h2 className="text-xl font-semibold mb-4">{selectedDiscussion.meeting_name}</h2>
-                        <div className="flex flex-col gap-3">
-                            <button
-                                onClick={handleJoinMeeting}
-                                className="px-4 py-2 bg-sky-600 text-white rounded-md font-semibold"
-                            >
-                                Join Meeting
-                            </button>
-                            <button
-                                onClick={handleViewParticipants}
-                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md font-semibold"
-                            >
-                                See Participants
-                            </button>
-                            <button
-                                onClick={() => setShowJoinModal(false)}
-                                className="px-4 py-2 bg-gray-100 text-gray-500 rounded-md"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <AssignmentModal 
-                isOpen={showAssignmentModal} 
-                onClose={() => setShowAssignmentModal(false)} 
-                classId={id}
-                setLoading={(loading) => setLoadingStates(prev => ({ ...prev, assignment: loading }))}
-                onSuccess={handleAssignmentSuccess}
-            />
-
-            <AddResources 
-                isOpen={showResourcesModal} 
-                onClose={() => setShowResourcesModal(false)}
-                classId={id}
-                setLoading={(loading) => setLoadingStates(prev => ({...prev, resource: loading}))}
-                onSuccess={handleResourceSuccess}
-            />
-
-            <AnnouncementModal
-                isOpen={showAnnouncementModal}
-                onClose={() => setShowAnnouncementModal(false)}
-                classId={id}
-                setLoading={(loading) => setLoadingStates(prev => ({...prev, announcement: loading}))}
-                onSuccess={handleAnnouncementSuccess}
-            />
-
+            {/* Participants Modal */}
             {showParticipantsModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[100]">
                     <div className="bg-white p-6 rounded-lg w-[90vw] max-w-lg shadow-lg relative">
@@ -512,6 +668,24 @@ export default function SelectedClassroom() {
     );
 }
 
+// Modal wrapper for consistent modal style
+function ModalWrapper({ children, onClose }) {
+    return (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg w-96 relative">
+                <button
+                    onClick={onClose}
+                    className="absolute top-2 right-2 text-gray-400 hover:text-gray-700 text-2xl"
+                    aria-label="Close"
+                >
+                    &times;
+                </button>
+                {children}
+            </div>
+        </div>
+    );
+}
+
 function ClassWallpaper({ name }) {
     return (
         <div className="h-[20vh] md:h-[30vh] bg-gradient-to-r from-sky-700 to-pink-200 mr-[5%] py-5 px-2 rounded-md">
@@ -519,4 +693,3 @@ function ClassWallpaper({ name }) {
         </div>
     );
 }
-
