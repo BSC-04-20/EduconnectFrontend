@@ -2,6 +2,7 @@ import StudentSelectedClass from "../components/Student/classroom/selected/Selec
 import StudentSideBar from "../components/Student/SideBar";
 import StudentTopBar from "../components/Student/TopBar";
 
+// Showing student selected class
 export default function StudentClassScreen(){
     return(
         <div className="flex flex-row gap-5">
