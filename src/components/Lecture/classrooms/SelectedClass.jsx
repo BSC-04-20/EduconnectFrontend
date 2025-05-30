@@ -107,7 +107,6 @@ export default function SelectedClassroom() {
     };
 
     const handleJoinMeeting = () => {
-        // Implement join meeting logic
         navigate(`/meeting/${selectedDiscussion.meeting_id}`);
         setShowJoinModal(false);
     };
@@ -160,17 +159,15 @@ export default function SelectedClassroom() {
 
     return (
         <>
-            {/* Main content, blurred when participants modal is open */}
             <div className={`my-5 transition-all duration-200 ${showParticipantsModal ? 'blur-sm pointer-events-none select-none' : ''}`}>
                 <ClassWallpaper name={classData.name} />
                 <div className="flex flex-col md:grid md:grid-cols-[15%_75%] md:gap-10">
                     <div className="flex flex-row md:flex-col gap-2 mt-5 mr-[5%] md:mr-0">
                         <ClassCode code={classData.class_code} />
                         <RegisteredStudents total={enrolled} />
-                        <PostedResources />
+                        {/* <PostedResources /> */}
                     </div>
                     <div>
-                        {/* Tabs */}
                         <div className="flex gap-2 mb-4 mt-5">
                             <button
                                 className={`px-4 py-2 rounded-t-md font-semibold ${activeTab === 'resources' ? 'bg-sky-600 text-white' : 'bg-gray-200 text-gray-700'}`}
@@ -185,7 +182,6 @@ export default function SelectedClassroom() {
                                 Discussions
                             </button>
                         </div>
-                        {/* Tab Content */}
                         <div className="bg-white rounded-b-md shadow p-4 min-h-[200px]">
                             {activeTab === 'resources' ? (
                                 <ClassroomFeed announcements={announcements} />
@@ -244,17 +240,6 @@ export default function SelectedClassroom() {
                                                                 {formattedDate} &middot; {formattedTime}
                                                               </div>
                                                             </div>)}
-                                                            
-                                                            {/* Join/Participants Button */}
-                                                            <button
-                                                                onClick={() => handleDiscussionClick(discussion)}
-                                                                className="w-full text-left block p-4 border rounded-lg hover:bg-sky-50 transition"
-                                                            >
-                                                                <div className="font-semibold text-gray-800">{discussion.meeting_name}</div>
-                                                                <div className="text-sm text-gray-500">
-                                                                    {formattedDate} &middot; {formattedTime}
-                                                                </div>
-                                                            </button>
                                                         </div>
                                                     </li>
                                                 );
@@ -267,7 +252,6 @@ export default function SelectedClassroom() {
                     </div>
                 </div>
 
-                {/* Floating Action Menu */}
                 <div className="fixed bottom-24 right-5 flex flex-col items-end space-y-3">
                     {open && (
                         <>
@@ -358,7 +342,6 @@ export default function SelectedClassroom() {
                     </button>
                 </div>
 
-                {/* Add Discussion Modal */}
                 {showAddModal && (
                     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
                         <div className="bg-white p-6 rounded-lg w-96">
@@ -420,7 +403,6 @@ export default function SelectedClassroom() {
                 )}
             </div>
 
-            {/* Join/Participants Modal */}
             {showJoinModal && selectedDiscussion && (
                 <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
                     <div className="bg-white p-6 rounded-lg w-80 shadow-lg">
@@ -449,16 +431,14 @@ export default function SelectedClassroom() {
                 </div>
             )}
 
-            {/* Assignment Modal */}
             <AssignmentModal 
                 isOpen={showAssignmentModal} 
                 onClose={() => setShowAssignmentModal(false)} 
                 classId={id}
-                setLoading={(loading) => setLoadingStates(prev => ({...prev, assignment: loading}))}
+                setLoading={(loading) => setLoadingStates(prev => ({ ...prev, assignment: loading }))}
                 onSuccess={handleAssignmentSuccess}
             />
 
-            {/* Add Resources Modal */}
             <AddResources 
                 isOpen={showResourcesModal} 
                 onClose={() => setShowResourcesModal(false)}
@@ -467,7 +447,6 @@ export default function SelectedClassroom() {
                 onSuccess={handleResourceSuccess}
             />
 
-            {/* Announcement Modal */}
             <AnnouncementModal
                 isOpen={showAnnouncementModal}
                 onClose={() => setShowAnnouncementModal(false)}
@@ -476,7 +455,6 @@ export default function SelectedClassroom() {
                 onSuccess={handleAnnouncementSuccess}
             />
 
-            {/* Participants Modal */}
             {showParticipantsModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-[100]">
                     <div className="bg-white p-6 rounded-lg w-[90vw] max-w-lg shadow-lg relative">
@@ -541,3 +519,4 @@ function ClassWallpaper({ name }) {
         </div>
     );
 }
+

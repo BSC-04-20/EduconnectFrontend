@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthenticatedUserUrl } from "../../../../config/urlFetcher";
+import { MdOutlineMouse } from "react-icons/md";
 
 const ringColors = {
   blue: "ring-blue-600",
@@ -99,6 +100,10 @@ export default function Submissions() {
         Submissions for: {assignmentName}
       </h2>
 
+      <div className="my-2 flex flex-row gap-1 text-gray-400 items-center">
+        <MdOutlineMouse className="w-5 h-5" />
+        <span className="text-gray-400">Click on a student who has submitted to mark</span>
+      </div>
       {/* Filter Tabs */}
       <div className="flex flex-wrap gap-4 mb-6 justify-center sm:justify-start">
         {stats.map((stat) => (

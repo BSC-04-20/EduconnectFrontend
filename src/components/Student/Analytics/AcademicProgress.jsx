@@ -74,16 +74,16 @@ const AcademicProgress = ({
               <div className="flex justify-between text-sm">
                 <span>Attended vs Not Attended</span>
                 <span className="font-semibold">
-                  {studentData.meetingAttendanceRate ?? 0}%
+                  {parseInt((attendance.attended_discussions / attendance.total_discussions) * 100, 10) ?? 0}%
                 </span>
               </div>
               <ProgressBar 
-                percentage={studentData.meetingAttendanceRate} 
+                percentage={parseInt((attendance.attended_discussions / attendance.total_discussions) * 100, 10)} 
                 color="bg-blue-500"
               />
               <div className="flex justify-between text-xs text-gray-600">
                 <span>Total: {attendance.total_discussions}</span>
-                <span>Attended: {attendance.total_discussions}</span>
+                <span>Attended: {attendance.attended_discussions}</span>
                 <span>Not Attended: {attendance.total_discussions - attendance.attended_discussions}</span>
               </div>
               <p className="text-sm text-gray-600">

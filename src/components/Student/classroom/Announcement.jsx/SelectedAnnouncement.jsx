@@ -7,6 +7,7 @@ import {
 } from 'react-icons/fa';
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import { AuthenticatedUserUrl, StudentAuthenticatedUserUrl } from '../../../../config/urlFetcher';
+import toast from 'react-hot-toast';
 
 const baseUrl = import.meta.env.VITE_SANCTUM_TOP_LEVEL_DOMAIN;
 
@@ -92,11 +93,11 @@ export default function SelectedAnnouncement() {
           "Content-Type": "multipart/form-data"
         }
       });
-      alert("Assignment submitted successfully!");
+      toast.success("Assignment submitted successfully!");
       window.location.reload();
     } catch (err) {
       console.error("Submission error:", err);
-      alert("Failed to submit assignment.");
+      toast.success("Failed to submit assignment.");
     } finally {
       setUploading(false);
     }

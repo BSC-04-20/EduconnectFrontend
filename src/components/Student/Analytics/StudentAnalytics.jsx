@@ -121,7 +121,7 @@ const StudentAnalyticsDashboard = () => {
         const response = await StudentAuthenticatedUserUrl.get('/classes/discussion/summary');
         console.log(response.data)
         setAttendance(response.data);
-        setAttendancePercentage((response.data.total_discussions / response.data.attended_discussions) * 100)
+        setAttendancePercentage((response.data.attended_discussions / response.data.total_discussions ) * 100)
       } catch (err) {
         console.error(err);
       } finally {
@@ -229,7 +229,7 @@ const StudentAnalyticsDashboard = () => {
           getAssignmentCompletionRate={getAssignmentCompletionRate}
           getProgressColor={getProgressColor}
           studentData={studentInfo}
-          attendance={attendancePercentage}
+          attendance={attendance}
         />
 
         <SubmissionTrends
